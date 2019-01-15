@@ -5,6 +5,7 @@
  */
 package Server;
 
+import Beans.Player;
 import Models.PlayerListModel;
 import javax.swing.JOptionPane;
 
@@ -22,7 +23,7 @@ public class ServerGUI extends javax.swing.JFrame {
         initComponents();
         this.jLPlayer.setModel(plm);
         
-//        plm.addPlayer(new Player());
+
         
          
     }
@@ -31,6 +32,11 @@ public class ServerGUI extends javax.swing.JFrame {
     public void error(String s)
     {
        JOptionPane.showMessageDialog(null, s, "Server", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void playerJoined(Player p)
+    {
+        plm.addPlayer(p);
     }
     
     public void log(String message)
