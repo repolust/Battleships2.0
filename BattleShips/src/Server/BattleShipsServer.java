@@ -5,32 +5,36 @@
  */
 package Server;
 
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import Beans.Kugel;
+import Beans.Player;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import javax.swing.text.JTextComponent;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  *
  * @author michi
  */
-public abstract class BasicServer
-{
+public class BattleShipsServer{
     
     private final int PORTNR = 1337;
-    public ServerGUI gui;
     private ServerThread st;
+    private ServerGUI gui;
     
+    private LinkedList<Kugel> kugelListe = new LinkedList<Kugel>();   
+    private static Map<Player, OutputStream> clients = new HashMap();
 
- 
+    public BattleShipsServer(ServerGUI gui) {
+        this.gui = gui;
+    }
     
     public void startServer()
     {
@@ -39,23 +43,13 @@ public abstract class BasicServer
             try {
                 st = new ServerThread();
                 st.start();
-                log("Server started on Port: "+PORTNR);
+                gui.log("Server started on Port: "+PORTNR);
             } catch (IOException ex) {
                 
                 st = null;
-                log("Starting server failed!");
+                gui.log("Starting server failed! "+ ex.toString());
             }
         }
-    }
-    
-    protected void log(String message)
-    {   
-         gui.log(message);
-    }
-    
-    protected void logError(String e)
-    {
-        gui.error(e);
     }
     
     public void stopServer()
@@ -63,10 +57,11 @@ public abstract class BasicServer
         if( st != null ||st.isAlive())
         {
             st.interrupt();
-            
+            gui.log("Server stopped.");
         }
     }
     
+    //------------------------------------------------------------------------------    
     class ServerThread extends Thread
     {
         private ServerSocket serverSocket;
@@ -86,26 +81,27 @@ public abstract class BasicServer
                 try
                 {
                     Socket socket = serverSocket.accept();
-                   
+                    
+                    
                     ClientCommunicationThread cct = new ClientCommunicationThread(socket);
                     
                 } 
                 catch(SocketTimeoutException ex)
                 {
-//                    log("timeout");
+                    //gui.log("timeout");
                 }
                 catch (IOException ex)
                 {
-                   log("Connection failed");
+                   gui.log("Connection failed");
                 }
             }
             try
             {
                 serverSocket.close();
-                 log("Server shut down");
+                 gui.log("Server shut down");
             } catch (IOException ex)
             {
-               log("Closing Server failed");
+               gui.log("Closing Server failed");
             }
            
         }
@@ -119,7 +115,7 @@ public abstract class BasicServer
         public ClientCommunicationThread(Socket socket) throws SocketException
         {
             this.socket = socket;
-//            this.socket.setSoTimeout(1000);//Falls Client nix sendet
+            //this.socket.setSoTimeout(1000);//Falls Client nix sendet
             start();
         }
         
@@ -130,25 +126,30 @@ public abstract class BasicServer
         {
             
             
-            try(
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());)
+            try
             {
+               ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+               ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                Object obj = in.readObject();
-//                Transaction t = (Transaction) obj;
-//               gui.log("request on: "+ t.getIban());
                
-//               out.writeObject(performRequest(t));
+               if(obj instanceof Player)
+               {
+                   Player p = (Player) obj;
+                   if(!clients.containsKey(p))
+                   {
+                       clients.put(p, out);
+                   }
+                   else{
+                       
+                   }
+                   
+               }
                 
             } catch (IOException  | ClassNotFoundException ex)
             {
-                log("Error in ClientCommunication Thread! "+ ex.toString());
+                gui.error("Error in ClientCommunication Thread! "+ ex.toString());
             } 
         }
         
     }
-    
-//    protected abstract Object performRequest(Transaction t);
-
-   
 }
