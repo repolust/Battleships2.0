@@ -5,7 +5,7 @@
  */
 package Dialog;
 
-import BL.ListModel;
+import Models.ListModel;
 import Beans.EinheitsVektor;
 import Beans.Option;
 import Beans.Position;
