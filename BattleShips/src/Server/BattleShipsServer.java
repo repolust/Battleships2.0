@@ -124,24 +124,26 @@ public class BattleShipsServer{
         @Override
         public void run()
         {
-            
-            
+                    
             try
             {
                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-               Object obj = in.readObject();
+               Object objplayer = in.readObject();
                
-               if(obj instanceof Player)
+               if(objplayer instanceof Player)
                {
-                   Player p = (Player) obj;
+                   Player p = (Player) objplayer;
                    if(!clients.containsKey(p))
                    {
                        clients.put(p, out);
-                   }
-                   else{
-                       
-                   }
+                       gui.log(p.getName()+" joined the Battle!");
+                   }              
+               }
+               
+               while(!Thread.interrupted())
+               {
+                   Object obj = in.readObject();
                    
                }
                 
