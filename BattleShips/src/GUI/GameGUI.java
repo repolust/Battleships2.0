@@ -474,12 +474,12 @@ public class GameGUI extends javax.swing.JFrame
                     {
                         if(p1.getLeben() > p2.getLeben())
                         {
-                            p1.setSpeed(p1.getSpeed()+2);
+                            p1.setSpeed(p1.getSpeed()+10);
                             isSpeedIncreased = true;
                         }
                         else
                         {
-                            p2.setSpeed(p2.getSpeed()+2);
+                            p2.setSpeed(p2.getSpeed()+10);
                             isSpeedIncreased = true;
                         }
                     }
