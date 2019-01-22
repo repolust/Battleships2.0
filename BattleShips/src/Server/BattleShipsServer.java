@@ -29,7 +29,7 @@ public class BattleShipsServer{
     private ServerThread st;
     private ServerGUI gui;
     
-    private LinkedList<Kugel> kugelListe = new LinkedList<Kugel>();   
+    private LinkedList<Kugel> kugelList = new LinkedList<Kugel>(); 
     private static Map<Player, OutputStream> clients = new HashMap();
 
     public BattleShipsServer(ServerGUI gui) {
