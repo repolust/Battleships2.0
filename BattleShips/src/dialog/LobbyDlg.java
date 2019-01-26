@@ -3,25 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dialog;
+package dialog;
 
-import Models.ListModel;
 import Beans.EinheitsVektor;
 import Beans.Option;
 import Beans.Position;
 import Beans.Player;
-import GUI.GameGUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.JOptionPane;
+import models.SpielerListModel;
 
 /**
  *
  * @author Leonardo und Michael
  * Erstellt am 18.4.2018
  */
-public class NewPlayerDlg extends javax.swing.JDialog {
+public class LobbyDlg extends javax.swing.JDialog {
 
     /**
      * Creates new form NewPlayerDlg
@@ -35,7 +34,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
 
     private Player p;
 
-    private ListModel lm = new ListModel();
+    private SpielerListModel slm = new SpielerListModel();
 
     private int index = 0;
 
@@ -43,12 +42,12 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     private String shiffArt = "";
     private Option o;
 
-    public NewPlayerDlg(java.awt.Frame parent, boolean modal, Option o) {
+    public LobbyDlg(java.awt.Frame parent, boolean modal, Option o) {
         super(parent, modal);
         initComponents();
         this.setBounds(breiteSchirm * 2 / 3, hoeheSchirm / 3, breiteSchirm / 6, hoeheSchirm / 3);
         this.setResizable(false);
-        this.jlMyPlayerListe.setModel(lm);
+        this.jlMyPlayerListe.setModel(slm);
         this.o = o;
     }
 
@@ -218,52 +217,52 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_btFarbeActionPerformed
 
     private void btErstellenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btErstellenActionPerformed
-        this.name = this.tfName.getText();
-        if (c != null && (!name.equals("")) && ship != null) {
-            if (lm.getSize() >= 2) {
-                JOptionPane.showMessageDialog(this, "Maximal 2 Spieler (Ligth-Version)");
-            } else {
-                if (!lm.checkPlayer(name)) {
-                    index = index + 1;
-                    
-                    if(index == 1)//Spieler 1
-                    { 
-                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius());
-                    }
-                    else
-                    {
-                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 270, new EinheitsVektor(-1, 0), o.getSpeed(),o.getRadius());
-                    }
-                    
-                    
-
-                    lm.addElement(p);
-                    this.btSchiff.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Wähle einen anderen Spielernamen");
-                }
-            }
-            clearAuswahl();
-        } else {
-            JOptionPane.showMessageDialog(this, "Bitte Name, Farbe und Schiff auswählen!");
-        }
+//        this.name = this.tfName.getText();
+//        if (c != null && (!name.equals("")) && ship != null) {
+//            if (slm.getSize() >= 2) {
+//                JOptionPane.showMessageDialog(this, "Maximal 2 Spieler (Ligth-Version)");
+//            } else {
+//                if (!slm.checkPlayer(name)) {
+//                    index = index + 1;
+//                    
+//                    if(index == 1)//Spieler 1
+//                    { 
+//                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius());
+//                    }
+//                    else
+//                    {
+//                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 270, new EinheitsVektor(-1, 0), o.getSpeed(),o.getRadius());
+//                    }
+//                    
+//                    
+//
+//                    slm.addElement(p);
+//                    this.btSchiff.setText("");
+//                } else {
+//                    JOptionPane.showMessageDialog(this, "Wähle einen anderen Spielernamen");
+//                }
+//            }
+//            clearAuswahl();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Bitte Name, Farbe und Schiff auswählen!");
+//        }
 
     }//GEN-LAST:event_btErstellenActionPerformed
 
     private void btSpielStartenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSpielStartenActionPerformed
-        if (lm.getSize() == 2) {
-            this.dispose();
-
-            Player p1 = lm.getElementAt(0);
-            Player p2 = lm.getElementAt(1);
-            GameGUI gg = new GameGUI(p1, p2);
-
-            gg.setVisible(true);
-            this.dispose();
-//            gg.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Du musst 2 Spieler erstellen!");
-        }
+//        if (slm.getSize() == 2) {
+//            this.dispose();
+//
+//            Player p1 = slm.getElementAt(0);
+//            Player p2 = slm.getElementAt(1);
+//            GameGUI gg = new GameGUI(p1, p2);
+//
+//            gg.setVisible(true);
+//            this.dispose();
+////            gg.dispose();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Du musst 2 Spieler erstellen!");
+//        }
     }//GEN-LAST:event_btSpielStartenActionPerformed
 
     private void btBeendenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBeendenActionPerformed
@@ -271,20 +270,20 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_btBeendenActionPerformed
 
     private void btLoeschenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoeschenActionPerformed
-        try{
-            if(lm.getSize() == 0) {
-                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst erstellen");
-            }
-            else if (this.jlMyPlayerListe.getSelectedValue() != null) {
-                lm.deleteElement(this.jlMyPlayerListe.getSelectedIndex());
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
-            }
-        }catch(IndexOutOfBoundsException ex){
-            JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
-        }
-        
+//        try{
+//            if(slm.getSize() == 0) {
+//                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst erstellen");
+//            }
+//            else if (this.jlMyPlayerListe.getSelectedValue() != null) {
+//                slm.deleteElement(this.jlMyPlayerListe.getSelectedIndex());
+//            }
+//            else{
+//                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
+//            }
+//        }catch(IndexOutOfBoundsException ex){
+//            JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
+//        }
+//        
     }//GEN-LAST:event_btLoeschenActionPerformed
 
     private void btSchiffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSchiffActionPerformed
@@ -315,20 +314,21 @@ public class NewPlayerDlg extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewPlayerDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LobbyDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewPlayerDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LobbyDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewPlayerDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LobbyDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewPlayerDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LobbyDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NewPlayerDlg dialog = new NewPlayerDlg(new javax.swing.JFrame(), true, null);
+                LobbyDlg dialog = new LobbyDlg(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

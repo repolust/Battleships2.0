@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dialog;
+package dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +21,7 @@ public class ColorChooserDlg extends javax.swing.JDialog {
     private int breiteSchirm = (int) screensize.getWidth();
     private Color c = null;
 
-    public ColorChooserDlg(NewPlayerDlg parent, boolean modal) {
+    public ColorChooserDlg(LobbyDlg parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
@@ -126,11 +126,12 @@ public class ColorChooserDlg extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(ColorChooserDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ColorChooserDlg dialog = new ColorChooserDlg((NewPlayerDlg) new javax.swing.JDialog(), true);
+                ColorChooserDlg dialog = new ColorChooserDlg((LobbyDlg) new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

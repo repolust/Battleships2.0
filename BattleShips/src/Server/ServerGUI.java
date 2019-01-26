@@ -5,9 +5,9 @@
  */
 package Server;
 
-import Beans.Player;
-import Models.PlayerListModel;
+
 import javax.swing.JOptionPane;
+import models.SpielerListModel;
 
 /**
  *
@@ -18,14 +18,15 @@ public class ServerGUI extends javax.swing.JFrame {
     /**
      * Creates new form ServerGUI
      */
-    private PlayerListModel plm = new PlayerListModel();
+
+    private SpielerListModel sm = new SpielerListModel();
+    private BattleShipsServer bss;
+    
     public ServerGUI() {
         initComponents();
-        this.jLPlayer.setModel(plm);
+        this.jLPlayer.setModel(sm);
         
-
-        
-         
+         bss  = new BattleShipsServer(this);
     }
 
     
@@ -33,11 +34,7 @@ public class ServerGUI extends javax.swing.JFrame {
     {
        JOptionPane.showMessageDialog(null, s, "Server", JOptionPane.ERROR_MESSAGE);
     }
-    
-    public void playerJoined(Player p)
-    {
-        plm.addPlayer(p);
-    }
+
     
     public void log(String message)
     {

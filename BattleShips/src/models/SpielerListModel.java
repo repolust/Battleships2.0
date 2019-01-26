@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Models;
+package models;
 
 import Beans.Player;
 import java.util.LinkedList;
@@ -12,14 +12,13 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author tobia
+ * @author michi
  */
-public class PlayerListModel extends AbstractListModel
+public class SpielerListModel extends AbstractListModel
 {
+        private LinkedList<Player> playerList = new LinkedList<>();
 
-    private LinkedList<Player> playerList = new LinkedList<>();
-    
-    
+
     public void addPlayer(Player player) {
         if (!(playerList.contains(player))) {
             playerList.add(player);
@@ -28,7 +27,7 @@ public class PlayerListModel extends AbstractListModel
             JOptionPane.showMessageDialog(null, "so nicht");
         }
     }
-    
+
     public void delPlayer(Player player) {
         if (playerList.contains(player)) {
             playerList.remove(player);
@@ -37,7 +36,7 @@ public class PlayerListModel extends AbstractListModel
             JOptionPane.showMessageDialog(null, "so nicht");
         }
     }
-    
+
     @Override
     public int getSize()
     {
@@ -49,9 +48,9 @@ public class PlayerListModel extends AbstractListModel
     {
         return playerList.get(i);
     }
-    
+
     public void updateList() {
         super.fireContentsChanged(this, 0, playerList.size());
     }
-    
+
 }

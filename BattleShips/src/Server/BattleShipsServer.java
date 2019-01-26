@@ -7,6 +7,8 @@ package Server;
 
 import Beans.Kugel;
 import Beans.Player;
+import Beans.Treffer;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,6 +20,8 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,6 +38,7 @@ public class BattleShipsServer{
 
     public BattleShipsServer(ServerGUI gui) {
         this.gui = gui;
+        startServer();
     }
     
     public void startServer()
@@ -80,6 +85,7 @@ public class BattleShipsServer{
             {
                 try
                 {
+                    
                     Socket socket = serverSocket.accept();
                     
                     
@@ -108,6 +114,8 @@ public class BattleShipsServer{
      
     }
     
+    
+    
     class ClientCommunicationThread extends Thread
     {
         private Socket socket;
@@ -118,8 +126,7 @@ public class BattleShipsServer{
             //this.socket.setSoTimeout(1000);//Falls Client nix sendet
             start();
         }
-        
-        
+                
 
         @Override
         public void run()
@@ -145,13 +152,83 @@ public class BattleShipsServer{
                {
                    Object obj = in.readObject();
                    
+                   if(obj instanceof Player)
+                    {
+                        
+                    }
+                   else if(obj instanceof Kugel){
+                       Kugel k = (Kugel)obj;
+                       kugelList.add(k); 
+                   }
+                       
+                   
                }
+                  
+               } catch (IOException ex) {
+                Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
                 
-            } catch (IOException  | ClassNotFoundException ex)
-            {
-                gui.error("Error in ClientCommunication Thread! "+ ex.toString());
             } 
         }
+    
+    
+    class CheckIfHitThread extends Thread
+    {
+        public CheckIfHitThread(){
         
+        }
+        
+        public void checkCollision()
+        {
+            for (Player p : clients.keySet()) 
+            {
+                for (Player p2 : clients.keySet()) 
+                {
+                    if(p != p2)
+                    {
+                        if(p.getHitbox().intersects(p2.getHitbox()))
+                        {
+                            //Jedem client sagen dass 2 SChiffe ineinander gefahren sind
+                            //schiffs koord. reseten
+                            //leben abziehen
+                            //den 2en jeweils leben mitteilen
+                            //allen die pos mitteilen
+                            gui.log(p.getName()+" und "+p2.getName()+" sind zusammengefahren!");
+                        }
+                    }
+                    
+                }
+            }
+            
+        }        
+
+    
+        public void checkIfHit() {
+
+            //Treffer mit KanonenKugel
+            for (Kugel k : kugelList) {
+
+                Rectangle rectK = new Rectangle(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse());
+
+                for (Player p : clients.keySet()) 
+                {
+                    Rectangle hitbox = p.getHitbox();
+                    
+                    if (rectK.intersects(hitbox)) 
+                    {
+                        Treffer t = new Treffer(p.getIndex(), kugelList.indexOf(k));
+                        //leben abziehen
+                        //kugel entfernen
+                        //dem client leben mitteilen
+                        gui.log(p.getName()+" wurde getroffen!");
+                    }
+                }
+            }
+
+        }
     }
-}
+
+    }
+

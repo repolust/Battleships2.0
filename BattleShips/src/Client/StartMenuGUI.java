@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package GUI;
+package Client;
 
-import BL.MusikThread;
-import Beans.Option;
-import Dialog.HelpDlg;
-import Dialog.NewPlayerDlg;
-import Dialog.OptionsDlg;
+import dialog.HelpDlg;
 import java.awt.Dimension;
 import java.io.File;
+import java.nio.file.Paths;
+import sound.MusikThread;
 
 
 /**
@@ -28,11 +26,8 @@ public class StartMenuGUI extends javax.swing.JFrame {
     private int hoeheSchirm = (int) screensize.getHeight();
     private int breiteSchirm = (int) screensize.getWidth();
 
-    private Option o = new Option(100,150,8,3);
-        private final String musicPath = System.getProperty("user.dir")
-            + File.separator + "src"
-            + File.separator + "sound"
-            + File.separator + "FluchDerKaribik.mp3";
+    private final String musicPath = Paths.get(System.getProperty("user.dir"),"src","sound","FluchDerKaribik.mp3").toString();
+
         
     private MusikThread musik = new MusikThread(musicPath);
     
@@ -54,7 +49,6 @@ public class StartMenuGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        btOption = new javax.swing.JButton();
         btStarten = new javax.swing.JButton();
         btBeenden = new javax.swing.JButton();
         btHilfe1 = new javax.swing.JButton();
@@ -66,19 +60,6 @@ public class StartMenuGUI extends javax.swing.JFrame {
         setUndecorated(true);
 
         jPanel2.setLayout(null);
-
-        btOption.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
-        btOption.setForeground(new java.awt.Color(255, 255, 255));
-        btOption.setText("Options");
-        btOption.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 4, true));
-        btOption.setContentAreaFilled(false);
-        btOption.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onOptions(evt);
-            }
-        });
-        jPanel2.add(btOption);
-        btOption.setBounds(40, 140, 220, 45);
 
         btStarten.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
         btStarten.setForeground(new java.awt.Color(255, 255, 255));
@@ -104,7 +85,7 @@ public class StartMenuGUI extends javax.swing.JFrame {
             }
         });
         jPanel2.add(btBeenden);
-        btBeenden.setBounds(40, 290, 220, 45);
+        btBeenden.setBounds(40, 250, 220, 45);
 
         btHilfe1.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
         btHilfe1.setForeground(new java.awt.Color(255, 255, 255));
@@ -117,7 +98,7 @@ public class StartMenuGUI extends javax.swing.JFrame {
             }
         });
         jPanel2.add(btHilfe1);
-        btHilfe1.setBounds(40, 210, 220, 45);
+        btHilfe1.setBounds(40, 160, 220, 45);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bilder/Logo.PNG"))); // NOI18N
         jPanel2.add(jLabel1);
@@ -148,9 +129,9 @@ public class StartMenuGUI extends javax.swing.JFrame {
 
     private void onStart(java.awt.event.ActionEvent evt)//GEN-FIRST:event_onStart
     {//GEN-HEADEREND:event_onStart
-        NewPlayerDlg pldg = new NewPlayerDlg(this, true, o);
-        pldg.setVisible(true);
-        
+//        NewPlayerDlg pldg = new NewPlayerDlg(this, true, o);
+//        pldg.setVisible(true);
+//        
     }//GEN-LAST:event_onStart
 
     private void onBeenden(java.awt.event.ActionEvent evt)//GEN-FIRST:event_onBeenden
@@ -158,16 +139,6 @@ public class StartMenuGUI extends javax.swing.JFrame {
         dispose();
         System.exit(0);
     }//GEN-LAST:event_onBeenden
-
-    private void onOptions(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onOptions
-        OptionsDlg odlg = new OptionsDlg(this, true);
-        odlg.setVisible(true);
-        
-        if(odlg.isok())
-        {
-            o = odlg.getOptions();
-        }
-    }//GEN-LAST:event_onOptions
 
     private void onHilfe(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onHilfe
         HelpDlg hdlg = new HelpDlg(this, true);
@@ -201,6 +172,8 @@ public class StartMenuGUI extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -213,7 +186,6 @@ public class StartMenuGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBeenden;
     private javax.swing.JButton btHilfe1;
-    private javax.swing.JButton btOption;
     private javax.swing.JButton btStarten;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
