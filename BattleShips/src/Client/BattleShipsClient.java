@@ -28,7 +28,7 @@ public class BattleShipsClient
     private BattleShipsClient() {
     }
     
-    public BattleShipsClient gettheInstance()
+    public static BattleShipsClient getTheInstance()
     {
         if(theInstance == null)
         {
@@ -52,4 +52,10 @@ public class BattleShipsClient
         out.writeObject(toSend);
         Object obj = in.readObject();
     }
+
+    public ObjectInputStream getInputStream() {
+        return in;
+    }
+    
+    
 }

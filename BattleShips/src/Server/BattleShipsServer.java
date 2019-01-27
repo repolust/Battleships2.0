@@ -34,7 +34,8 @@ public class BattleShipsServer{
     private ServerGUI gui;
     
     private LinkedList<Kugel> kugelList = new LinkedList<Kugel>(); 
-    private static Map<Player, OutputStream> clients = new HashMap();
+    private static Map<ObjectInputStream, Player> clients = new HashMap();
+    private LinkedList<ObjectOutputStream> connections = new LinkedList();
 
     public BattleShipsServer(ServerGUI gui) {
         this.gui = gui;
@@ -141,29 +142,39 @@ public class BattleShipsServer{
                if(objplayer instanceof Player)
                {
                    Player p = (Player) objplayer;
-                   if(!clients.containsKey(p))
-                   {
-                       clients.put(p, out);
+                  
+                       clients.put(in,p);
+                       connections.add(out);
                        gui.log(p.getName()+" joined the Battle!");
-                   }              
+                                
                }
                
+               synchronized(clients) {                 
                while(!Thread.interrupted())
                {
                    Object obj = in.readObject();
                    
                    if(obj instanceof Player)
                     {
+                        Player p = (Player) obj;
+                        clients.replace(in, p);
                         
+                        LinkedList<Player> players = new LinkedList();
+                        for (ObjectInputStream oin : clients.keySet()) 
+                        {
+                            players.add(clients.get(oin));
+                        }
+                        out.writeObject(players);
                     }
                    else if(obj instanceof Kugel){
                        Kugel k = (Kugel)obj;
                        kugelList.add(k); 
+                       out.writeObject(kugelList);
                    }
                        
                    
                }
-                  
+              }
                } catch (IOException ex) {
                 Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
@@ -182,9 +193,14 @@ public class BattleShipsServer{
         
         public void checkCollision()
         {
-            for (Player p : clients.keySet()) 
+            LinkedList<Player> players = new LinkedList();
+            for (ObjectInputStream oin : clients.keySet()) {
+                players.add(clients.get(oin));
+            }
+                        
+            for (Player p : players) 
             {
-                for (Player p2 : clients.keySet()) 
+                for (Player p2 : players) 
                 {
                     if(p != p2)
                     {
