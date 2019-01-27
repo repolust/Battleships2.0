@@ -40,7 +40,9 @@ public class BattleShipsClient
     public void connect() throws UnknownHostException, IOException
     {
         ADDR = InetAddress.getLocalHost();
-        socket = new Socket(ADDR, 1337);
+        //ADDR = InetAddress.getByAddress("10.40.200.10", null);
+        socket = new Socket(ADDR, 1337);       
+            
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
     }
