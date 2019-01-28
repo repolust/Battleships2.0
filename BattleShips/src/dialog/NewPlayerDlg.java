@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package dialog;
+
 import Beans.EinheitsVektor;
 import Beans.Option;
 import Beans.Position;
@@ -16,11 +17,13 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import models.SpielerListModel;
+
 /**
  *
  * @author Leonardo
  */
 public class NewPlayerDlg extends javax.swing.JDialog {
+
     private Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
     private int hoeheSchirm = (int) screensize.getHeight();
     private int breiteSchirm = (int) screensize.getWidth();
@@ -37,6 +40,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     private Image ship = null;
     private String shiffArt = "";
     private Option o;
+
     /**
      * Creates new form NewPlayerDlg
      */
@@ -48,9 +52,8 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         this.setResizable(false);
 //        this.jlMyPlayerListe.setModel(slm);
         this.o = o;
-        
-    }
 
+    }
 
     public void clearAuswahl() {
         ship = null;
@@ -216,25 +219,21 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_btBeendenActionPerformed
 
     private void onBeitreten(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBeitreten
-                //Erstellen-----------------------------
-                this.name = this.tfName.getText();
-                if ((!name.equals("")) && ship != null) {
-                     this.dispose();
-                     
-                     p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), -1, null, shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius(),null);
-                                          
-                } 
-                else{
-                    JOptionPane.showMessageDialog(null, "Bitte geben Sie alle Daten ein!");
-                }
-                
-                //Beitreten-------------------------------
-                        this.dispose();
-                        LobbyGUI gg = new LobbyGUI(p);
-            
-                        gg.setVisible(true);
+        //Erstellen-----------------------------
+        this.name = this.tfName.getText();
+        if ((!name.equals("")) && ship != null) {
+            this.dispose();
 
-                    
+            p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), -1, null, shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius(), null);
+            //Beitreten-------------------------------
+            this.dispose();
+            LobbyGUI gg = new LobbyGUI(p);
+
+            gg.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Bitte geben Sie alle Daten ein!");
+        }
+
     }//GEN-LAST:event_onBeitreten
 
     /**
@@ -267,7 +266,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NewPlayerDlg dialog = new NewPlayerDlg(new StartMenuGUI(), true,null);
+                NewPlayerDlg dialog = new NewPlayerDlg(new StartMenuGUI(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

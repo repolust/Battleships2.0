@@ -37,6 +37,7 @@ public class ShipChooserDlg extends javax.swing.JDialog {
     
     public ShipChooserDlg(NewPlayerDlg parent, boolean modal) {
         super(parent, modal);
+        setUndecorated(true);
         initComponents();
         this.setBounds(breiteSchirm / 3, hoeheSchirm / 3, breiteSchirm / 3, hoeheSchirm / 3);
         this.setResizable(false);
@@ -78,8 +79,11 @@ public class ShipChooserDlg extends javax.swing.JDialog {
 
         jPanel3.setLayout(new java.awt.GridLayout(2, 2));
 
+        playShip1.setBackground(new java.awt.Color(0, 153, 255));
         playShip1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         playShip1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bilder/showShip1.png"))); // NOI18N
+        playShip1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        playShip1.setOpaque(true);
         playShip1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 onShip1Clicked(evt);
@@ -87,8 +91,11 @@ public class ShipChooserDlg extends javax.swing.JDialog {
         });
         jPanel3.add(playShip1);
 
+        playShip2.setBackground(new java.awt.Color(0, 153, 255));
         playShip2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bilder/showShip2.png"))); // NOI18N
+        playShip2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         playShip2.setEnabled(false);
+        playShip2.setOpaque(true);
         playShip2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 onShip2Clicked(evt);
@@ -96,8 +103,11 @@ public class ShipChooserDlg extends javax.swing.JDialog {
         });
         jPanel3.add(playShip2);
 
+        playShip3.setBackground(new java.awt.Color(0, 153, 255));
         playShip3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bilder/showShip3.png"))); // NOI18N
+        playShip3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         playShip3.setEnabled(false);
+        playShip3.setOpaque(true);
         playShip3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 onShip3Clicked(evt);
@@ -105,8 +115,11 @@ public class ShipChooserDlg extends javax.swing.JDialog {
         });
         jPanel3.add(playShip3);
 
+        playShip4.setBackground(new java.awt.Color(0, 153, 255));
         playShip4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Bilder/showShip4.png"))); // NOI18N
+        playShip4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         playShip4.setEnabled(false);
+        playShip4.setOpaque(true);
         playShip4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 onShip4Clicked(evt);
@@ -118,11 +131,14 @@ public class ShipChooserDlg extends javax.swing.JDialog {
 
         jPanel4.setLayout(new java.awt.GridLayout(1, 0));
 
-        btWaehlen.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btWaehlen.setBackground(new java.awt.Color(0, 153, 255));
+        btWaehlen.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
+        btWaehlen.setForeground(new java.awt.Color(255, 255, 255));
         btWaehlen.setText("Auswählen");
         btWaehlen.setToolTipText("");
-        btWaehlen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btWaehlen.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btWaehlen.setContentAreaFilled(false);
+        btWaehlen.setOpaque(true);
         btWaehlen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onAuswaehlen(evt);
@@ -130,10 +146,13 @@ public class ShipChooserDlg extends javax.swing.JDialog {
         });
         jPanel4.add(btWaehlen);
 
-        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btBeenden.setBackground(new java.awt.Color(0, 153, 255));
+        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
+        btBeenden.setForeground(new java.awt.Color(255, 255, 255));
         btBeenden.setText("Beenden");
-        btBeenden.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBeenden.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeenden.setContentAreaFilled(false);
+        btBeenden.setOpaque(true);
         btBeenden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBeendenActionPerformed(evt);

@@ -13,11 +13,9 @@ import java.io.File;
 import java.nio.file.Paths;
 import sound.MusikThread;
 
-
 /**
  *
- * @author Leonardo und Michael
- * Erstellt am 18.4.2018
+ * @author Leonardo und Michael Erstellt am 18.4.2018
  */
 public class StartMenuGUI extends javax.swing.JFrame {
 
@@ -28,16 +26,16 @@ public class StartMenuGUI extends javax.swing.JFrame {
     private int hoeheSchirm = (int) screensize.getHeight();
     private int breiteSchirm = (int) screensize.getWidth();
 
-    private final String musicPath = Paths.get(System.getProperty("user.dir"),"src","sound","FluchDerKaribik.mp3").toString();
-    private Option o = new Option(100,150,8,3);
-        
+    private final String musicPath = Paths.get(System.getProperty("user.dir"), "src", "sound", "FluchDerKaribik.mp3").toString();
+    private Option o = new Option(100, 150, 8, 3);
+
     private MusikThread musik = new MusikThread(musicPath);
-    
+
     public StartMenuGUI() {
         initComponents();
-       this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         musik.start();
     }
 
@@ -126,12 +124,15 @@ public class StartMenuGUI extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
         );
 
+        jPanel2.getAccessibleContext().setAccessibleName("");
+        jPanel2.getAccessibleContext().setAccessibleDescription("");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void onStart(java.awt.event.ActionEvent evt)//GEN-FIRST:event_onStart
     {//GEN-HEADEREND:event_onStart
-        NewPlayerDlg pldg = new NewPlayerDlg(this, true,o);
+        NewPlayerDlg pldg = new NewPlayerDlg(this, true, o);
         pldg.setVisible(true);
 //        
     }//GEN-LAST:event_onStart

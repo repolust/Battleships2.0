@@ -25,13 +25,12 @@ public class ColorChooserDlg extends javax.swing.JDialog {
     public ColorChooserDlg(LobbyGUI parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
         this.setResizable(false);
     }
     public ColorChooserDlg(NewPlayerDlg parent, boolean modal) {
         super(parent, modal);
+        setUndecorated(true);
         initComponents();
-        this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
         this.setResizable(false);
     }
 
@@ -52,18 +51,26 @@ public class ColorChooserDlg extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Farbe wählen");
+        setSize(new java.awt.Dimension(1000, 1000));
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
+
+        cChooser.setBackground(new java.awt.Color(0, 153, 255));
+        cChooser.setForeground(new java.awt.Color(255, 255, 255));
+        cChooser.setToolTipText("");
         jPanel1.add(cChooser);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
-        btAuswaehlen.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btAuswaehlen.setBackground(new java.awt.Color(0, 153, 255));
+        btAuswaehlen.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
+        btAuswaehlen.setForeground(new java.awt.Color(255, 255, 255));
         btAuswaehlen.setText("Auswählen");
-        btAuswaehlen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btAuswaehlen.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btAuswaehlen.setContentAreaFilled(false);
+        btAuswaehlen.setOpaque(true);
         btAuswaehlen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAuswaehlenActionPerformed(evt);
@@ -71,10 +78,13 @@ public class ColorChooserDlg extends javax.swing.JDialog {
         });
         jPanel2.add(btAuswaehlen);
 
-        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btBeenden.setBackground(new java.awt.Color(0, 153, 255));
+        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 36)); // NOI18N
+        btBeenden.setForeground(new java.awt.Color(255, 255, 255));
         btBeenden.setText("Beenden");
-        btBeenden.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBeenden.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeenden.setContentAreaFilled(false);
+        btBeenden.setOpaque(true);
         btBeenden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBeendenActionPerformed(evt);
