@@ -5,6 +5,7 @@
  */
 package dialog;
 
+import Client.LobbyGUI;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -21,7 +22,7 @@ public class ColorChooserDlg extends javax.swing.JDialog {
     private int breiteSchirm = (int) screensize.getWidth();
     private Color c = null;
 
-    public ColorChooserDlg(LobbyDlg parent, boolean modal) {
+    public ColorChooserDlg(LobbyGUI parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
@@ -137,7 +138,7 @@ public class ColorChooserDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ColorChooserDlg dialog = new ColorChooserDlg((LobbyDlg) new javax.swing.JDialog(), true);
+                ColorChooserDlg dialog = new ColorChooserDlg((LobbyGUI) new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -8,6 +8,8 @@ import Beans.EinheitsVektor;
 import Beans.Option;
 import Beans.Position;
 import Beans.Player;
+import Client.LobbyGUI;
+import Client.StartMenuGUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -38,23 +40,15 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     /**
      * Creates new form NewPlayerDlg
      */
-    public NewPlayerDlg(java.awt.Frame parent, boolean modal, Option o) {
+    public NewPlayerDlg(StartMenuGUI parent, boolean modal, Option o) {
         super(parent, modal);
         initComponents();
-        this.setBounds(breiteSchirm * 2 / 3, hoeheSchirm / 3, breiteSchirm / 6, hoeheSchirm / 3);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
 //        this.jlMyPlayerListe.setModel(slm);
         this.o = o;
     }
 
-    private NewPlayerDlg(JFrame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        this.setBounds(breiteSchirm * 2 / 3, hoeheSchirm / 3, breiteSchirm / 6, hoeheSchirm / 3);
-        this.setResizable(false);
-//        this.jlMyPlayerListe.setModel(slm);
-        this.o = o;
-    }
 
     public void clearAuswahl() {
         ship = null;
@@ -85,28 +79,25 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         btSchiff = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        btErstellen = new javax.swing.JButton();
-        btLoeschen = new javax.swing.JButton();
+        btBeitreten = new javax.swing.JButton();
         btBeenden = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        btSpielStarten = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jPanel1.setLayout(new java.awt.GridLayout(2, 1));
+        setPreferredSize(new java.awt.Dimension(688, 387));
 
         jPanel2.setLayout(new java.awt.GridLayout(3, 2));
 
-        jLabel1.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
-        jLabel1.setText("Name");
+        jLabel1.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Name:");
         jPanel2.add(jLabel1);
 
         tfName.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
         jPanel2.add(tfName);
 
-        jLabel2.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
-        jLabel2.setText("Farbe");
+        jLabel2.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Farbe:");
         jPanel2.add(jLabel2);
 
         btFarbe.setBorder(null);
@@ -117,8 +108,9 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel2.add(btFarbe);
 
-        jLabel3.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
-        jLabel3.setText("Schiff");
+        jLabel3.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Schiff:");
         jPanel2.add(jLabel3);
 
         btSchiff.addActionListener(new java.awt.event.ActionListener() {
@@ -128,34 +120,18 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel2.add(btSchiff);
 
-        jPanel1.add(jPanel2);
+        jPanel3.setLayout(new java.awt.GridLayout(1, 1));
 
-        jPanel3.setLayout(new java.awt.GridLayout(2, 1));
-
-        jPanel4.setLayout(new java.awt.GridLayout(1, 2));
-
-        btErstellen.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
-        btErstellen.setText("Erstellen");
-        btErstellen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btErstellen.setContentAreaFilled(false);
-        btErstellen.addActionListener(new java.awt.event.ActionListener() {
+        btBeitreten.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btBeitreten.setText("Beitreten");
+        btBeitreten.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBeitreten.setContentAreaFilled(false);
+        btBeitreten.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btErstellenActionPerformed(evt);
+                onBeitreten(evt);
             }
         });
-        jPanel4.add(btErstellen);
-
-        btLoeschen.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
-        btLoeschen.setText("Löschen");
-        btLoeschen.setToolTipText("");
-        btLoeschen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btLoeschen.setContentAreaFilled(false);
-        btLoeschen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btLoeschenActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btLoeschen);
+        jPanel3.add(btBeitreten);
 
         btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
         btBeenden.setText("Beenden");
@@ -166,28 +142,33 @@ public class NewPlayerDlg extends javax.swing.JDialog {
                 btBeendenActionPerformed(evt);
             }
         });
-        jPanel4.add(btBeenden);
+        jPanel3.add(btBeenden);
 
-        jPanel3.add(jPanel4);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
-        jPanel5.setLayout(new java.awt.GridLayout());
-
-        btSpielStarten.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
-        btSpielStarten.setText("Spiel starten");
-        btSpielStarten.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btSpielStarten.setContentAreaFilled(false);
-        btSpielStarten.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSpielStartenActionPerformed(evt);
-            }
-        });
-        jPanel5.add(btSpielStarten);
-
-        jPanel3.add(jPanel5);
-
-        jPanel1.add(jPanel3);
-
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -197,6 +178,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         cdlg.setVisible(true);
         if (cdlg.isC()) {
             c = cdlg.getC();
+            this.btFarbe.setOpaque(true);
             this.btFarbe.setBackground(c);
         } else {
             System.out.println("Fehler bei der Farbübergabe!!!");
@@ -204,84 +186,41 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_btFarbeActionPerformed
 
     private void btSchiffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSchiffActionPerformed
-//        ShipChooserDlg scdlg = new ShipChooserDlg(this, true);
-//        scdlg.setVisible(true);
-//
-//        if (scdlg.issok()) {
-//            ship = scdlg.getSelectedShip();
-//            shiffArt = scdlg.getshipName();
-//            this.btSchiff.setText(shiffArt);
-//        }
+        ShipChooserDlg scdlg = new ShipChooserDlg(this, true);
+        scdlg.setVisible(true);
+
+        if (scdlg.issok()) {
+            ship = scdlg.getSelectedShip();
+            shiffArt = scdlg.getshipName();
+            this.btSchiff.setText(shiffArt);
+        }
     }//GEN-LAST:event_btSchiffActionPerformed
-
-    private void btErstellenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btErstellenActionPerformed
-        //        this.name = this.tfName.getText();
-        //        if (c != null && (!name.equals("")) && ship != null) {
-            //            if (slm.getSize() >= 2) {
-                //                JOptionPane.showMessageDialog(this, "Maximal 2 Spieler (Ligth-Version)");
-                //            } else {
-                //                if (!slm.checkPlayer(name)) {
-                    //                    index = index + 1;
-                    //
-                    //                    if(index == 1)//Spieler 1
-                    //                    {
-                        //                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius());
-                        //                    }
-                    //                    else
-                    //                    {
-                        //                        p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), index, (new Position(0, 0)), shiffArt, 270, new EinheitsVektor(-1, 0), o.getSpeed(),o.getRadius());
-                        //                    }
-                    //
-                    //
-                    //
-                    //                    slm.addElement(p);
-                    //                    this.btSchiff.setText("");
-                    //                } else {
-                    //                    JOptionPane.showMessageDialog(this, "Wähle einen anderen Spielernamen");
-                    //                }
-                //            }
-            //            clearAuswahl();
-            //        } else {
-            //            JOptionPane.showMessageDialog(this, "Bitte Name, Farbe und Schiff auswählen!");
-            //        }
-    }//GEN-LAST:event_btErstellenActionPerformed
-
-    private void btLoeschenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLoeschenActionPerformed
-        //        try{
-            //            if(slm.getSize() == 0) {
-                //                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst erstellen");
-                //            }
-            //            else if (this.jlMyPlayerListe.getSelectedValue() != null) {
-                //                slm.deleteElement(this.jlMyPlayerListe.getSelectedIndex());
-                //            }
-            //            else{
-                //                JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
-                //            }
-            //        }catch(IndexOutOfBoundsException ex){
-            //            JOptionPane.showMessageDialog(this, "Bitte Spieler zuerst auswählen um zu löschen");
-            //        }
-        //
-    }//GEN-LAST:event_btLoeschenActionPerformed
 
     private void btBeendenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBeendenActionPerformed
         dispose();
     }//GEN-LAST:event_btBeendenActionPerformed
 
-    private void btSpielStartenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSpielStartenActionPerformed
-        //        if (slm.getSize() == 2) {
-            //            this.dispose();
-            //
-            //            Player p1 = slm.getElementAt(0);
-            //            Player p2 = slm.getElementAt(1);
-            //            GameGUI gg = new GameGUI(p1, p2);
-            //
-            //            gg.setVisible(true);
-            //            this.dispose();
-            ////            gg.dispose();
-            //        } else {
-            //            JOptionPane.showMessageDialog(this, "Du musst 2 Spieler erstellen!");
-            //        }
-    }//GEN-LAST:event_btSpielStartenActionPerformed
+    private void onBeitreten(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBeitreten
+                //Erstellen-----------------------------
+                this.name = this.tfName.getText();
+                if ((!name.equals("")) && ship != null) {
+                     this.dispose();
+                     
+                     p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), -1, null, shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius(),null);
+                                          
+                } 
+                else{
+                    JOptionPane.showMessageDialog(null, "Bitte geben Sie alle Daten ein!");
+                }
+                
+                //Beitreten-------------------------------
+                        this.dispose();
+                        LobbyGUI gg = new LobbyGUI(p);
+            // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
+                        gg.setVisible(true);
+
+                    
+    }//GEN-LAST:event_onBeitreten
 
     /**
      * @param args the command line arguments
@@ -313,7 +252,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NewPlayerDlg dialog = new NewPlayerDlg(new javax.swing.JFrame(), true);
+                NewPlayerDlg dialog = new NewPlayerDlg(new StartMenuGUI(), true,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -327,19 +266,15 @@ public class NewPlayerDlg extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btBeenden;
-    private javax.swing.JButton btErstellen;
+    private javax.swing.JButton btBeitreten;
     private javax.swing.JButton btFarbe;
-    private javax.swing.JButton btLoeschen;
     private javax.swing.JButton btSchiff;
-    private javax.swing.JButton btSpielStarten;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JTextField tfName;
     // End of variables declaration//GEN-END:variables
 }

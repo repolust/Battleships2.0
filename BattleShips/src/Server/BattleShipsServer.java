@@ -38,7 +38,7 @@ public class BattleShipsServer{
     private LinkedList<Kugel> kugelList = new LinkedList<Kugel>(); 
     private static Map<ObjectInputStream, Player> clients = new HashMap();
     private LinkedList<ObjectOutputStream> connections = new LinkedList();
-    private LinkedList<Position> startPositions = new LinkedList(); // Server muss startPositionen der Spieler wissen
+    
     
             
     public BattleShipsServer(ServerGUI gui) {
@@ -119,12 +119,7 @@ public class BattleShipsServer{
      
     }
     
-    public void calculateStartPosition(int pos)
-    {
-        
-    }
-    
-    
+ 
     
     class ClientCommunicationThread extends Thread
     {
@@ -162,11 +157,11 @@ public class BattleShipsServer{
                synchronized(clients) {                 
                while(!Thread.interrupted())
                {
-                   Object obj2 = in.readObject();
+                   Object gameObj = in.readObject();
                    
-                   if(obj2 instanceof Player)
+                   if(gameObj instanceof Player)
                     {
-                        Player p = (Player) obj2;
+                        Player p = (Player) gameObj;
                         clients.replace(in, p);
                         
                         LinkedList<Player> players = new LinkedList();
@@ -176,15 +171,12 @@ public class BattleShipsServer{
                         }
                         out.writeObject(players);
                     }
-                   else if(obj2 instanceof Kugel){
-                       Kugel k = (Kugel)obj2;
+                   else if(gameObj instanceof Kugel){
+                       Kugel k = (Kugel)gameObj;
                        kugelList.add(k); 
                        out.writeObject(kugelList);
                    }
-                   else if(obj2 instanceof Dimension)
-                   {
-                       //calculateStartPosition(position of player)
-                   }
+                   
                        
                    
                }

@@ -127,15 +127,7 @@ public class GameGUI extends javax.swing.JFrame {
             this.lbHealth = lbHealth;
             this.lbMunition = lbMunition;
             connection = BattleShipsClient.getTheInstance();
-            p.setScreensize(new Dimension(maxX, maxY)); //Screensize dem Server übermitteln
-            
-            try {
-                connection.sendObject(p);
-            } catch (IOException ex) {
-                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
         }
 
         @Override

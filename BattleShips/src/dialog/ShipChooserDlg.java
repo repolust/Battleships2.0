@@ -35,7 +35,7 @@ public class ShipChooserDlg extends javax.swing.JDialog {
             + File.separator + "bilder"
             + File.separator + "playShip1.png";
     
-    public ShipChooserDlg(LobbyDlg parent, boolean modal) {
+    public ShipChooserDlg(NewPlayerDlg parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setBounds(breiteSchirm / 3, hoeheSchirm / 3, breiteSchirm / 3, hoeheSchirm / 3);
@@ -260,7 +260,7 @@ public class ShipChooserDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ShipChooserDlg dialog = new ShipChooserDlg((LobbyDlg) new javax.swing.JDialog(), true);
+                ShipChooserDlg dialog = new ShipChooserDlg((NewPlayerDlg) new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

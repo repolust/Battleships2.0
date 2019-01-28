@@ -5,7 +5,9 @@
  */
 package Client;
 
+import Beans.Option;
 import dialog.HelpDlg;
+import dialog.NewPlayerDlg;
 import java.awt.Dimension;
 import java.io.File;
 import java.nio.file.Paths;
@@ -27,13 +29,13 @@ public class StartMenuGUI extends javax.swing.JFrame {
     private int breiteSchirm = (int) screensize.getWidth();
 
     private final String musicPath = Paths.get(System.getProperty("user.dir"),"src","sound","FluchDerKaribik.mp3").toString();
-
+    private Option o = new Option(100,150,8,3);
         
     private MusikThread musik = new MusikThread(musicPath);
     
     public StartMenuGUI() {
         initComponents();
-        this.setBounds(breiteSchirm / 3, hoeheSchirm / 3, breiteSchirm / 3, hoeheSchirm / 3);
+       this.setLocationRelativeTo(null);
         this.setResizable(false);
         
         musik.start();
@@ -129,8 +131,8 @@ public class StartMenuGUI extends javax.swing.JFrame {
 
     private void onStart(java.awt.event.ActionEvent evt)//GEN-FIRST:event_onStart
     {//GEN-HEADEREND:event_onStart
-//        NewPlayerDlg pldg = new NewPlayerDlg(this, true, o);
-//        pldg.setVisible(true);
+        NewPlayerDlg pldg = new NewPlayerDlg(this, true,o);
+        pldg.setVisible(true);
 //        
     }//GEN-LAST:event_onStart
 
