@@ -149,7 +149,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
     private void onBereitMachen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBereitMachen
         //Anmelden, vom Server restlichen Daten bekommen
-        
+        // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
     }//GEN-LAST:event_onBereitMachen
 
     /**

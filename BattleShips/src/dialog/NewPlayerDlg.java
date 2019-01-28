@@ -216,7 +216,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
                 //Beitreten-------------------------------
                         this.dispose();
                         LobbyGUI gg = new LobbyGUI(p);
-            // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
+            
                         gg.setVisible(true);
 
                     
