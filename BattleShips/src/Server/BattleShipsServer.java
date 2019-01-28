@@ -154,7 +154,7 @@ public class BattleShipsServer{
                }
                
                
-               synchronized(clients) {                 
+           synchronized(clients) {                 
                while(!Thread.interrupted())
                {
                    Object gameObj = in.readObject();
