@@ -42,11 +42,13 @@ public class NewPlayerDlg extends javax.swing.JDialog {
      */
     public NewPlayerDlg(StartMenuGUI parent, boolean modal, Option o) {
         super(parent, modal);
+        setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 //        this.jlMyPlayerListe.setModel(slm);
         this.o = o;
+        
     }
 
 
@@ -85,22 +87,34 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(688, 387));
 
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
         jPanel2.setLayout(new java.awt.GridLayout(3, 2));
 
+        jLabel1.setBackground(new java.awt.Color(0, 153, 255));
         jLabel1.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Name:");
+        jLabel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jLabel1.setOpaque(true);
         jPanel2.add(jLabel1);
 
         tfName.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
+        tfName.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         jPanel2.add(tfName);
 
+        jLabel2.setBackground(new java.awt.Color(0, 153, 255));
         jLabel2.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Farbe:");
+        jLabel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jLabel2.setOpaque(true);
         jPanel2.add(jLabel2);
 
-        btFarbe.setBorder(null);
+        btFarbe.setBackground(new java.awt.Color(204, 204, 204));
+        btFarbe.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btFarbe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btFarbeActionPerformed(evt);
@@ -108,11 +122,17 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel2.add(btFarbe);
 
+        jLabel3.setBackground(new java.awt.Color(0, 153, 255));
         jLabel3.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Schiff:");
+        jLabel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jLabel3.setOpaque(true);
         jPanel2.add(jLabel3);
 
+        btSchiff.setBackground(new java.awt.Color(204, 204, 204));
+        btSchiff.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btSchiff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btSchiffActionPerformed(evt);
@@ -120,12 +140,17 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel2.add(btSchiff);
 
+        jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
+
         jPanel3.setLayout(new java.awt.GridLayout(1, 1));
 
-        btBeitreten.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btBeitreten.setBackground(new java.awt.Color(0, 153, 255));
+        btBeitreten.setFont(new java.awt.Font("Old English Text MT", 1, 48)); // NOI18N
+        btBeitreten.setForeground(new java.awt.Color(255, 255, 255));
         btBeitreten.setText("Beitreten");
-        btBeitreten.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBeitreten.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeitreten.setContentAreaFilled(false);
+        btBeitreten.setOpaque(true);
         btBeitreten.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 onBeitreten(evt);
@@ -133,10 +158,13 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel3.add(btBeitreten);
 
-        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
+        btBeenden.setBackground(new java.awt.Color(0, 153, 255));
+        btBeenden.setFont(new java.awt.Font("Old English Text MT", 1, 48)); // NOI18N
+        btBeenden.setForeground(new java.awt.Color(255, 255, 255));
         btBeenden.setText("Beenden");
-        btBeenden.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBeenden.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeenden.setContentAreaFilled(false);
+        btBeenden.setOpaque(true);
         btBeenden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBeendenActionPerformed(evt);
@@ -144,20 +172,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         });
         jPanel3.add(btBeenden);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
