@@ -193,14 +193,14 @@ public class NewPlayerDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btFarbeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFarbeActionPerformed
-//        ColorChooserDlg cdlg = new ColorChooserDlg(this, true);
-//        cdlg.setVisible(true);
-//        if (cdlg.isC()) {
-//            c = cdlg.getC();
-//            this.btFarbe.setBackground(c);
-//        } else {
-//            System.out.println("Fehler bei der Farbübergabe!!!");
-//        }
+        ColorChooserDlg cdlg = new ColorChooserDlg(this, true);
+        cdlg.setVisible(true);
+        if (cdlg.isC()) {
+            c = cdlg.getC();
+            this.btFarbe.setBackground(c);
+        } else {
+            System.out.println("Fehler bei der Farbübergabe!!!");
+        }
     }//GEN-LAST:event_btFarbeActionPerformed
 
     private void btSchiffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSchiffActionPerformed

@@ -27,6 +27,12 @@ public class ColorChooserDlg extends javax.swing.JDialog {
         this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
         this.setResizable(false);
     }
+    public ColorChooserDlg(NewPlayerDlg parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        this.setBounds(breiteSchirm/3,hoeheSchirm/3,breiteSchirm/3,hoeheSchirm/3);
+        this.setResizable(false);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
