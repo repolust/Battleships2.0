@@ -12,6 +12,7 @@ import Beans.Position;
 import Beans.Treffer;
 import Client.BL.Controlls;
 import Client.BL.GameBL;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.List;
 import java.awt.Rectangle;
@@ -70,6 +71,8 @@ public class GameGUI extends javax.swing.JFrame {
     private int maxX = (int) this.jpGame.getSize().getWidth();
     private int maxY = (int) this.jpGame.getSize().getHeight();
     
+    private Player p;
+    
     @Override
     public void paint(Graphics grphcs)
     {
@@ -87,7 +90,7 @@ public class GameGUI extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
-        
+        this.p = p;
         
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
@@ -124,6 +127,15 @@ public class GameGUI extends javax.swing.JFrame {
             this.lbHealth = lbHealth;
             this.lbMunition = lbMunition;
             connection = BattleShipsClient.getTheInstance();
+            p.setScreensize(new Dimension(maxX, maxY)); //Screensize dem Server übermitteln
+            
+            try {
+                connection.sendObject(p);
+            } catch (IOException ex) {
+                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         @Override
@@ -131,8 +143,8 @@ public class GameGUI extends javax.swing.JFrame {
         {
             while (!isInterrupted())
             {
-                try
-                {
+//                try
+//                {
 
                     lbName.setText(p.getName());
                     lbHealth.setText(""+p.getLeben());
@@ -150,17 +162,17 @@ public class GameGUI extends javax.swing.JFrame {
 
                     if (controlls.containsKey(KeyEvent.VK_W) && !controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W Gerade aus
                     {
-                        checkAndIncrease1();
+                        checkAndIncrease();
 
                     }
                     if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && controlls.containsKey(KeyEvent.VK_D))// W A D Gerade aus
                     {
-                        checkAndIncrease1();
+                        checkAndIncrease();
 
                     }
                     if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W A Links Kurve
                     {
-                        checkAndIncrease1();
+                        checkAndIncrease();
                         EinheitsVektor k = p.getDirection();
                         k.rotateEinheitsVektor(-p.getRotation());
                         p.setDirection(k);
@@ -169,7 +181,7 @@ public class GameGUI extends javax.swing.JFrame {
                     }
                     if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
                     {
-                        checkAndIncrease1();
+                        checkAndIncrease();
                         EinheitsVektor k = p.getDirection();
                         k.rotateEinheitsVektor(p.getRotation());
                         p.setDirection(k);
@@ -292,76 +304,76 @@ public class GameGUI extends javax.swing.JFrame {
 //-----------------------------------//Kugel bewegen---------------------------------
 
 //-----------------------------------Collision Detection---------------------------------
-                    CheckIfHit check = new CheckIfHit(kugelListe, schiffListe);
-
-                    if (check.checkCollision()) // Schiffe fahren zusammen
-                    {
-                        playSound(crashPath);
-                        
-                        p.setLeben(p.getLeben() - 20);
-                        p2.setLeben(p2.getLeben() - 20);
- 
-//                   ------------------Schiffe zurücksetzen----------------                     
-                        pos1 = new Position(300, (maxY / 2 - 35));
-                        pos2 = new Position((maxX - 390), (maxY / 2 - 35));
-                        
-                        p.setP(pos1);
-                        p.setCurrentAngle(90);
-                        p.setDirection(new EinheitsVektor(1, 0));
-
-                        p2.setP(pos2);
-                        p2.setCurrentAngle(270);
-                        p2.setDirection(new EinheitsVektor(-1, 0));
-
-                    }
-
-                    if (check.checkIfHit() != null)//Kanonenkugel hat getroffen
-                    {
-                        playSound(hitPath);
-                        
-                        Treffer t = check.checkIfHit();
-                        kugelListe.remove((t.getKugelIndex()));
-
-                    }
+//                    CheckIfHit check = new CheckIfHit(kugelListe, schiffListe);
+//
+//                    if (check.checkCollision()) // Schiffe fahren zusammen
+//                    {
+//                        playSound(crashPath);
+//                        
+//                        p.setLeben(p.getLeben() - 20);
+//                        p2.setLeben(p2.getLeben() - 20);
+// 
+////                   ------------------Schiffe zurücksetzen----------------                     
+//                        pos1 = new Position(300, (maxY / 2 - 35));
+//                        pos2 = new Position((maxX - 390), (maxY / 2 - 35));
+//                        
+//                        p.setP(pos1);
+//                        p.setCurrentAngle(90);
+//                        p.setDirection(new EinheitsVektor(1, 0));
+//
+//                        p2.setP(pos2);
+//                        p2.setCurrentAngle(270);
+//                        p2.setDirection(new EinheitsVektor(-1, 0));
+//
+//                    }
+//
+//                    if (check.checkIfHit() != null)//Kanonenkugel hat getroffen
+//                    {
+//                        playSound(hitPath);
+//                        
+//                        Treffer t = check.checkIfHit();
+//                        kugelListe.remove((t.getKugelIndex()));
+//
+//                    }
                     
-                    if(p.getLeben() <= 0 && p2.getLeben() <= 0)// Unentschieden
-                    {
-                        
-                        gui.dispose();
-                         
-                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Unentschieden","");
-                        wdlg.setVisible(true);
-
-                        this.interrupt();
-                        break;
-                    }
-                    
-                    else if (p.getLeben() <= 0)//Spieler 2 gewinnt
-                    {
-                        
-                        gui.dispose();
-                         
-                        playSound(winSoundPath);
-                        
-                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts !", p2.getName());
-                        wdlg.setVisible(true);
-
-                        this.interrupt();
-                        break;
-                        
-                    } else if (p2.getLeben() <= 0)//Spieler 1 gewinnt
-                    {
-                        
-                        gui.dispose();
-                        
-                        playSound(winSoundPath);
-                        
-                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts!",p.getName());
-                        wdlg.setVisible(true);
-                        
-                        this.interrupt();
-                        break;
-                    }
+//                    if(p.getLeben() <= 0 && p2.getLeben() <= 0)// Unentschieden
+//                    {
+//                        
+//                        gui.dispose();
+//                         
+//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Unentschieden","");
+//                        wdlg.setVisible(true);
+//
+//                        this.interrupt();
+//                        break;
+//                    }
+//                    
+//                    else if (p.getLeben() <= 0)//Spieler 2 gewinnt
+//                    {
+//                        
+//                        gui.dispose();
+//                         
+//                        playSound(winSoundPath);
+//                        
+//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts !", p2.getName());
+//                        wdlg.setVisible(true);
+//
+//                        this.interrupt();
+//                        break;
+//                        
+//                    } else if (p2.getLeben() <= 0)//Spieler 1 gewinnt
+//                    {
+//                        
+//                        gui.dispose();
+//                        
+//                        playSound(winSoundPath);
+//                        
+//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts!",p.getName());
+//                        wdlg.setVisible(true);
+//                        
+//                        this.interrupt();
+//                        break;
+//                    }
 
 
 
@@ -376,33 +388,34 @@ public class GameGUI extends javax.swing.JFrame {
                     }
 //                    
 //                    Thread.sleep(10);
-                } catch (InterruptedException ex)
-                {
-                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+               } 
+//                    catch (InterruptedException ex)
+//                {
+//                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
 
         }
 
-        public void checkAndIncrease1()//Bewegt Spieler1 und sorgt dafür das man über den Rand fahren kann
+        public void checkAndIncrease()//Bewegt Spieler1 und sorgt dafür das man über den Rand fahren kann
         {
 
             if (p.getP().getX() <= 0)
             {
-                pos1.setX(maxX - 1);
-            } else if (pos1.getX() >= maxX)
+                p.getP().setX(maxX - 1);
+            } else if (p.getP().getX() >= maxX)
             {
-                pos1.setX(1);
-            } else if (pos1.getY() <= 0)
+                p.getP().setX(1);
+            } else if (p.getP().getY() <= 0)
             {
-                pos1.setY(maxY - 1);
-            } else if (pos1.getY() >= maxY)
+                p.getP().setY(maxY - 1);
+            } else if (p.getP().getY() >= maxY)
             {
-                pos1.setY(1);
+                p.getP().setY(1);
             } else
             {
-                pos1.increaseY(p.getDirection().getY() * p.getSpeed());
-                pos1.increaseX(p.getDirection().getX() * p.getSpeed());
+                p.getP().increaseY(p.getDirection().getY() * p.getSpeed());
+                p.getP().increaseX(p.getDirection().getX() * p.getSpeed());
             }
         }
 
@@ -613,7 +626,7 @@ public class GameGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GameGUI().setVisible(true);
+                new GameGUI(null).setVisible(true);
             }
         });
     }

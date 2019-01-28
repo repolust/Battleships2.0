@@ -9,6 +9,7 @@ import Client.*;
 import Beans.EinheitsVektor;
 import Beans.Kugel;
 import Beans.Player;
+import Beans.Position;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -40,6 +41,8 @@ public class GameBL
     private LinkedList<Player> schiffListe;
     private LinkedList<Kugel> kugelListe;
 
+    private Position startPos1 = new Position(300, (maxY / 2 - 35));
+    
     public GameBL(JPanel jpGame)
     {
         this.jpGame = jpGame;

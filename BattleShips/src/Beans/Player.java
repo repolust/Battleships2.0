@@ -5,6 +5,7 @@
  */
 package Beans;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Rectangle;
 
@@ -28,10 +29,11 @@ public class Player {
     private double speed;
     private int width, height;
     private int rotation;
+    private Dimension screensize;
 
  
 
-    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation) 
+    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation,Dimension screensize) 
     {
         this.name = name;
         this.c = c;
@@ -47,6 +49,7 @@ public class Player {
         this.width = schiff.getWidth(null);
         this.height = schiff.getHeight(null);
         this.rotation = rotation;
+        this.screensize = screensize;
     }
 
        public int getWidth() {
@@ -75,6 +78,14 @@ public class Player {
 
     public void setRotation(int rotation) {
         this.rotation = rotation;
+    }
+
+    public Dimension getScreensize() {
+        return screensize;
+    }
+
+    public void setScreensize(Dimension screensize) {
+        this.screensize = screensize;
     }
        
     public void setWidth(int width) {

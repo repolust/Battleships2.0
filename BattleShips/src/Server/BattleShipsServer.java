@@ -7,7 +7,9 @@ package Server;
 
 import Beans.Kugel;
 import Beans.Player;
+import Beans.Position;
 import Beans.Treffer;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,7 +38,9 @@ public class BattleShipsServer{
     private LinkedList<Kugel> kugelList = new LinkedList<Kugel>(); 
     private static Map<ObjectInputStream, Player> clients = new HashMap();
     private LinkedList<ObjectOutputStream> connections = new LinkedList();
-
+    private LinkedList<Position> startPositions = new LinkedList(); // Server muss startPositionen der Spieler wissen
+    
+            
     public BattleShipsServer(ServerGUI gui) {
         this.gui = gui;
         startServer();
@@ -115,6 +119,11 @@ public class BattleShipsServer{
      
     }
     
+    public void calculateStartPosition(int pos)
+    {
+        
+    }
+    
     
     
     class ClientCommunicationThread extends Thread
@@ -137,11 +146,11 @@ public class BattleShipsServer{
             {
                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-               Object objplayer = in.readObject();
+               Object obj = in.readObject();
                
-               if(objplayer instanceof Player)
+               if(obj instanceof Player)
                {
-                   Player p = (Player) objplayer;
+                   Player p = (Player) obj;
                   
                        clients.put(in,p);
                        connections.add(out);
@@ -149,14 +158,15 @@ public class BattleShipsServer{
                                 
                }
                
+               
                synchronized(clients) {                 
                while(!Thread.interrupted())
                {
-                   Object obj = in.readObject();
+                   Object obj2 = in.readObject();
                    
-                   if(obj instanceof Player)
+                   if(obj2 instanceof Player)
                     {
-                        Player p = (Player) obj;
+                        Player p = (Player) obj2;
                         clients.replace(in, p);
                         
                         LinkedList<Player> players = new LinkedList();
@@ -166,10 +176,14 @@ public class BattleShipsServer{
                         }
                         out.writeObject(players);
                     }
-                   else if(obj instanceof Kugel){
-                       Kugel k = (Kugel)obj;
+                   else if(obj2 instanceof Kugel){
+                       Kugel k = (Kugel)obj2;
                        kugelList.add(k); 
                        out.writeObject(kugelList);
+                   }
+                   else if(obj2 instanceof Dimension)
+                   {
+                       //calculateStartPosition(position of player)
                    }
                        
                    
@@ -228,7 +242,13 @@ public class BattleShipsServer{
 
                 Rectangle rectK = new Rectangle(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse());
 
-                for (Player p : clients.keySet()) 
+                LinkedList<Player> players = new LinkedList();
+                for (ObjectInputStream oin : clients.keySet()) 
+                {
+                  players.add(clients.get(oin));
+                }
+                        
+                for (Player p : players) 
                 {
                     Rectangle hitbox = p.getHitbox();
                     
@@ -244,6 +264,8 @@ public class BattleShipsServer{
             }
 
         }
+        
+        
     }
 
     }
