@@ -51,12 +51,12 @@ public class GameBL
         this.maxX = maxX;
         this.maxY = maxY;
         
-        ServerCommunicationThread connection = new ServerCommunicationThread();
-        DrawThread drawThread = new DrawThread();
-        
-        connection.start();
-        drawThread.start();
-//        initMyInits();
+//        ServerCommunicationThread connection = new ServerCommunicationThread();
+//        DrawThread drawThread = new DrawThread();
+//        
+//        connection.start();
+//        drawThread.start();
+
 
     }
 

@@ -32,6 +32,7 @@ public class ColorChooserDlg extends javax.swing.JDialog {
         setUndecorated(true);
         initComponents();
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
     }
 
     /**

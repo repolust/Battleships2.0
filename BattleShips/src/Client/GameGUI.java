@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import sound.MusikThread;
 
 /**
@@ -90,17 +91,20 @@ public class GameGUI extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
+        this.jpGame.setSize(1920, 918);
         maxX = (int) this.jpGame.getSize().getWidth();
         maxY = (int) this.jpGame.getSize().getHeight();
+        
         this.p = p;
         
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
         
-        bl = new GameBL(this.jpGame,maxX,maxY);
-//        bl = new GameBL(this.jpGame, schiffListe);
+//        bl = new GameBL(this.jpGame,maxX,maxY);
         
         playSound(airhornPath);
+        
+        JOptionPane.showMessageDialog(null,"MaxX: "+maxX+" | MaxY: "+maxY);
     }
 
      public void playSound(String path)
@@ -524,9 +528,10 @@ public class GameGUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(102, 255, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(32767, 100));
         jPanel1.setMinimumSize(new java.awt.Dimension(100, 39));
-        jPanel1.setPreferredSize(new java.awt.Dimension(659, 80));
+        jPanel1.setPreferredSize(new java.awt.Dimension(659, 75));
         jPanel1.setLayout(new java.awt.GridLayout(1, 6));
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Name:");
         jPanel1.add(jLabel1);
@@ -534,13 +539,16 @@ public class GameGUI extends javax.swing.JFrame {
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(lbName);
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Leben:");
         jPanel1.add(jLabel4);
 
+        lbLeben.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lbLeben.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(lbLeben);
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Munition:");
         jPanel1.add(jLabel3);
@@ -550,15 +558,17 @@ public class GameGUI extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        jpGame.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+
         javax.swing.GroupLayout jpGameLayout = new javax.swing.GroupLayout(jpGame);
         jpGame.setLayout(jpGameLayout);
         jpGameLayout.setHorizontalGroup(
             jpGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 659, Short.MAX_VALUE)
+            .addGap(0, 657, Short.MAX_VALUE)
         );
         jpGameLayout.setVerticalGroup(
             jpGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 315, Short.MAX_VALUE)
+            .addGap(0, 318, Short.MAX_VALUE)
         );
 
         getContentPane().add(jpGame, java.awt.BorderLayout.CENTER);

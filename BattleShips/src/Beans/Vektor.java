@@ -5,12 +5,14 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Tobias
  * Erstellt am 2.5.2018
  */
-public class Vektor
+public class Vektor implements Serializable
 {
 
     protected double x;

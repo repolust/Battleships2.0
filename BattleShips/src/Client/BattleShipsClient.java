@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,20 +39,25 @@ public class BattleShipsClient
         return theInstance;
     }
     
-    public void connect() throws UnknownHostException, IOException
+    public void connect() 
     {
-        ADDR = InetAddress.getLocalHost();
-        //ADDR = InetAddress.getByAddress("10.40.200.10", null);
-        socket = new Socket(ADDR, 1337);       
+        try {
+            ADDR = InetAddress.getLocalHost();
+            //ADDR = InetAddress.getByAddress("10.40.200.10", null);
+            socket = new Socket(ADDR, 1337);
             
-        this.out = new ObjectOutputStream(socket.getOutputStream());
-        this.in = new ObjectInputStream(socket.getInputStream());
+            this.out = new ObjectOutputStream(socket.getOutputStream());
+            this.in = new ObjectInputStream(socket.getInputStream());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void sendObject(Object toSend) throws IOException, ClassNotFoundException
     {
         out.writeObject(toSend);
-        Object obj = in.readObject();
     }
 
     public ObjectInputStream getInputStream() {

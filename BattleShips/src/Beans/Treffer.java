@@ -5,12 +5,14 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Michael
  * Erstellt am 18.6.2018
  */
-public class Treffer {
+public class Treffer implements Serializable{
     
     private int playernummer;
     private int kugelIndex;

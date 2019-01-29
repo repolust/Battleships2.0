@@ -5,11 +5,13 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Michael
  */
-public class Option {//Option-Klasse die die Werte für den Start des Spiels beinhaltet
+public class Option implements Serializable{//Option-Klasse die die Werte für den Start des Spiels beinhaltet
     
     private int leben,munition,speed ,radius;
 

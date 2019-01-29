@@ -5,12 +5,14 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Tobias
  * Erstellt am 2.5.2018
  */
-public class EinheitsVektor extends Vektor{
+public class EinheitsVektor extends Vektor implements Serializable{
     
     public EinheitsVektor(double x, double y) {
         super(x, y);

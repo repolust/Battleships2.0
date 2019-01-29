@@ -40,7 +40,8 @@ public class BattleShipsServer {
     private static Map<ObjectInputStream, Player> clients = new HashMap();
     private LinkedList<ObjectOutputStream> connections = new LinkedList();
 
-    private int maxY, maxX;
+    private int maxX = 1920;
+    private int maxY = 910; 
 
     public void initClientPosition() {
         
@@ -67,6 +68,9 @@ public class BattleShipsServer {
                 //setEinheitsvektor
                 player1.setDirection(new EinheitsVektor(1, 0));
                 player2.setDirection(new EinheitsVektor(-1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
                 //updatePlayerliste
                 players.set(0, player1);
                 players.set(1, player2);
@@ -91,6 +95,10 @@ public class BattleShipsServer {
                 player1.setDirection(new EinheitsVektor(1, 0));
                 player2.setDirection(new EinheitsVektor(-1, 0));
                 player3.setDirection(new EinheitsVektor(1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
+                player3.setCurrentAngle(90);
                 //updatePlayerliste
                 players.set(0, player1);
                 players.set(1, player2);
@@ -121,6 +129,11 @@ public class BattleShipsServer {
                 player2.setDirection(new EinheitsVektor(-1, 0));
                 player3.setDirection(new EinheitsVektor(1, 0));
                 player4.setDirection(new EinheitsVektor(-1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
+                player3.setCurrentAngle(90);
+                player4.setCurrentAngle(270);
                 //updatePlayerliste
                 players.set(0, player1);
                 players.set(1, player2);
@@ -172,7 +185,7 @@ public class BattleShipsServer {
                 try {
 
                     Socket socket = serverSocket.accept();
-
+                    gui.log("Neuer client");
                     ClientCommunicationThread cct = new ClientCommunicationThread(socket);
 
                 } catch (SocketTimeoutException ex) {
@@ -205,12 +218,17 @@ public class BattleShipsServer {
         @Override
         public void run() {
 
-            try {
+            gui.log("Communication Started!");
+        try {
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                
                 Object obj = in.readObject();
-
-                if (obj instanceof Player) {
+                
+            synchronized (clients) 
+            {
+                if (obj instanceof Player) 
+                {
                     Player p = (Player) obj;
 
                     clients.put(in, p);
@@ -218,13 +236,13 @@ public class BattleShipsServer {
                     gui.log(p.getName() + " joined the Battle!");
 
                 }
-
-                synchronized (clients) {
+         
                     
                     while (!Thread.interrupted()) {
                         Object gameObj = in.readObject();
 
-                        if (gameObj instanceof Player) {
+                        if (gameObj instanceof Player) 
+                        {
                             Player p = (Player) gameObj;
                             clients.replace(in, p);
 
@@ -234,11 +252,37 @@ public class BattleShipsServer {
                                 players.add(clients.get(oin));
                             }
                             //----------------------------
-                            out.writeObject(players);
-                        } else if (gameObj instanceof Kugel) {
+                            for (ObjectOutputStream con : connections) {
+                                con.writeObject(players);
+                            }
+                            
+                        } 
+                        else if (gameObj instanceof Kugel) 
+                        {
                             Kugel k = (Kugel) gameObj;
                             kugelList.add(k);
-                            out.writeObject(kugelList);
+                            for (ObjectOutputStream con : connections) {
+                                con.writeObject(kugelList);
+                            }
+                            
+                        }
+                        else if(gameObj instanceof String)
+                        {
+                            String command = (String) gameObj;
+                            if(command.equals("currentPlayers"))
+                            {
+                                LinkedList<Player> players = new LinkedList();
+                                for (ObjectInputStream oin : clients.keySet()) {
+                                    players.add(clients.get(oin));
+                                }
+                                out.writeObject(players);
+                            }
+                            else if(command.equals("imReady"))
+                            {
+                                Player p = clients.get(in);
+                                p.setBereit(true);
+                                clients.put(in, p);
+                            }
                         }
 
                     }
@@ -255,7 +299,6 @@ public class BattleShipsServer {
     class LogicThread extends Thread {
 
         public LogicThread() {
-
             
         }
 
@@ -299,28 +342,33 @@ public class BattleShipsServer {
                     }
         }
 
-        public void checkCollision() {
-            LinkedList<Player> players = new LinkedList();
-            for (ObjectInputStream oin : clients.keySet()) {
-                players.add(clients.get(oin));
-            }
+        public void checkCollision() 
+        {
+            if(!clients.isEmpty())
+            {    
+                LinkedList<Player> players = new LinkedList();
+                
+                for (ObjectInputStream oin : clients.keySet()) {
+                    players.add(clients.get(oin));
+                }
 
-            for (Player p : players) {
-                for (Player p2 : players) {
-                    if (p != p2) {
-                        if (p.getHitbox().intersects(p2.getHitbox())) {
-                            //Jedem client sagen dass 2 SChiffe ineinander gefahren sind
-                            //schiffs koord. reseten
-                            //leben abziehen
-                            //den 2en jeweils leben mitteilen
-                            //allen die pos mitteilen
-                            gui.log(p.getName() + " und " + p2.getName() + " sind zusammengefahren!");
+                for (Player p : players) {
+                    for (Player p2 : players) {
+                        if (p != p2) {
+                            if (p.getHitbox().intersects(p2.getHitbox())) {
+                                //Jedem client sagen dass 2 SChiffe ineinander gefahren sind
+                                //schiffs koord. reseten
+                                p.setLeben(p.getLeben() - 20);
+                                p2.setLeben(p2.getLeben() - 20);
+                                //den 2en jeweils leben mitteilen
+                                //allen die pos mitteilen
+                                gui.log(p.getName() + " und " + p2.getName() + " sind zusammengefahren!");
+                            }
                         }
-                    }
 
+                    }
                 }
             }
-
         }
 
         public void checkIfHit() {
@@ -351,5 +399,7 @@ public class BattleShipsServer {
         }
 
     }
+    
+    
 
 }

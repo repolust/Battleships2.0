@@ -8,17 +8,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.Serializable;
 
 /**
  *
  * @author Team
  * Erstellt am 11.4.2018
  */
-public class Player {
+public class Player implements Serializable{
     
     private String name;
     private Color c;
-    private Image schiff;
+    private transient Image schiff;
     private int leben;
     private int munition;
     private int index;
@@ -29,12 +30,13 @@ public class Player {
     private double speed;
     private int width, height;
     private int rotation;
+    //Neu mit Server
     private Position startPos;
-
+    private boolean bereit;
 
  
 
-    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation, Position startPos) 
+    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation, Position startPos, boolean bereit) 
     {
         this.name = name;
         this.c = c;
@@ -51,6 +53,7 @@ public class Player {
         this.height = schiff.getHeight(null);
         this.rotation = rotation;
         this.startPos = startPos;
+        this.bereit = bereit;
     }
 
        public int getWidth() {
@@ -73,6 +76,10 @@ public class Player {
            return hitbox;
        }
 
+       public void setToStartPosition()
+       {
+           this.p = this.startPos;
+       }
     public int getRotation() {
         return rotation;
     }
@@ -94,6 +101,14 @@ public class Player {
     }
     public double getSpeed() {
         return speed;
+    }
+
+    public boolean isBereit() {
+        return bereit;
+    }
+
+    public void setBereit(boolean bereit) {
+        this.bereit = bereit;
     }
 
     public void setSpeed(double speed) {

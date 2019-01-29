@@ -16,7 +16,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import models.SpielerListModel;
+import models.SpielerTableModel;
 
 /**
  *
@@ -33,7 +33,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
 
     private Player p;
 
-    private SpielerListModel slm = new SpielerListModel();
+    private SpielerTableModel slm = new SpielerTableModel();
 
     private int index = 0;
 
@@ -104,6 +104,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         jPanel2.add(jLabel1);
 
         tfName.setFont(new java.awt.Font("Old English Text MT", 1, 18)); // NOI18N
+        tfName.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         tfName.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         jPanel2.add(tfName);
 
@@ -224,7 +225,7 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         if ((!name.equals("")) && ship != null) {
             this.dispose();
 
-            p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), -1, null, shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius(), null);
+            p = new Player(this.name, c, ship, o.getLeben(), o.getMunition(), -1, null, shiffArt, 90, new EinheitsVektor(1, 0), o.getSpeed(), o.getRadius(), null,false);
             //Beitreten-------------------------------
             this.dispose();
             LobbyGUI gg = new LobbyGUI(p);

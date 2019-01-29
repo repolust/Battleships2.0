@@ -7,7 +7,7 @@ package Server;
 
 
 import javax.swing.JOptionPane;
-import models.SpielerListModel;
+import models.SpielerTableModel;
 
 /**
  *
@@ -19,12 +19,12 @@ public class ServerGUI extends javax.swing.JFrame {
      * Creates new form ServerGUI
      */
 
-    private SpielerListModel sm = new SpielerListModel();
+    private SpielerTableModel sm = new SpielerTableModel();
     private BattleShipsServer bss;
     
     public ServerGUI() {
         initComponents();
-        this.jLPlayer.setModel(sm);
+//        this.jLPlayer.setModel(sm);
         
          bss  = new BattleShipsServer(this);
     }
@@ -48,8 +48,7 @@ public class ServerGUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -59,11 +58,15 @@ public class ServerGUI extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                onStopTheServer(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED), "Players"));
 
-        jLPlayer.setModel(new javax.swing.AbstractListModel<String>()
-        {
+        jLPlayer.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
@@ -117,6 +120,10 @@ public class ServerGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void onStopTheServer(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onStopTheServer
+        bss.stopServer();
+    }//GEN-LAST:event_onStopTheServer
 
     /**
      * @param args the command line arguments

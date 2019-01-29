@@ -5,11 +5,13 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Tobias
  */
-public class Position
+public class Position implements Serializable
 {
 
     private double x;

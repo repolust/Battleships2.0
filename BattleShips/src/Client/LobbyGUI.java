@@ -12,8 +12,13 @@ import Beans.Player;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import models.SpielerListModel;
+import models.SpielerTableModel;
 
 /**
  *
@@ -25,31 +30,35 @@ public class LobbyGUI extends javax.swing.JFrame {
     /**
      * Creates new form NewPlayerDlg
      */
-    private Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    private int maxY = (int) screensize.getHeight()-80;
-    private int maxX = (int) screensize.getWidth();
-
-    private String name = null;
-    private Color c;
 
     private Player p;
 
-    private SpielerListModel slm = new SpielerListModel();
-
-    private int index = 0;
-
-    private Image ship = null;
-    private String shiffArt = "";
-
+    private SpielerTableModel slm = new SpielerTableModel();
+    private BattleShipsClient connection;
 
     public LobbyGUI(Player p) {
 
         initComponents();
-        this.setLocationRelativeTo(null);
-        
+        this.setLocationRelativeTo(null);   
         this.setResizable(false);
-        this.jlMyPlayerListe.setModel(slm);
-
+        
+        this.p = p;
+        this.jTPlayers.setModel(slm);
+        
+        
+        
+        try {
+            //Beim Server anmelden
+            connection = BattleShipsClient.getTheInstance();
+            connection.connect();       
+            connection.sendObject(p);
+            
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        UpdateThread searchForUpdates = new UpdateThread();
+        searchForUpdates.start();
     }
 
 
@@ -67,8 +76,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         jTextPane1 = new javax.swing.JTextPane();
         jPanel7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jlMyPlayerListe = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTPlayers = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btBereit = new javax.swing.JButton();
         btSpielStarten = new javax.swing.JButton();
@@ -83,9 +92,20 @@ public class LobbyGUI extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Spieler", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Old English Text MT", 1, 14))); // NOI18N
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
-        jScrollPane2.setViewportView(jlMyPlayerListe);
+        jTPlayers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTPlayers);
 
-        jPanel1.add(jScrollPane2);
+        jPanel1.add(jScrollPane3);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -101,12 +121,12 @@ public class LobbyGUI extends javax.swing.JFrame {
         jPanel2.add(btBereit);
 
         btSpielStarten.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
-        btSpielStarten.setText("Spiel starten");
+        btSpielStarten.setText("Beenden");
         btSpielStarten.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btSpielStarten.setContentAreaFilled(false);
         btSpielStarten.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSpielStartenActionPerformed(evt);
+                btSpielBeenden(evt);
             }
         });
         jPanel2.add(btSpielStarten);
@@ -131,7 +151,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btSpielStartenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSpielStartenActionPerformed
+    private void btSpielBeenden(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSpielBeenden
 //        if (slm.getSize() == 2) {
 //            this.dispose();
 //
@@ -145,13 +165,58 @@ public class LobbyGUI extends javax.swing.JFrame {
 //        } else {
 //            JOptionPane.showMessageDialog(this, "Du musst 2 Spieler erstellen!");
 //        }
-    }//GEN-LAST:event_btSpielStartenActionPerformed
+    }//GEN-LAST:event_btSpielBeenden
 
     private void onBereitMachen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBereitMachen
-        //Anmelden, vom Server restlichen Daten bekommen
-        // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
+        try {
+            //Anmelden, vom Server restlichen Daten bekommen
+            connection.sendObject("imReady");
+            JOptionPane.showMessageDialog(null, "Server bescheid gesagt");
+            
+            // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
+        } catch (IOException ex) {
+            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_onBereitMachen
 
+    public class UpdateThread extends Thread
+    {
+
+        public UpdateThread() {
+            
+        }
+
+        @Override
+        public void run() {
+            while(!isInterrupted())
+            {
+                try {
+                    ObjectInputStream in = connection.getInputStream();
+                    //REquesrUpdate
+                    connection.sendObject("currentPlayers");
+                   
+                    LinkedList<Player> players = (LinkedList<Player>) in.readObject();
+                    slm.setPlayerList(players);
+                } catch (IOException ex) {
+                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -204,8 +269,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTPlayers;
     private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JList<String> jlMyPlayerListe;
     // End of variables declaration//GEN-END:variables
 }

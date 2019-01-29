@@ -5,12 +5,14 @@
  */
 package Beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Leonardo
  * Erstellt am 6.6.2018
  */
-public class Kugel {
+public class Kugel implements Serializable{
     
     private EinheitsVektor einheintsVektor;
     private Position pos;
