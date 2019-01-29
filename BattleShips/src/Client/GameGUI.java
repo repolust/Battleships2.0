@@ -112,8 +112,8 @@ public class GameGUI extends javax.swing.JFrame {
 
         private JFrame gui;
         
-        private LinkedList<Player> schiffListe = new LinkedList<Player>();
-        private LinkedList<Kugel> kugelListe = new LinkedList<Kugel>();
+//        private LinkedList<Player> schiffListe = new LinkedList<Player>();
+//        private LinkedList<Kugel> kugelListe = new LinkedList<Kugel>();
         private Player p;
         private JLabel lbName,lbHealth,lbMunition;
         
@@ -183,8 +183,8 @@ public class GameGUI extends javax.swing.JFrame {
                     if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss
                     {
 
-                        EinheitsVektor einVLinks = new EinheitsVektor(schiffListe.get(0).getDirection().getX(), schiffListe.get(0).getDirection().getY()); 
-                        EinheitsVektor einVRechts = new EinheitsVektor(schiffListe.get(0).getDirection().getX(), schiffListe.get(0).getDirection().getY());
+                        EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY()); 
+                        EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
 
                         einVLinks.rotateEinheitsVektor(-90); 
                         einVRechts.rotateEinheitsVektor(90);
@@ -268,31 +268,7 @@ public class GameGUI extends javax.swing.JFrame {
 
 
 //-----------------------------------Kugel bewegen und entfernen---------------------------------
-                    int removeIndex = -1;
-
-                    for (Kugel k : kugelListe)
-                    {
-
-                        k.getPos().increaseX(k.getEinheintsVektor().getX() * 20);
-                        k.getPos().increaseY(k.getEinheintsVektor().getY() * 20);
-
-                        if (k.getPos().getX() > maxX || k.getPos().getX() < 0)
-                        {
-                            removeIndex = kugelListe.indexOf(k);
-
-                        }
-                        if (k.getPos().getY() > maxY || k.getPos().getY() < 0)
-                        {
-                            removeIndex = kugelListe.indexOf(k);
-
-                        }
-
-                    }
-
-                    if (removeIndex != -1)
-                    {
-                        kugelListe.remove(removeIndex);
-                    }
+                    
 //-----------------------------------//Kugel bewegen---------------------------------
 
 //-----------------------------------Collision Detection---------------------------------
