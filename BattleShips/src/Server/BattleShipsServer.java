@@ -40,9 +40,10 @@ public class BattleShipsServer {
     private static Map<ObjectInputStream, Player> clients = new HashMap();
     private LinkedList<ObjectOutputStream> connections = new LinkedList();
 
-    private int hoeheBildschirm, breiteBildschirm;
+    private int maxY, maxX;
 
     public void initClientPosition() {
+        
         LinkedList<Player> players = new LinkedList();
         for (ObjectInputStream oin : clients.keySet()) {
             players.add(clients.get(oin));
@@ -56,8 +57,8 @@ public class BattleShipsServer {
                 Player player1 = players.get(0);
                 Player player2 = players.get(1);
                 //setPosition
-                Position p1 = new Position(300, (hoeheBildschirm / 2) - 35);
-                Position p2 = new Position(breiteBildschirm - 300, (hoeheBildschirm / 2) - 35);
+                Position p1 = new Position(300, (maxY / 2) - 35);
+                Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
                 player1.setP(p1);
                 player2.setP(p2);
                 //setRotation
@@ -77,8 +78,8 @@ public class BattleShipsServer {
                 Player player3 = players.get(2);
                 //setPosition
                 Position p1 = new Position(300, 200);
-                Position p2 = new Position(breiteBildschirm - 300, 200);
-                Position p3 = new Position(300, hoeheBildschirm - 200);
+                Position p2 = new Position(maxX - 300, 200);
+                Position p3 = new Position(300, maxY - 200);
                 player1.setP(p1);
                 player2.setP(p2);
                 player3.setP(p3);
@@ -103,9 +104,9 @@ public class BattleShipsServer {
                 Player player4 = players.get(3);
                 //setPosition
                 Position p1 = new Position(300, 200);
-                Position p2 = new Position(breiteBildschirm - 300, 200);
-                Position p3 = new Position(300, hoeheBildschirm - 200);
-                Position p4 = new Position(breiteBildschirm - 300, hoeheBildschirm - 200);
+                Position p2 = new Position(maxX - 300, 200);
+                Position p3 = new Position(300, maxY - 200);
+                Position p4 = new Position(maxX - 300, maxY - 200);
                 player1.setP(p1);
                 player2.setP(p2);
                 player3.setP(p3);
@@ -219,6 +220,7 @@ public class BattleShipsServer {
                 }
 
                 synchronized (clients) {
+                    
                     while (!Thread.interrupted()) {
                         Object gameObj = in.readObject();
 
@@ -250,10 +252,51 @@ public class BattleShipsServer {
         }
     }
 
-    class CheckIfHitThread extends Thread {
+    class LogicThread extends Thread {
 
-        public CheckIfHitThread() {
+        public LogicThread() {
 
+            
+        }
+
+        @Override
+        public void run() {
+            
+            if(!kugelList.isEmpty())
+            {
+                moveKugeln();
+                checkIfHit();
+            }
+            checkCollision();
+        }
+        
+        public void moveKugeln()
+        {
+            int removeIndex = -1;
+
+                    for (Kugel k : kugelList)
+                    {
+
+                        k.getPos().increaseX(k.getEinheintsVektor().getX() * 20);
+                        k.getPos().increaseY(k.getEinheintsVektor().getY() * 20);
+
+                        if (k.getPos().getX() > maxX || k.getPos().getX() < 0)
+                        {
+                            removeIndex = kugelList.indexOf(k);
+
+                        }
+                        if (k.getPos().getY() > maxY || k.getPos().getY() < 0)
+                        {
+                            removeIndex = kugelList.indexOf(k);
+
+                        }
+
+                    }
+
+                    if (removeIndex != -1)
+                    {
+                        kugelList.remove(removeIndex);
+                    }
         }
 
         public void checkCollision() {

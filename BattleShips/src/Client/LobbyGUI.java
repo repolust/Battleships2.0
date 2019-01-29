@@ -26,8 +26,8 @@ public class LobbyGUI extends javax.swing.JFrame {
      * Creates new form NewPlayerDlg
      */
     private Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-    private int hoeheSchirm = (int) screensize.getHeight();
-    private int breiteSchirm = (int) screensize.getWidth();
+    private int maxY = (int) screensize.getHeight()-80;
+    private int maxX = (int) screensize.getWidth();
 
     private String name = null;
     private Color c;
@@ -78,7 +78,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Spieler erstellen");
         setPreferredSize(new java.awt.Dimension(688, 387));
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Spieler", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Old English Text MT", 1, 14))); // NOI18N
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));

@@ -68,8 +68,8 @@ public class GameGUI extends javax.swing.JFrame {
     
     private KeyListener jpGameListener = new KeyAdapterImpl();
     
-    private int maxX = (int) this.jpGame.getSize().getWidth();
-    private int maxY = (int) this.jpGame.getSize().getHeight();
+    private int maxX;
+    private int maxY;
     
     private Player p;
     
@@ -90,6 +90,8 @@ public class GameGUI extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
+        maxX = (int) this.jpGame.getSize().getWidth();
+        maxY = (int) this.jpGame.getSize().getHeight();
         this.p = p;
         
         jpGame.addKeyListener(jpGameListener);
@@ -268,31 +270,7 @@ public class GameGUI extends javax.swing.JFrame {
 
 
 //-----------------------------------Kugel bewegen und entfernen---------------------------------
-                    int removeIndex = -1;
-
-                    for (Kugel k : kugelListe)
-                    {
-
-                        k.getPos().increaseX(k.getEinheintsVektor().getX() * 20);
-                        k.getPos().increaseY(k.getEinheintsVektor().getY() * 20);
-
-                        if (k.getPos().getX() > maxX || k.getPos().getX() < 0)
-                        {
-                            removeIndex = kugelListe.indexOf(k);
-
-                        }
-                        if (k.getPos().getY() > maxY || k.getPos().getY() < 0)
-                        {
-                            removeIndex = kugelListe.indexOf(k);
-
-                        }
-
-                    }
-
-                    if (removeIndex != -1)
-                    {
-                        kugelListe.remove(removeIndex);
-                    }
+                    
 //-----------------------------------//Kugel bewegen---------------------------------
 
 //-----------------------------------Collision Detection---------------------------------
