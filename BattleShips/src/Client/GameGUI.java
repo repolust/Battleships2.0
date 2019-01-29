@@ -80,7 +80,7 @@ public class GameGUI extends javax.swing.JFrame {
 
         if (bl != null)
         {
-            bl.drawPlayers();
+            bl.draw();
 
         }
     }
@@ -95,7 +95,7 @@ public class GameGUI extends javax.swing.JFrame {
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
         
-        bl = new GameBL(this.jpGame);
+        bl = new GameBL(this.jpGame,maxX,maxY);
 //        bl = new GameBL(this.jpGame, schiffListe);
         
         playSound(airhornPath);
@@ -370,7 +370,7 @@ public class GameGUI extends javax.swing.JFrame {
 
 
                     try {
-                        //----------------------------BL zeichnet------------------------------------
+                        //----------------------------Daten werden zum Server geschickt------------------------------------
                         connection.sendObject(p);
                         
                     } catch (IOException ex) {
