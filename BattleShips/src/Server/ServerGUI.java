@@ -41,7 +41,7 @@ public class ServerGUI extends javax.swing.JFrame
         this.jTextArea1.append(message + "\n");
     }
 
-    public void fillPlayertable(LinkedList<Player> list)
+    public void updatePlayertable(LinkedList<Player> list)
     {
        sm.setPlayerList(list);
     }

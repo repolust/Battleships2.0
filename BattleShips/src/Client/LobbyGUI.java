@@ -171,7 +171,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         try {
             //Anmelden, vom Server restlichen Daten bekommen
             connection.sendObject("imReady");
-            JOptionPane.showMessageDialog(null, "Server bescheid gesagt");
+//            JOptionPane.showMessageDialog(null, "Server bescheid gesagt");
             
             // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
         } catch (IOException ex) {
@@ -193,12 +193,20 @@ public class LobbyGUI extends javax.swing.JFrame {
             while(!isInterrupted())
             {
                 try {
-                    ObjectInputStream in = connection.getInputStream();
+                    
                     //REquesrUpdate
                     connection.sendObject("currentPlayers");
-                   
-                    LinkedList<Player> players = (LinkedList<Player>) in.readObject();
-                    slm.setPlayerList(players);
+
+                    
+                    Object obj = connection.getObject();
+                    
+                    if(obj instanceof LinkedList)
+                    {
+                        LinkedList<Player> players = (LinkedList<Player>) obj;   
+
+                        slm.setPlayerList(players);
+                    }
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {

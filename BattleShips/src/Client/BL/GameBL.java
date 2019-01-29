@@ -176,11 +176,11 @@ public class GameBL
      public class ServerCommunicationThread extends Thread
     {
 
-         private ObjectInputStream in;
+         private BattleShipsClient bss;
          
         public ServerCommunicationThread() {
             
-            in = BattleShipsClient.getTheInstance().getInputStream();
+            bss = BattleShipsClient.getTheInstance();
         }
 
         @Override
@@ -188,7 +188,7 @@ public class GameBL
             while(!isInterrupted())
             {
                 try {
-                    Object obj = in.readObject();
+                    Object obj = bss.getObject();
                     
                     if(obj instanceof LinkedList)
                     {

@@ -18,51 +18,57 @@ import java.util.logging.Logger;
  *
  * @author michi
  */
-public class BattleShipsClient 
+public class BattleShipsClient
 {
+
     private InetAddress ADDR;
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    
+
     private static BattleShipsClient theInstance;
 
-    private BattleShipsClient() {
+    private BattleShipsClient()
+    {
     }
-    
+
     public static BattleShipsClient getTheInstance()
     {
-        if(theInstance == null)
+        if (theInstance == null)
         {
-            theInstance = new BattleShipsClient();         
+            theInstance = new BattleShipsClient();
         }
         return theInstance;
     }
-    
-    public void connect() 
+
+    public void connect()
     {
-        try {
+        try
+        {
             ADDR = InetAddress.getLocalHost();
             //ADDR = InetAddress.getByAddress("10.40.200.10", null);
             socket = new Socket(ADDR, 1337);
-            
+
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
-        } catch (UnknownHostException ex) {
+        } catch (UnknownHostException ex)
+        {
             Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void sendObject(Object toSend) throws IOException, ClassNotFoundException
     {
         out.writeObject(toSend);
     }
 
-    public ObjectInputStream getInputStream() {
-        return in;
+    public Object getObject() throws IOException, ClassNotFoundException
+    {
+        Object obj = in.readObject();
+        return obj;
     }
-    
-    
+
 }
