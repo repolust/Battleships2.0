@@ -5,6 +5,7 @@
  */
 package Server;
 
+import Beans.EinheitsVektor;
 import Beans.Kugel;
 import Beans.Player;
 import Beans.Position;
@@ -40,42 +41,44 @@ public class BattleShipsServer {
     private LinkedList<ObjectOutputStream> connections = new LinkedList();
 
     private int hoeheBildschirm, breiteBildschirm;
-    
+
     public void initClientPosition() {
         LinkedList<Player> players = new LinkedList();
         for (ObjectInputStream oin : clients.keySet()) {
             players.add(clients.get(oin));
         }
-        
+
         int anzahl = players.size();
-        
-        switch(anzahl){
-            case 2:
-            {
+
+        switch (anzahl) {
+            case 2: {
                 //getPlayer
                 Player player1 = players.get(0);
                 Player player2 = players.get(1);
                 //setPosition
-                Position p1 = new Position(300, (hoeheBildschirm/2)-35);
-                Position p2 = new Position(breiteBildschirm-300, (hoeheBildschirm/2)-35);
+                Position p1 = new Position(300, (hoeheBildschirm / 2) - 35);
+                Position p2 = new Position(breiteBildschirm - 300, (hoeheBildschirm / 2) - 35);
                 player1.setP(p1);
                 player2.setP(p2);
                 //setRotation
                 player1.setRotation(40);
                 player2.setRotation(270);
                 //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1,0));
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                //updatePlayerliste
+                players.set(0, player1);
+                players.set(1, player2);
             }
-            case 3:
-            {
+            case 3: {
                 //getPlayer
                 Player player1 = players.get(0);
                 Player player2 = players.get(1);
                 Player player3 = players.get(2);
                 //setPosition
-                Position p1 = new Position(300,200);
-                Position p2 = new Position(breiteBildschirm-300, 200);
-                Position p3 = new Position(300,hoeheBildschirm-200);
+                Position p1 = new Position(300, 200);
+                Position p2 = new Position(breiteBildschirm - 300, 200);
+                Position p3 = new Position(300, hoeheBildschirm - 200);
                 player1.setP(p1);
                 player2.setP(p2);
                 player3.setP(p3);
@@ -83,20 +86,26 @@ public class BattleShipsServer {
                 player1.setRotation(40);
                 player2.setRotation(270);
                 player3.setRotation(40);
-                
+                //setEinheitsvektor
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                player3.setDirection(new EinheitsVektor(1, 0));
+                //updatePlayerliste
+                players.set(0, player1);
+                players.set(1, player2);
+                players.set(2, player3);
             }
-            case 4:
-            {
+            case 4: {
                 //getPlayer
                 Player player1 = players.get(0);
                 Player player2 = players.get(1);
                 Player player3 = players.get(2);
                 Player player4 = players.get(3);
                 //setPosition
-                Position p1 = new Position(300,200);
-                Position p2 = new Position(breiteBildschirm-300, 200);
-                Position p3 = new Position(300,hoeheBildschirm-200);
-                Position p4 = new Position(breiteBildschirm-300,hoeheBildschirm-200);
+                Position p1 = new Position(300, 200);
+                Position p2 = new Position(breiteBildschirm - 300, 200);
+                Position p3 = new Position(300, hoeheBildschirm - 200);
+                Position p4 = new Position(breiteBildschirm - 300, hoeheBildschirm - 200);
                 player1.setP(p1);
                 player2.setP(p2);
                 player3.setP(p3);
@@ -106,6 +115,16 @@ public class BattleShipsServer {
                 player2.setRotation(270);
                 player3.setRotation(40);
                 player4.setRotation(270);
+                //setEinheitsvektor
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                player3.setDirection(new EinheitsVektor(1, 0));
+                player4.setDirection(new EinheitsVektor(-1, 0));
+                //updatePlayerliste
+                players.set(0, player1);
+                players.set(1, player2);
+                players.set(2, player3);
+                players.set(3, player4);
             }
         }
     }
