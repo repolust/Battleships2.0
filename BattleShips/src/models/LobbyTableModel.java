@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author michi
  */
-public class SpielerTableModel extends AbstractTableModel
+public class LobbyTableModel extends AbstractTableModel
 {
         private List<Player> playerList = new LinkedList<>();
         private String colNames[] = {"Name","Schiff","Bereit?"};
@@ -25,6 +25,12 @@ public class SpielerTableModel extends AbstractTableModel
         {
             this.playerList = list;
             
+            this.fireTableDataChanged();
+        }
+        
+        public void addPlayer(Player p )
+        {
+            this.playerList.add(p);
             this.fireTableDataChanged();
         }
 

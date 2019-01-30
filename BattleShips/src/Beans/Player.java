@@ -34,6 +34,9 @@ public class Player implements Serializable{
     private Position startPos;
     private boolean bereit;
 
+    public Player()
+    {
+    }
  
 
     public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation, Position startPos, boolean bereit) 

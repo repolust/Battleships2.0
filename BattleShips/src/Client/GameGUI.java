@@ -14,7 +14,7 @@ import Client.BL.Controlls;
 import Client.BL.GameBL;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.List;
+import java.util.List;
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -118,8 +118,8 @@ public class GameGUI extends javax.swing.JFrame {
 
         private JFrame gui;
         
-        private LinkedList<Player> schiffListe = new LinkedList<Player>();
-        private LinkedList<Kugel> kugelListe = new LinkedList<Kugel>();
+        private List<Player> schiffListe = new LinkedList<Player>();
+        private List<Kugel> kugelListe = new LinkedList<Kugel>();
         private Player p;
         private JLabel lbName,lbHealth,lbMunition;
         

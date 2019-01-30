@@ -7,6 +7,7 @@ package Server;
 
 import Beans.Player;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import models.SpielerTableModel;
 
@@ -41,7 +42,7 @@ public class ServerGUI extends javax.swing.JFrame
         this.jTextArea1.append(message + "\n");
     }
 
-    public void updatePlayertable(LinkedList<Player> list)
+    public void updatePlayertable(List<Player> list)
     {
        sm.setPlayerList(list);
     }

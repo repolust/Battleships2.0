@@ -22,6 +22,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,9 +38,9 @@ public class BattleShipsServer
     private ServerThread st;
     private ServerGUI gui;
 
-    private LinkedList<Kugel> kugelList = new LinkedList<Kugel>();
+    private List<Kugel> kugelList = new LinkedList();
     private Map<ObjectInputStream, Player> clients = new HashMap();
-    private LinkedList<ObjectOutputStream> connections = new LinkedList();
+    private List<ObjectOutputStream> connections = new LinkedList();
 
     private int maxX = 1920;
     private int maxY = 910;
@@ -47,7 +48,7 @@ public class BattleShipsServer
     public void initClientPosition()
     {
 
-        LinkedList<Player> players = new LinkedList();
+        List<Player> players = new LinkedList();
         for (ObjectInputStream oin : clients.keySet())
         {
             players.add(clients.get(oin));
@@ -156,9 +157,9 @@ public class BattleShipsServer
         startServer();
     }
 
-    public LinkedList<Player> getPlayerList()
+    public List<Player> getPlayerList()
     {
-        LinkedList<Player> players = new LinkedList();
+        List<Player> players = new LinkedList();
         for (ObjectInputStream oin : clients.keySet())
         {
             players.add(clients.get(oin));
@@ -269,13 +270,19 @@ public class BattleShipsServer
                     clients.put(in, p);
                     connections.add(out);
                     gui.log(p.getName() + " joined the Battle!");
-                    
+
+                    for (ObjectOutputStream con : connections)
+                    {
+                        con.writeObject(getPlayerList());
+                    }
                     gui.updatePlayertable(getPlayerList());
 
                 }
 
                 while (!Thread.interrupted())
                 {
+                    
+                    
                     Object gameObj = in.readObject();
 
                     if (gameObj instanceof Player)
@@ -283,13 +290,12 @@ public class BattleShipsServer
                         Player p = (Player) gameObj;
                         clients.replace(in, p);
 
-                        //Player aus der Clientliste
-                        LinkedList<Player> players = new LinkedList();
                         //----------------------------
                         for (ObjectOutputStream con : connections)
                         {
                             con.writeObject(getPlayerList());
                         }
+                        gui.log("Players were sent to all clients!");
 
                     } else if (gameObj instanceof Kugel)
                     {
@@ -303,24 +309,26 @@ public class BattleShipsServer
                     } else if (gameObj instanceof String)
                     {
                         String command = (String) gameObj;
-                        
-                        if (command.equals("currentPlayers"))
-                        {
-                            gui.log("currentPlayers requestet");
-                            
-                            out.writeObject(getPlayerList());                         
-                            gui.log("currentPlayers sent");
-                        } 
-                        else if (command.equals("imReady"))
-                        {
 
+                        if (command.equals("imReady"))
+                        {
+                            
                             Player p = clients.get(in);
                             p.setBereit(true);
-                            clients.put(in, p);
                             
+                            clients.replace(in, p);
+
                             gui.log(p.getName() + " is ready!");
 
+                            for (ObjectOutputStream con : connections)
+                            {
+                                con.writeObject(getPlayerList());
+                                
+                            }
+                            gui.log("Players were sent to all clients!");
+
                             gui.updatePlayertable(getPlayerList());
+
                         }
                     }
 

@@ -73,7 +73,8 @@ public class NewPlayerDlg extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -119,8 +120,10 @@ public class NewPlayerDlg extends javax.swing.JDialog {
 
         btFarbe.setBackground(new java.awt.Color(204, 204, 204));
         btFarbe.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
-        btFarbe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btFarbe.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btFarbeActionPerformed(evt);
             }
         });
@@ -137,8 +140,10 @@ public class NewPlayerDlg extends javax.swing.JDialog {
 
         btSchiff.setBackground(new java.awt.Color(204, 204, 204));
         btSchiff.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
-        btSchiff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btSchiff.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btSchiffActionPerformed(evt);
             }
         });
@@ -155,8 +160,10 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         btBeitreten.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeitreten.setContentAreaFilled(false);
         btBeitreten.setOpaque(true);
-        btBeitreten.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btBeitreten.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 onBeitreten(evt);
             }
         });
@@ -169,8 +176,10 @@ public class NewPlayerDlg extends javax.swing.JDialog {
         btBeenden.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
         btBeenden.setContentAreaFilled(false);
         btBeenden.setOpaque(true);
-        btBeenden.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btBeenden.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btBeendenActionPerformed(evt);
             }
         });

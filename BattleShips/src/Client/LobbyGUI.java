@@ -15,53 +15,58 @@ import java.awt.Image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import models.LobbyTableModel;
 import models.SpielerTableModel;
 
 /**
  *
- * @author Leonardo und Michael
- * Erstellt am 18.4.2018
+ * @author Leonardo und Michael Erstellt am 18.4.2018
  */
-public class LobbyGUI extends javax.swing.JFrame {
+public class LobbyGUI extends javax.swing.JFrame
+{
 
     /**
      * Creates new form NewPlayerDlg
      */
-
     private Player p;
 
-    private SpielerTableModel slm = new SpielerTableModel();
+    private LobbyTableModel slm;
     private BattleShipsClient connection;
+    private UpdateThread searchForUpdates;
 
-    public LobbyGUI(Player p) {
+    public LobbyGUI(Player p)
+    {
 
         initComponents();
-        this.setLocationRelativeTo(null);   
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
-        
+
         this.p = p;
-        this.jTPlayers.setModel(slm);
-        
-        
-        
-        try {
+        slm = new LobbyTableModel();
+        this.jTablePlayers.setModel(slm);
+
+        try
+        {
             //Beim Server anmelden
             connection = BattleShipsClient.getTheInstance();
-            connection.connect();       
+            connection.connect();
+
+            searchForUpdates = new UpdateThread();
+            searchForUpdates.start();
+
             connection.sendObject(p);
             
-        } catch (IOException | ClassNotFoundException ex) {
+        } 
+        catch (IOException | ClassNotFoundException ex)
+        {
             Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        UpdateThread searchForUpdates = new UpdateThread();
-        searchForUpdates.start();
+
     }
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,14 +75,15 @@ public class LobbyGUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jPanel7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTPlayers = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTablePlayers = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btBereit = new javax.swing.JButton();
         btSpielStarten = new javax.swing.JButton();
@@ -92,29 +98,33 @@ public class LobbyGUI extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Spieler", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Old English Text MT", 1, 14))); // NOI18N
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
-        jTPlayers.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        jTablePlayers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTPlayers);
+        jScrollPane2.setViewportView(jTablePlayers);
 
-        jPanel1.add(jScrollPane3);
+        jPanel1.add(jScrollPane2);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 2));
 
         btBereit.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
         btBereit.setText("Bereit machen");
-        btBereit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btBereit.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btBereit.setContentAreaFilled(false);
-        btBereit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btBereit.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 onBereitMachen(evt);
             }
         });
@@ -122,10 +132,12 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         btSpielStarten.setFont(new java.awt.Font("Old English Text MT", 1, 24)); // NOI18N
         btSpielStarten.setText("Beenden");
-        btSpielStarten.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btSpielStarten.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btSpielStarten.setContentAreaFilled(false);
-        btSpielStarten.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        btSpielStarten.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 btSpielBeenden(evt);
             }
         });
@@ -168,15 +180,17 @@ public class LobbyGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btSpielBeenden
 
     private void onBereitMachen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBereitMachen
-        try {
+        try
+        {
             //Anmelden, vom Server restlichen Daten bekommen
             connection.sendObject("imReady");
-//            JOptionPane.showMessageDialog(null, "Server bescheid gesagt");
-            
+
             // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_onBereitMachen
@@ -184,70 +198,82 @@ public class LobbyGUI extends javax.swing.JFrame {
     public class UpdateThread extends Thread
     {
 
-        public UpdateThread() {
-            
+        public UpdateThread()
+        {
+
         }
 
         @Override
-        public void run() {
-            while(!isInterrupted())
+        public void run()
+        {
+            while (!isInterrupted())
             {
-                try {
-                    
-                    //REquesrUpdate
-                    connection.sendObject("currentPlayers");
+                try
+                {
 
-                    
+                    //REquesrUpdate
                     Object obj = connection.getObject();
-                    
-                    if(obj instanceof LinkedList)
+
+                    if (obj instanceof List)
                     {
-                        LinkedList<Player> players = (LinkedList<Player>) obj;   
+                        List<Player> players = (List<Player>) obj;
 
                         slm.setPlayerList(players);
+                     
+//                        JOptionPane.showMessageDialog(null, "Table updated!");
                     }
-                    
-                } catch (IOException ex) {
+
+                } catch (IOException ex)
+                {
                     Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (ClassNotFoundException ex)
+                {
                     Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                
-                try {
+
+                try
+                {
                     Thread.sleep(1000);
-                } catch (InterruptedException ex) {
+                } catch (InterruptedException ex)
+                {
                     Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        
-        
-        
+
     }
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(LobbyGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(LobbyGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(LobbyGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(LobbyGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -256,12 +282,16 @@ public class LobbyGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 LobbyGUI dialog = new LobbyGUI(null);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                dialog.addWindowListener(new java.awt.event.WindowAdapter()
+                {
                     @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
+                    public void windowClosing(java.awt.event.WindowEvent e)
+                    {
                         System.exit(0);
                     }
                 });
@@ -277,8 +307,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTPlayers;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTablePlayers;
     private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
 }

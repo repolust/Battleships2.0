@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -30,16 +31,14 @@ import javax.swing.JPanel;
  */
 public class GameBL
 {
-
-    private LinkedList<Player> players = new LinkedList();
     private int maxX, maxY;
     private Graphics g;
     private JPanel jpGame;
 
     private BufferedImage bufferedImage;
 
-    private LinkedList<Player> schiffListe;
-    private LinkedList<Kugel> kugelListe;
+    private List<Player> schiffListe;
+    private List<Kugel> kugelListe;
 
 //    private Position startPos1 = new Position(300, (maxY / 2 - 35));
 //    
@@ -190,16 +189,16 @@ public class GameBL
                 try {
                     Object obj = bss.getObject();
                     
-                    if(obj instanceof LinkedList)
+                    if(obj instanceof List)
                     {
-                       LinkedList list = (LinkedList) obj;
+                       List list = (List) obj;
                         if(list.get(0) instanceof Player)
                         {
-                            schiffListe = (LinkedList<Player>) obj;
+                            schiffListe = (List<Player>) obj;
                         }
                         else if(list.get(0) instanceof Kugel)
                         {
-                            kugelListe = (LinkedList<Kugel>) obj;
+                            kugelListe = (List<Kugel>) obj;
                         }
 
                     }

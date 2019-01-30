@@ -49,8 +49,10 @@ public class BattleShipsClient
             //ADDR = InetAddress.getByAddress("10.40.200.10", null);
             socket = new Socket(ADDR, 1337);
 
+            
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
+               
         } catch (UnknownHostException ex)
         {
             Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -67,6 +69,7 @@ public class BattleShipsClient
 
     public Object getObject() throws IOException, ClassNotFoundException
     {
+
         Object obj = in.readObject();
         return obj;
     }
