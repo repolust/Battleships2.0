@@ -213,7 +213,7 @@ public class LobbyGUI extends javax.swing.JFrame
 
                     //REquesrUpdate
                     Object obj = connection.getObject();
-
+                    System.out.println("Neue Liste bekommen boy");
                     if (obj instanceof List)
                     {
                         List<Player> players = (List<Player>) obj;
