@@ -61,6 +61,12 @@ public class BattleShipsClient
             Logger.getLogger(BattleShipsClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public void disconnect() throws IOException
+    {
+        in.close();
+        out.close();
+        socket.close();
+    }
 
     public void sendObject(Object toSend) throws IOException, ClassNotFoundException
     {

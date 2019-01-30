@@ -91,7 +91,7 @@ public class LobbyGUI extends javax.swing.JFrame
         jScrollPane1.setViewportView(jTextPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Spieler erstellen");
+        setTitle("Lobby");
         setPreferredSize(new java.awt.Dimension(688, 387));
         getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
@@ -164,19 +164,19 @@ public class LobbyGUI extends javax.swing.JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSpielBeenden(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSpielBeenden
-//        if (slm.getSize() == 2) {
-//            this.dispose();
-//
-//            Player p1 = slm.getElementAt(0);
-//            Player p2 = slm.getElementAt(1);
-//            GameGUI gg = new GameGUI(p1, p2);
-//
-//            gg.setVisible(true);
-//            this.dispose();
-////            gg.dispose();
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Du musst 2 Spieler erstellen!");
-//        }
+        try
+        {
+            connection.sendObject("imOut");
+            connection.disconnect();
+            this.dispose();
+            System.exit(0);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btSpielBeenden
 
     private void onBereitMachen(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onBereitMachen
@@ -221,8 +221,8 @@ public class LobbyGUI extends javax.swing.JFrame
 
                 } catch (IOException | ClassNotFoundException ex)
                 {
-                    JOptionPane.showMessageDialog(null, "An error eccourd!","Oh nein",JOptionPane.ERROR_MESSAGE);
-//                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                    JOptionPane.showMessageDialog(null, "An error eccourd!","Oh nein",JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 try

@@ -325,10 +325,25 @@ public class BattleShipsServer
                                 con.reset();
                                 
                             }
-                            gui.log("Players were sent to all clients!");
 
                             gui.updatePlayertable(getPlayerList());
 
+                        }
+                        else if(command.equals("imOut"))
+                        {
+                            gui.log(clients.get(in).getName() + " disconnected");
+                            
+                            clients.remove(in);
+                            gui.updatePlayertable(getPlayerList());
+                            
+                            for (ObjectOutputStream con : connections)
+                            {
+                                con.writeObject(getPlayerList());
+                                con.reset();
+                                
+                            }
+                            
+                            
                         }
                     }
 
