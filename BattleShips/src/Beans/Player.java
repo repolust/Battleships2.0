@@ -209,6 +209,7 @@ public class Player implements Serializable{
 
     @Override
     public String toString() {
+        int n = 1;
         return "Player{" + "name=" + name + ", c=" + c + ", schiff=" + schiff + ", leben=" + leben + ", munition=" + munition + ", index=" + index + ", p=" + p + ", schiffArt=" + schiffArt + ", currentAngle=" + currentAngle + ", direction=" + direction + ", speed=" + speed + ", width=" + width + ", height=" + height + ", rotation=" + rotation + ", startPos=" + startPos + ", bereit=" + bereit + '}';
     }
 
