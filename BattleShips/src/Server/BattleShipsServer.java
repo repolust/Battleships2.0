@@ -262,7 +262,7 @@ public class BattleShipsServer
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 
                 Object obj = in.readObject();
-
+//-------------------------Anmelden--------------------
                 if (obj instanceof Player)
                 {
                     Player p = (Player) obj;
@@ -274,15 +274,15 @@ public class BattleShipsServer
                     for (ObjectOutputStream con : connections)
                     {
                         con.writeObject(getPlayerList());
+                        con.reset();
                     }
                     gui.updatePlayertable(getPlayerList());
 
                 }
-
+//------------------------- Spielverlauf--------------------
                 while (!Thread.interrupted())
                 {
-                    
-                    
+
                     Object gameObj = in.readObject();
 
                     if (gameObj instanceof Player)
@@ -290,32 +290,31 @@ public class BattleShipsServer
                         Player p = (Player) gameObj;
                         clients.replace(in, p);
 
-                        //----------------------------
                         for (ObjectOutputStream con : connections)
                         {
                             con.writeObject(getPlayerList());
+                            con.reset();
                         }
+
                         gui.log("Players were sent to all clients!");
 
-                    } else if (gameObj instanceof Kugel)
+                    } 
+                    else if (gameObj instanceof Kugel)
                     {
                         Kugel k = (Kugel) gameObj;
                         kugelList.add(k);
-                        for (ObjectOutputStream con : connections)
-                        {
-                            con.writeObject(kugelList);
-                        }
 
-                    } else if (gameObj instanceof String)
+                    } 
+                    else if (gameObj instanceof String)
                     {
                         String command = (String) gameObj;
 
                         if (command.equals("imReady"))
                         {
-                            
+
                             Player p = clients.get(in);
                             p.setBereit(true);
-                            
+
                             clients.replace(in, p);
 
                             gui.log(p.getName() + " is ready!");
@@ -323,6 +322,7 @@ public class BattleShipsServer
                             for (ObjectOutputStream con : connections)
                             {
                                 con.writeObject(getPlayerList());
+                                con.reset();
                                 
                             }
                             gui.log("Players were sent to all clients!");
@@ -391,6 +391,17 @@ public class BattleShipsServer
             if (removeIndex != -1)
             {
                 kugelList.remove(removeIndex);
+            }
+
+            for (ObjectOutputStream con : connections)
+            {
+                try
+                {
+                    con.writeObject(kugelList);
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 

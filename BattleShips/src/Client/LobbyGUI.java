@@ -186,10 +186,7 @@ public class LobbyGUI extends javax.swing.JFrame
             connection.sendObject("imReady");
 
             // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
-        } catch (IOException ex)
-        {
-            Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
+        } catch (IOException | ClassNotFoundException ex)
         {
             Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -217,18 +214,15 @@ public class LobbyGUI extends javax.swing.JFrame
                     if (obj instanceof List)
                     {
                         List<Player> players = (List<Player>) obj;
-
                         slm.setPlayerList(players);
                      
 //                        JOptionPane.showMessageDialog(null, "Table updated!");
                     }
 
-                } catch (IOException ex)
+                } catch (IOException | ClassNotFoundException ex)
                 {
-                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex)
-                {
-                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "An error eccourd!","Oh nein",JOptionPane.ERROR_MESSAGE);
+//                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 try
