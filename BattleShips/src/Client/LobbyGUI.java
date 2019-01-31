@@ -223,6 +223,7 @@ public class LobbyGUI extends javax.swing.JFrame
                         String command = (String) obj;
                         if(command.equals("StartGame"))
                         {
+                            JOptionPane.showMessageDialog(null, "Lets go bois!");
                             //Startinformationen von Player anfordern
                             connection.sendObject("requestStartInformation");
                             Object objStart = connection.getObject();
@@ -231,6 +232,7 @@ public class LobbyGUI extends javax.swing.JFrame
                             {
                                 Player p = (Player) objStart;
                                 GameGUI gui = new GameGUI(p);
+                                gui.setVisible(true);
                                 this.interrupt();
                             }
                         }
