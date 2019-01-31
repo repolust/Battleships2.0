@@ -45,9 +45,9 @@ public class BattleShipsClient
     {
         try
         {
-            ADDR = InetAddress.getLocalHost();
-            //ADDR = InetAddress.getByAddress("10.40.200.10", null);
-            socket = new Socket(ADDR, 1337);
+//            ADDR = InetAddress.getLocalHost();
+//            ADDR = InetAddress.getByName("192.168.126.1"); //getByAddress(, null);
+            socket = new Socket("192.168.8.100", 1337);
 
             
             this.out = new ObjectOutputStream(socket.getOutputStream());
