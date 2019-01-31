@@ -42,11 +42,9 @@ public class BattleShipsServer
     private List<Kugel> kugelList = new LinkedList();
     private Map<ObjectInputStream, Player> clients = new HashMap();
     private List<ObjectOutputStream> connections = new LinkedList();
-
+    private StartGameThread startGame = new StartGameThread();
     private int maxX = 1920;
     private int maxY = 910;
-
-   
 
     public BattleShipsServer(ServerGUI gui)
     {
@@ -72,11 +70,11 @@ public class BattleShipsServer
             {
                 st = new ServerThread();
                 st.start();
-                StartGameThread startGame= new StartGameThread();
-                startGame.start();
+
                 InetAddress inetAddress = InetAddress.getLocalHost();
-                gui.log("Server started on "+inetAddress.getHostAddress()+" | Port: " + PORTNR);
+                gui.log("Server started on " + inetAddress.getHostAddress() + " | Port: " + PORTNR);
                 gui.log("Waiting for players..");
+                startGame.start();
             } catch (IOException ex)
             {
 
@@ -115,7 +113,7 @@ public class BattleShipsServer
                 try
                 {
 
-                    if(clients.size() < 4)
+                    if (clients.size() < 4)
                     {
                         Socket socket = serverSocket.accept();
                         gui.log("Neuer client!");
@@ -243,9 +241,9 @@ public class BattleShipsServer
 
                             }
 
-                        }
-                        else if(command.equals("requestStartInformation"))
+                        } else if (command.equals("requestStartInformation"))
                         {
+                            gui.log("Start information sent to: " + clients.get(in).getName());
                             out.writeObject(clients.get(in));
                             out.reset();
                         }
@@ -263,168 +261,207 @@ public class BattleShipsServer
 
         }
     }
-    
+
     class StartGameThread extends Thread
     {
 
         public StartGameThread()
         {
-            
+
         }
-         public void initClientPosition()
-    {
 
-        List<Player> players = getPlayerList();
-
-        int anzahl = players.size();
-
-        switch (anzahl)
+        public void initClientPosition()
         {
-            case 2:
-            {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                //setPosition
-                Position p1 = new Position(300, (maxY / 2) - 35);
-                Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
-                player1.setP(p1);
-                player2.setP(p2);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                
 
-                //updatePlayerliste           
-                int c = 0;
-                for (ObjectInputStream stream : clients.keySet())
-                {
-                    switch(c)
-                    {
-                        case 0: clients.replace(stream, player1);break;
-                        case 1: clients.replace(stream, player2);break;
-                        default: break;
-                    }
-                    c++;
-                }
-                
-            }
-            case 3:
+            List<Player> players = getPlayerList();
+
+            int anzahl = players.size();
+
+            switch (anzahl)
             {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                Player player3 = players.get(2);
-                //setPosition
-                Position p1 = new Position(300, 200);
-                Position p2 = new Position(maxX - 300, 200);
-                Position p3 = new Position(300, maxY - 200);
-                player1.setP(p1);
-                player2.setP(p2);
-                player3.setP(p3);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                player3.setRotation(40);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                player3.setDirection(new EinheitsVektor(1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                player3.setCurrentAngle(90);
-                
-                //updatePlayerliste           
-                int c = 0;
-                for (ObjectInputStream stream : clients.keySet())
+                case 2:
                 {
-                    switch(c)
+                    //getPlayer
+                    Player player1 = players.get(0);
+                    Player player2 = players.get(1);
+                    //setPosition
+                    Position p1 = new Position(300, (maxY / 2) - 35);
+                    Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
+                    player1.setP(p1);
+                    player2.setP(p2);
+                    //setRotation
+                    player1.setRotation(40);
+                    player2.setRotation(270);
+                    //setEinheitsvektor
+                    player1.setDirection(new EinheitsVektor(1, 0));
+                    player2.setDirection(new EinheitsVektor(-1, 0));
+                    //setWinkel
+                    player1.setCurrentAngle(90);
+                    player2.setCurrentAngle(270);
+
+                    //updatePlayerliste           
+                    int c = 0;
+                    for (ObjectInputStream stream : clients.keySet())
                     {
-                        case 0: clients.replace(stream, player1);break;
-                        case 1: clients.replace(stream, player2);break;
-                        case 2: clients.replace(stream, player3);break;
-                        default: break;
+                        switch (c)
+                        {
+                            case 0:
+                                clients.replace(stream, player1);
+                                break;
+                            case 1:
+                                clients.replace(stream, player2);
+                                break;
+                            default:
+                                break;
+                        }
+                        c++;
                     }
-                    c++;
+
                 }
-            }
-            case 4:
-            {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                Player player3 = players.get(2);
-                Player player4 = players.get(3);
-                //setPosition
-                Position p1 = new Position(300, 200);
-                Position p2 = new Position(maxX - 300, 200);
-                Position p3 = new Position(300, maxY - 200);
-                Position p4 = new Position(maxX - 300, maxY - 200);
-                player1.setP(p1);
-                player2.setP(p2);
-                player3.setP(p3);
-                player4.setP(p3);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                player3.setRotation(40);
-                player4.setRotation(270);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                player3.setDirection(new EinheitsVektor(1, 0));
-                player4.setDirection(new EinheitsVektor(-1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                player3.setCurrentAngle(90);
-                player4.setCurrentAngle(270);
-                //updatePlayerliste           
-                int c = 0;
-                for (ObjectInputStream stream : clients.keySet())
+                case 3:
                 {
-                    switch(c)
+                    //getPlayer
+                    Player player1 = players.get(0);
+                    Player player2 = players.get(1);
+                    Player player3 = players.get(2);
+                    //setPosition
+                    Position p1 = new Position(300, 200);
+                    Position p2 = new Position(maxX - 300, 200);
+                    Position p3 = new Position(300, maxY - 200);
+                    player1.setP(p1);
+                    player2.setP(p2);
+                    player3.setP(p3);
+                    //setRotation
+                    player1.setRotation(40);
+                    player2.setRotation(270);
+                    player3.setRotation(40);
+                    //setEinheitsvektor
+                    player1.setDirection(new EinheitsVektor(1, 0));
+                    player2.setDirection(new EinheitsVektor(-1, 0));
+                    player3.setDirection(new EinheitsVektor(1, 0));
+                    //setWinkel
+                    player1.setCurrentAngle(90);
+                    player2.setCurrentAngle(270);
+                    player3.setCurrentAngle(90);
+
+                    //updatePlayerliste           
+                    int c = 0;
+                    for (ObjectInputStream stream : clients.keySet())
                     {
-                        case 0: clients.replace(stream, player1);break;
-                        case 1: clients.replace(stream, player2);break;
-                        case 2: clients.replace(stream, player3);break;
-                        case 3: clients.replace(stream, player4);break;
-                        default: break;
+                        switch (c)
+                        {
+                            case 0:
+                                clients.replace(stream, player1);
+                                break;
+                            case 1:
+                                clients.replace(stream, player2);
+                                break;
+                            case 2:
+                                clients.replace(stream, player3);
+                                break;
+                            default:
+                                break;
+                        }
+                        c++;
                     }
-                    c++;
+                }
+                case 4:
+                {
+                    //getPlayer
+                    Player player1 = players.get(0);
+                    Player player2 = players.get(1);
+                    Player player3 = players.get(2);
+                    Player player4 = players.get(3);
+                    //setPosition
+                    Position p1 = new Position(300, 200);
+                    Position p2 = new Position(maxX - 300, 200);
+                    Position p3 = new Position(300, maxY - 200);
+                    Position p4 = new Position(maxX - 300, maxY - 200);
+                    player1.setP(p1);
+                    player2.setP(p2);
+                    player3.setP(p3);
+                    player4.setP(p3);
+                    //setRotation
+                    player1.setRotation(40);
+                    player2.setRotation(270);
+                    player3.setRotation(40);
+                    player4.setRotation(270);
+                    //setEinheitsvektor
+                    player1.setDirection(new EinheitsVektor(1, 0));
+                    player2.setDirection(new EinheitsVektor(-1, 0));
+                    player3.setDirection(new EinheitsVektor(1, 0));
+                    player4.setDirection(new EinheitsVektor(-1, 0));
+                    //setWinkel
+                    player1.setCurrentAngle(90);
+                    player2.setCurrentAngle(270);
+                    player3.setCurrentAngle(90);
+                    player4.setCurrentAngle(270);
+                    //updatePlayerliste           
+                    int c = 0;
+                    for (ObjectInputStream stream : clients.keySet())
+                    {
+                        switch (c)
+                        {
+                            case 0:
+                                clients.replace(stream, player1);
+                                break;
+                            case 1:
+                                clients.replace(stream, player2);
+                                break;
+                            case 2:
+                                clients.replace(stream, player3);
+                                break;
+                            case 3:
+                                clients.replace(stream, player4);
+                                break;
+                            default:
+                                break;
+                        }
+                        c++;
+                    }
                 }
             }
         }
-    }
+
+        public List<Player> getPlayerList()
+        {
+            List<Player> players = new LinkedList();
+            for (ObjectInputStream oin : clients.keySet())
+            {
+                players.add(clients.get(oin));
+            }
+            return players;
+        }
 
         @Override
         public void run()
         {
-            while(!isInterrupted())
+            gui.log("StartGameThread started!");
+
+            while (!isInterrupted())
             {
-                boolean startGame = true;
-                for (Player p: clients.values())
+                boolean startGame = false;
+                for (Player p : getPlayerList())
                 {
-                    if(!p.isBereit())
+                    gui.log("" + p.isBereit());
+                    if (p.isBereit())
                     {
+
+                        startGame = true;
+                    }
+                    else{
                         startGame = false;
                     }
                 }
-                
-                if(startGame)
+
+                if (startGame)
                 {
                     initClientPosition();
                     for (ObjectOutputStream con : connections)
                     {
                         try
                         {
+                            gui.log("Game Started!");
                             con.writeObject("StartGame");
                             con.reset();
                         } catch (IOException ex)
@@ -434,11 +471,10 @@ public class BattleShipsServer
                     }
                     this.interrupt();
                 }
-                
+
             }
         }
-        
-        
+
     }
 
     class LogicThread extends Thread
