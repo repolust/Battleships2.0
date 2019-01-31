@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -73,7 +74,8 @@ public class BattleShipsServer
                 st.start();
                 StartGameThread startGame= new StartGameThread();
                 startGame.start();
-                gui.log("Server started on Port: " + PORTNR);
+                InetAddress inetAddress = InetAddress.getLocalHost();
+                gui.log("Server started on "+inetAddress.getHostAddress()+" | Port: " + PORTNR);
                 gui.log("Waiting for players..");
             } catch (IOException ex)
             {
