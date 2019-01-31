@@ -74,6 +74,8 @@ public class GameGUI extends javax.swing.JFrame {
     
     private Player p;
     
+    private ControllThread controllThread;
+    
     @Override
     public void paint(Graphics grphcs)
     {
@@ -99,12 +101,12 @@ public class GameGUI extends javax.swing.JFrame {
         
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
-        
-//        bl = new GameBL(this.jpGame,maxX,maxY);
-        
         playSound(airhornPath);
         
-        JOptionPane.showMessageDialog(null,"MaxX: "+maxX+" | MaxY: "+maxY);
+        bl = new GameBL(this.jpGame,maxX,maxY);
+
+        controllThread = new ControllThread(this,this.lbName,this.lbLeben,this.lbMunition);
+        controllThread.start();
     }
 
      public void playSound(String path)
@@ -113,22 +115,21 @@ public class GameGUI extends javax.swing.JFrame {
             sound.start();
         }
     
-    public class zeichenThread extends Thread
+    public class ControllThread extends Thread
     {
 
         private JFrame gui;
         
         private List<Player> schiffListe = new LinkedList<Player>();
         private List<Kugel> kugelListe = new LinkedList<Kugel>();
-        private Player p;
         private JLabel lbName,lbHealth,lbMunition;
         
         private BattleShipsClient connection;
         
-        public zeichenThread(JFrame gui,Player p,JLabel lbName, JLabel lbHealth,JLabel lbMunition)
+        public ControllThread(JFrame gui,JLabel lbName, JLabel lbHealth,JLabel lbMunition)
         {
             this.gui = gui;
-            this.p = p;
+
             this.lbName = lbName;
             this.lbHealth = lbHealth;
             this.lbMunition = lbMunition;
@@ -151,7 +152,7 @@ public class GameGUI extends javax.swing.JFrame {
 // Der Thread überprüft ob die jeweiligen Tasten in der Liste der Klasse Controlls enthalten sind und führt demensprechen die Aktionen aus     
 
 //-----------------------------------Controlls---------------------------------
-//-----------------------------------Spieler 1 ---------------------------------
+
 
                     if (p.getCurrentAngle() >= 360 || p.getCurrentAngle() <= -360) // Winkel zurücksetzen
                     {
@@ -273,19 +274,8 @@ public class GameGUI extends javax.swing.JFrame {
 //                    }
 
 
-//-----------------------------------Kugel bewegen und entfernen---------------------------------
-                    
-//-----------------------------------//Kugel bewegen---------------------------------
 
-//-----------------------------------Collision Detection---------------------------------
-//                    CheckIfHit check = new CheckIfHit(kugelListe, schiffListe);
-//
-//                    if (check.checkCollision()) // Schiffe fahren zusammen
-//                    {
-//                        playSound(crashPath);
-//                        
-//                        p.setLeben(p.getLeben() - 20);
-//                        p2.setLeben(p2.getLeben() - 20);
+
 // 
 ////                   ------------------Schiffe zurücksetzen----------------                     
 //                        pos1 = new Position(300, (maxY / 2 - 35));

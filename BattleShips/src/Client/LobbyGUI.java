@@ -218,6 +218,23 @@ public class LobbyGUI extends javax.swing.JFrame
                      
 //                        JOptionPane.showMessageDialog(null, "Table updated!");
                     }
+                    else if(obj instanceof String)
+                    {
+                        String command = (String) obj;
+                        if(command.equals("StartGame"))
+                        {
+                            //Startinformationen von Player anfordern
+                            connection.sendObject("requestStartInformation");
+                            Object objStart = connection.getObject();
+                            
+                            if(objStart instanceof Player)
+                            {
+                                Player p = (Player) objStart;
+                                GameGUI gui = new GameGUI(p);
+                                this.interrupt();
+                            }
+                        }
+                    }
 
                 } catch (IOException | ClassNotFoundException ex)
                 {

@@ -45,111 +45,7 @@ public class BattleShipsServer
     private int maxX = 1920;
     private int maxY = 910;
 
-    public void initClientPosition()
-    {
-
-        List<Player> players = new LinkedList();
-        for (ObjectInputStream oin : clients.keySet())
-        {
-            players.add(clients.get(oin));
-        }
-
-        int anzahl = players.size();
-
-        switch (anzahl)
-        {
-            case 2:
-            {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                //setPosition
-                Position p1 = new Position(300, (maxY / 2) - 35);
-                Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
-                player1.setP(p1);
-                player2.setP(p2);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                //updatePlayerliste
-                players.set(0, player1);
-                players.set(1, player2);
-            }
-            case 3:
-            {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                Player player3 = players.get(2);
-                //setPosition
-                Position p1 = new Position(300, 200);
-                Position p2 = new Position(maxX - 300, 200);
-                Position p3 = new Position(300, maxY - 200);
-                player1.setP(p1);
-                player2.setP(p2);
-                player3.setP(p3);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                player3.setRotation(40);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                player3.setDirection(new EinheitsVektor(1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                player3.setCurrentAngle(90);
-                //updatePlayerliste
-                players.set(0, player1);
-                players.set(1, player2);
-                players.set(2, player3);
-            }
-            case 4:
-            {
-                //getPlayer
-                Player player1 = players.get(0);
-                Player player2 = players.get(1);
-                Player player3 = players.get(2);
-                Player player4 = players.get(3);
-                //setPosition
-                Position p1 = new Position(300, 200);
-                Position p2 = new Position(maxX - 300, 200);
-                Position p3 = new Position(300, maxY - 200);
-                Position p4 = new Position(maxX - 300, maxY - 200);
-                player1.setP(p1);
-                player2.setP(p2);
-                player3.setP(p3);
-                player4.setP(p3);
-                //setRotation
-                player1.setRotation(40);
-                player2.setRotation(270);
-                player3.setRotation(40);
-                player4.setRotation(270);
-                //setEinheitsvektor
-                player1.setDirection(new EinheitsVektor(1, 0));
-                player2.setDirection(new EinheitsVektor(-1, 0));
-                player3.setDirection(new EinheitsVektor(1, 0));
-                player4.setDirection(new EinheitsVektor(-1, 0));
-                //setWinkel
-                player1.setCurrentAngle(90);
-                player2.setCurrentAngle(270);
-                player3.setCurrentAngle(90);
-                player4.setCurrentAngle(270);
-                //updatePlayerliste
-                players.set(0, player1);
-                players.set(1, player2);
-                players.set(2, player3);
-                players.set(3, player4);
-            }
-        }
-    }
+   
 
     public BattleShipsServer(ServerGUI gui)
     {
@@ -175,7 +71,10 @@ public class BattleShipsServer
             {
                 st = new ServerThread();
                 st.start();
+                StartGameThread startGame= new StartGameThread();
+                startGame.start();
                 gui.log("Server started on Port: " + PORTNR);
+                gui.log("Waiting for players..");
             } catch (IOException ex)
             {
 
@@ -214,10 +113,12 @@ public class BattleShipsServer
                 try
                 {
 
-                    Socket socket = serverSocket.accept();
-                    gui.log("Neuer client!");
-                    ClientCommunicationThread cct = new ClientCommunicationThread(socket);
-
+                    if(clients.size() < 4)
+                    {
+                        Socket socket = serverSocket.accept();
+                        gui.log("Neuer client!");
+                        ClientCommunicationThread cct = new ClientCommunicationThread(socket);
+                    }
                 } catch (SocketTimeoutException ex)
                 {
                     //gui.log("timeout");
@@ -298,14 +199,12 @@ public class BattleShipsServer
 
                         gui.log("Players were sent to all clients!");
 
-                    } 
-                    else if (gameObj instanceof Kugel)
+                    } else if (gameObj instanceof Kugel)
                     {
                         Kugel k = (Kugel) gameObj;
                         kugelList.add(k);
 
-                    } 
-                    else if (gameObj instanceof String)
+                    } else if (gameObj instanceof String)
                     {
                         String command = (String) gameObj;
 
@@ -323,27 +222,30 @@ public class BattleShipsServer
                             {
                                 con.writeObject(getPlayerList());
                                 con.reset();
-                                
+
                             }
 
                             gui.updatePlayertable(getPlayerList());
 
-                        }
-                        else if(command.equals("imOut"))
+                        } else if (command.equals("imOut"))
                         {
                             gui.log(clients.get(in).getName() + " disconnected");
-                            
+
                             clients.remove(in);
                             gui.updatePlayertable(getPlayerList());
-                            
+
                             for (ObjectOutputStream con : connections)
                             {
                                 con.writeObject(getPlayerList());
                                 con.reset();
-                                
+
                             }
-                            
-                            
+
+                        }
+                        else if(command.equals("requestStartInformation"))
+                        {
+                            out.writeObject(clients.get(in));
+                            out.reset();
                         }
                     }
 
@@ -358,6 +260,183 @@ public class BattleShipsServer
             }
 
         }
+    }
+    
+    class StartGameThread extends Thread
+    {
+
+        public StartGameThread()
+        {
+            
+        }
+         public void initClientPosition()
+    {
+
+        List<Player> players = getPlayerList();
+
+        int anzahl = players.size();
+
+        switch (anzahl)
+        {
+            case 2:
+            {
+                //getPlayer
+                Player player1 = players.get(0);
+                Player player2 = players.get(1);
+                //setPosition
+                Position p1 = new Position(300, (maxY / 2) - 35);
+                Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
+                player1.setP(p1);
+                player2.setP(p2);
+                //setRotation
+                player1.setRotation(40);
+                player2.setRotation(270);
+                //setEinheitsvektor
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
+                
+
+                //updatePlayerliste           
+                int c = 0;
+                for (ObjectInputStream stream : clients.keySet())
+                {
+                    switch(c)
+                    {
+                        case 0: clients.replace(stream, player1);break;
+                        case 1: clients.replace(stream, player2);break;
+                        default: break;
+                    }
+                    c++;
+                }
+                
+            }
+            case 3:
+            {
+                //getPlayer
+                Player player1 = players.get(0);
+                Player player2 = players.get(1);
+                Player player3 = players.get(2);
+                //setPosition
+                Position p1 = new Position(300, 200);
+                Position p2 = new Position(maxX - 300, 200);
+                Position p3 = new Position(300, maxY - 200);
+                player1.setP(p1);
+                player2.setP(p2);
+                player3.setP(p3);
+                //setRotation
+                player1.setRotation(40);
+                player2.setRotation(270);
+                player3.setRotation(40);
+                //setEinheitsvektor
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                player3.setDirection(new EinheitsVektor(1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
+                player3.setCurrentAngle(90);
+                
+                //updatePlayerliste           
+                int c = 0;
+                for (ObjectInputStream stream : clients.keySet())
+                {
+                    switch(c)
+                    {
+                        case 0: clients.replace(stream, player1);break;
+                        case 1: clients.replace(stream, player2);break;
+                        case 2: clients.replace(stream, player3);break;
+                        default: break;
+                    }
+                    c++;
+                }
+            }
+            case 4:
+            {
+                //getPlayer
+                Player player1 = players.get(0);
+                Player player2 = players.get(1);
+                Player player3 = players.get(2);
+                Player player4 = players.get(3);
+                //setPosition
+                Position p1 = new Position(300, 200);
+                Position p2 = new Position(maxX - 300, 200);
+                Position p3 = new Position(300, maxY - 200);
+                Position p4 = new Position(maxX - 300, maxY - 200);
+                player1.setP(p1);
+                player2.setP(p2);
+                player3.setP(p3);
+                player4.setP(p3);
+                //setRotation
+                player1.setRotation(40);
+                player2.setRotation(270);
+                player3.setRotation(40);
+                player4.setRotation(270);
+                //setEinheitsvektor
+                player1.setDirection(new EinheitsVektor(1, 0));
+                player2.setDirection(new EinheitsVektor(-1, 0));
+                player3.setDirection(new EinheitsVektor(1, 0));
+                player4.setDirection(new EinheitsVektor(-1, 0));
+                //setWinkel
+                player1.setCurrentAngle(90);
+                player2.setCurrentAngle(270);
+                player3.setCurrentAngle(90);
+                player4.setCurrentAngle(270);
+                //updatePlayerliste           
+                int c = 0;
+                for (ObjectInputStream stream : clients.keySet())
+                {
+                    switch(c)
+                    {
+                        case 0: clients.replace(stream, player1);break;
+                        case 1: clients.replace(stream, player2);break;
+                        case 2: clients.replace(stream, player3);break;
+                        case 3: clients.replace(stream, player4);break;
+                        default: break;
+                    }
+                    c++;
+                }
+            }
+        }
+    }
+
+        @Override
+        public void run()
+        {
+            while(!isInterrupted())
+            {
+                boolean startGame = true;
+                for (Player p: clients.values())
+                {
+                    if(!p.isBereit())
+                    {
+                        startGame = false;
+                    }
+                }
+                
+                if(startGame)
+                {
+                    initClientPosition();
+                    for (ObjectOutputStream con : connections)
+                    {
+                        try
+                        {
+                            con.writeObject("StartGame");
+                            con.reset();
+                        } catch (IOException ex)
+                        {
+                            Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    this.interrupt();
+                }
+                
+            }
+        }
+        
+        
     }
 
     class LogicThread extends Thread
@@ -413,6 +492,7 @@ public class BattleShipsServer
                 try
                 {
                     con.writeObject(kugelList);
+                    con.reset();
                 } catch (IOException ex)
                 {
                     Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -437,7 +517,8 @@ public class BattleShipsServer
                                 //schiffs koord. reseten
                                 p.setLeben(p.getLeben() - 20);
                                 p2.setLeben(p2.getLeben() - 20);
-                                //den 2en jeweils leben mitteilen
+                                p.setToStartPos();
+                                p2.setToStartPos();
                                 //allen die pos mitteilen
                                 gui.log(p.getName() + " und " + p2.getName() + " sind zusammengefahren!");
                             }

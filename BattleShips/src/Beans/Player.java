@@ -62,7 +62,11 @@ public class Player implements Serializable{
        public int getWidth() {
         return width;
     }
-
+       
+       public void setToStartPos()
+       {
+           this.p = startPos;
+       }
        public Rectangle getHitbox()
        {
            Rectangle hitbox = null;
