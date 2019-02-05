@@ -62,6 +62,8 @@ public class BattleShipsServer
         return players;
     }
 
+    
+    
     public void startServer()
     {
         if (st == null || !st.isAlive())
@@ -425,12 +427,15 @@ public class BattleShipsServer
 
         public List<Player> getPlayerList()
         {
-            List<Player> players = new LinkedList();
-            for (ObjectInputStream oin : clients.keySet())
-            {
-                players.add(clients.get(oin));
-            }
-            return players;
+     
+                List<Player> players = new LinkedList();
+                for (ObjectInputStream oin : clients.keySet())
+                {
+                    players.add(clients.get(oin));
+                }
+                return players;
+            
+           
         }
 
         @Override
@@ -440,7 +445,7 @@ public class BattleShipsServer
 
             while (!isInterrupted())
             {
-                if (!getPlayerList().isEmpty())
+                if (getPlayerList().size() >=2)
                 {
                     boolean startGame = false;
                     for (Player p : getPlayerList())
@@ -450,7 +455,8 @@ public class BattleShipsServer
                         {
 
                             startGame = true;
-                        } else
+                        } 
+                        else
                         {
                             startGame = false;
                             break;
