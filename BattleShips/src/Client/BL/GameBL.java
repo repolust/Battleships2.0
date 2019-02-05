@@ -46,6 +46,7 @@ public class GameBL
     
     public GameBL(JPanel jpGame, int maxX,int maxY)
     {
+        g = jpGame.getGraphics();
         this.jpGame = jpGame;
         this.maxX = maxX;
         this.maxY = maxY;

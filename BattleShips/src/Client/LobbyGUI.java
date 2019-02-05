@@ -231,6 +231,7 @@ public class LobbyGUI extends javax.swing.JFrame
                             
                             if(objStart instanceof Player)
                             {
+                                JOptionPane.showMessageDialog(null, "Start inforormation bekommen!");
                                 Player p = (Player) objStart;
                                 GameGUI gui = new GameGUI(p);
                                 gui.setVisible(true);
