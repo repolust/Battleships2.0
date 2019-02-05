@@ -236,6 +236,7 @@ public class LobbyGUI extends javax.swing.JFrame
                                 GameGUI gui = new GameGUI(p);
                                 gui.setVisible(true);
                                 this.interrupt();
+                                
                             }
                         }
                     }
@@ -251,7 +252,7 @@ public class LobbyGUI extends javax.swing.JFrame
                     Thread.sleep(1000);
                 } catch (InterruptedException ex)
                 {
-                    Logger.getLogger(LobbyGUI.class.getName()).log(Level.SEVERE, null, ex);
+                  
                 }
             }
         }

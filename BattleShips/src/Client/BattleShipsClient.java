@@ -71,6 +71,7 @@ public class BattleShipsClient
     public void sendObject(Object toSend) throws IOException, ClassNotFoundException
     {
         out.writeObject(toSend);
+        out.reset();
     }
 
     public Object getObject() throws IOException, ClassNotFoundException
