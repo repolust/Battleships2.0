@@ -250,7 +250,8 @@ public class BattleShipsServer
 
                                 }
                             }
-                        } else if (command.equals("requestStartInformation"))
+                        } 
+                        else if (command.equals("requestStartInformation"))
                         {
                             synchronized (clients)
                             {
