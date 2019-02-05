@@ -170,8 +170,10 @@ public class BattleShipsServer
                 if (obj instanceof Player)
                 {
                     Player p = (Player) obj;
-
-                    clients.put(in, p);
+                    synchronized (clients)
+                    {
+                        clients.put(in, p);
+                    }
                     connections.add(out);
                     gui.log(p.getName() + " joined the Battle!");
 
@@ -191,15 +193,17 @@ public class BattleShipsServer
 
                     if (gameObj instanceof Player)
                     {
-                        Player p = (Player) gameObj;
-                        clients.replace(in, p);
-
-                        for (ObjectOutputStream con : connections)
+                        synchronized (clients)
                         {
-                            con.writeObject(getPlayerList());
-                            con.reset();
-                        }
+                            Player p = (Player) gameObj;
+                            clients.replace(in, p);
 
+                            for (ObjectOutputStream con : connections)
+                            {
+                                con.writeObject(getPlayerList());
+                                con.reset();
+                            }
+                        }
 
                     } else if (gameObj instanceof Kugel)
                     {
@@ -212,42 +216,48 @@ public class BattleShipsServer
 
                         if (command.equals("imReady"))
                         {
-
-                            Player p = clients.get(in);
-                            p.setBereit(true);
-
-                            clients.replace(in, p);
-
-                            gui.log(p.getName() + " is ready!");
-
-                            for (ObjectOutputStream con : connections)
+                            synchronized (clients)
                             {
-                                con.writeObject(getPlayerList());
-                                con.reset();
+                                Player p = clients.get(in);
+                                p.setBereit(true);
 
+                                clients.replace(in, p);
+
+                                gui.log(p.getName() + " is ready!");
+
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(getPlayerList());
+                                    con.reset();
+
+                                }
+
+                                gui.updatePlayertable(getPlayerList());
                             }
-
-                            gui.updatePlayertable(getPlayerList());
-
                         } else if (command.equals("imOut"))
                         {
-                            gui.log(clients.get(in).getName() + " disconnected");
-
-                            clients.remove(in);
-                            gui.updatePlayertable(getPlayerList());
-
-                            for (ObjectOutputStream con : connections)
+                            synchronized (clients)
                             {
-                                con.writeObject(getPlayerList());
-                                con.reset();
+                                gui.log(clients.get(in).getName() + " disconnected");
 
+                                clients.remove(in);
+                                gui.updatePlayertable(getPlayerList());
+
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(getPlayerList());
+                                    con.reset();
+
+                                }
                             }
-
                         } else if (command.equals("requestStartInformation"))
                         {
-                            gui.log("Start information sent to: " + clients.get(in).getName());
-                            out.writeObject(clients.get(in));
-                            out.reset();
+                            synchronized (clients)
+                            {
+                                gui.log("Start information sent to: " + clients.get(in).getName());
+                                out.writeObject(clients.get(in));
+                                out.reset();
+                            }
                         }
                     }
 
