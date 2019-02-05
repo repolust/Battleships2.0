@@ -103,10 +103,12 @@ public class GameGUI extends javax.swing.JFrame {
         jpGame.setFocusable(true);
         playSound(airhornPath);
         
-        bl = new GameBL(this.jpGame,maxX,maxY);
+        
 
         controllThread = new ControllThread(this,this.lbName,this.lbLeben,this.lbMunition);
         controllThread.start();
+        
+        bl = new GameBL(this.jpGame,maxX,maxY);
     }
 
      public void playSound(String path)
@@ -251,94 +253,6 @@ public class GameGUI extends javax.swing.JFrame {
                         
                         
                     }
-
-
-//-----------------------------------/Controlls---------------------------------
-
-                    //Falls beide SChiffe keine Munition haben, bekommt das Schiff das mehr Leben hat einen leichten Geschwindigkeitsboost
-//                    if (!isSpeedIncreased) {
-//                        
-//                    if(p.getMunition() == 0 && p2.getMunition() == 0)
-//                    {
-//                        if(p.getLeben() > p2.getLeben())
-//                        {
-//                            p.setSpeed(p.getSpeed()+2);
-//                            isSpeedIncreased = true;
-//                        }
-//                        else
-//                        {
-//                            p2.setSpeed(p2.getSpeed()+2);
-//                            isSpeedIncreased = true;
-//                        }
-//                    }
-//                    }
-
-
-
-
-// 
-////                   ------------------Schiffe zurücksetzen----------------                     
-//                        pos1 = new Position(300, (maxY / 2 - 35));
-//                        pos2 = new Position((maxX - 390), (maxY / 2 - 35));
-//                        
-//                        p.setP(pos1);
-//                        p.setCurrentAngle(90);
-//                        p.setDirection(new EinheitsVektor(1, 0));
-//
-//                        p2.setP(pos2);
-//                        p2.setCurrentAngle(270);
-//                        p2.setDirection(new EinheitsVektor(-1, 0));
-//
-//                    }
-//
-//                    if (check.checkIfHit() != null)//Kanonenkugel hat getroffen
-//                    {
-//                        playSound(hitPath);
-//                        
-//                        Treffer t = check.checkIfHit();
-//                        kugelListe.remove((t.getKugelIndex()));
-//
-//                    }
-                    
-//                    if(p.getLeben() <= 0 && p2.getLeben() <= 0)// Unentschieden
-//                    {
-//                        
-//                        gui.dispose();
-//                         
-//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Unentschieden","");
-//                        wdlg.setVisible(true);
-//
-//                        this.interrupt();
-//                        break;
-//                    }
-//                    
-//                    else if (p.getLeben() <= 0)//Spieler 2 gewinnt
-//                    {
-//                        
-//                        gui.dispose();
-//                         
-//                        playSound(winSoundPath);
-//                        
-//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts !", p2.getName());
-//                        wdlg.setVisible(true);
-//
-//                        this.interrupt();
-//                        break;
-//                        
-//                    } else if (p2.getLeben() <= 0)//Spieler 1 gewinnt
-//                    {
-//                        
-//                        gui.dispose();
-//                        
-//                        playSound(winSoundPath);
-//                        
-//                        WinnerDlg wdlg = new WinnerDlg(new javax.swing.JFrame(),true,"Du siegts!",p.getName());
-//                        wdlg.setVisible(true);
-//                        
-//                        this.interrupt();
-//                        break;
-//                    }
-
 
 
                     try {
