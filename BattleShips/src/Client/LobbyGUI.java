@@ -218,7 +218,7 @@ public class LobbyGUI extends javax.swing.JFrame
                      
 //                        JOptionPane.showMessageDialog(null, "Table updated!");
                     }
-                    else if(obj instanceof String)
+                    if(obj instanceof String)
                     {
                         String command = (String) obj;
                         if(command.equals("StartGame"))

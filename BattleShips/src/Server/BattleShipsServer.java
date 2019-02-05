@@ -55,15 +55,16 @@ public class BattleShipsServer
     public List<Player> getPlayerList()
     {
         List<Player> players = new LinkedList();
-        for (ObjectInputStream oin : clients.keySet())
+        synchronized (clients)
         {
-            players.add(clients.get(oin));
+            for (ObjectInputStream oin : clients.keySet())
+            {
+                players.add(clients.get(oin));
+            }
         }
         return players;
     }
 
-    
-    
     public void startServer()
     {
         if (st == null || !st.isAlive())
@@ -199,7 +200,6 @@ public class BattleShipsServer
                             con.reset();
                         }
 
-                        gui.log("Players were sent to all clients!");
 
                     } else if (gameObj instanceof Kugel)
                     {
@@ -320,6 +320,7 @@ public class BattleShipsServer
                     }
 
                 }
+                break;
                 case 3:
                 {
                     //getPlayer
@@ -367,6 +368,7 @@ public class BattleShipsServer
                         c++;
                     }
                 }
+                break;
                 case 4:
                 {
                     //getPlayer
@@ -422,20 +424,23 @@ public class BattleShipsServer
                         c++;
                     }
                 }
+                break;
+
             }
         }
 
         public List<Player> getPlayerList()
         {
-     
-                List<Player> players = new LinkedList();
+            List<Player> players = new LinkedList();
+            synchronized (clients)
+            {
                 for (ObjectInputStream oin : clients.keySet())
                 {
                     players.add(clients.get(oin));
                 }
-                return players;
-            
-           
+            }
+            return players;
+
         }
 
         @Override
@@ -445,18 +450,16 @@ public class BattleShipsServer
 
             while (!isInterrupted())
             {
-                if (getPlayerList().size() >=2)
+                boolean startGame = false;
+                if (getPlayerList().size() > 1)
                 {
-                    boolean startGame = false;
+
                     for (Player p : getPlayerList())
                     {
-
                         if (p.isBereit())
                         {
-
                             startGame = true;
-                        } 
-                        else
+                        } else
                         {
                             startGame = false;
                             break;
@@ -465,6 +468,7 @@ public class BattleShipsServer
 
                     if (startGame)
                     {
+                        gui.log("JETZT GEHTS LOOS!");
                         initClientPosition();
                         for (ObjectOutputStream con : connections)
                         {
