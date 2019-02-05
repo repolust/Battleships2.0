@@ -440,38 +440,41 @@ public class BattleShipsServer
 
             while (!isInterrupted())
             {
-                boolean startGame = false;
-                for (Player p : getPlayerList())
+                if (!getPlayerList().isEmpty())
                 {
-                    gui.log("" + p.isBereit());
-                    if (p.isBereit())
+                    boolean startGame = false;
+                    for (Player p : getPlayerList())
                     {
 
-                        startGame = true;
-                    }
-                    else{
-                        startGame = false;
-                    }
-                }
+                        if (p.isBereit())
+                        {
 
-                if (startGame)
-                {
-                    initClientPosition();
-                    for (ObjectOutputStream con : connections)
-                    {
-                        try
+                            startGame = true;
+                        } else
                         {
-                            gui.log("Game Started!");
-                            con.writeObject("StartGame");
-                            con.reset();
-                        } catch (IOException ex)
-                        {
-                            Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                            startGame = false;
+                            break;
                         }
                     }
-                    this.interrupt();
-                }
 
+                    if (startGame)
+                    {
+                        initClientPosition();
+                        for (ObjectOutputStream con : connections)
+                        {
+                            try
+                            {
+                                gui.log("Game Started!");
+                                con.writeObject("StartGame");
+                                con.reset();
+                            } catch (IOException ex)
+                            {
+                                Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        this.interrupt();
+                    }
+                }
             }
         }
 
