@@ -6,6 +6,8 @@
 package Server;
 
 import Beans.Player;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -39,7 +41,7 @@ public class ServerGUI extends javax.swing.JFrame
 
     public void log(String message)
     {
-        this.jTextArea1.append(message + "\n");
+        this.jTextArea1.append(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))+" - "+message + "\n");
     }
 
     public void updatePlayertable(List<Player> list)
