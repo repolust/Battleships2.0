@@ -81,9 +81,9 @@ public class GameGUI extends javax.swing.JFrame {
     {
         super.paint(grphcs); //To change body of generated methods, choose Tools | Templates.
 
-        if (bl != null && p!=null)
+        if (bl != null)
         {
-            bl.startdrawPlayer(p);
+            bl.drawShips();
 
         }
     }

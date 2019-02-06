@@ -115,7 +115,6 @@ public class GameBL
                 //-----------Rotate----------------
                 AffineTransform origXform1 = g2d.getTransform();
                 AffineTransform newXform1 = (AffineTransform) (origXform1.clone());
-                System.out.println(" "+p.getP().getXInt());
                 int xRot1 = p.getP().getXInt() + (p.getWidth() / 2);
                 int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
                 newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
@@ -137,33 +136,33 @@ public class GameBL
             }
         }
     }
-
-    public void startdrawPlayer(Player startp)//Zeichnet die Schiffe das erste mal. Wird von der Paint-Methode aus der GUI am start aufgerufen
-    {
-        Graphics gPanel = this.jpGame.getGraphics();
-        gPanel.setColor(new Color(62, 208, 245));
-        gPanel.fillRect(0, 0, maxX, maxY);
-
-        Graphics2D g2d = bufferedImage.createGraphics();
-
-        drawPlayer(startp, 0);
-    
-
-        g.drawImage(bufferedImage, 0, 0, null);
-    }
-
-    public void drawPlayer(Player p, int angle)
-    {
-        Graphics2D g2d = bufferedImage.createGraphics();
-        AffineTransform origXform1 = g2d.getTransform();
-        AffineTransform newXform1 = (AffineTransform) (origXform1.clone());
-        int xRot1 = p.getP().getXInt() + (p.getWidth() / 2);
-        int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
-        newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
-        g2d.setTransform(newXform1);
-        g2d.drawImage(p.getSchiff(), p.getP().getXInt(), p.getP().getYInt(), null);
-        g2d.setTransform(origXform1);
-    }
+//
+//    public void startdrawPlayer(Player startp)//Zeichnet die Schiffe das erste mal. Wird von der Paint-Methode aus der GUI am start aufgerufen
+//    {
+//        Graphics gPanel = this.jpGame.getGraphics();
+//        gPanel.setColor(new Color(62, 208, 245));
+//        gPanel.fillRect(0, 0, maxX, maxY);
+//
+//        Graphics2D g2d = bufferedImage.createGraphics();
+//
+//        drawPlayer(startp, 0);
+//    
+//
+//        g.drawImage(bufferedImage, 0, 0, null);
+//    }
+//
+//    public void drawPlayer(Player p, int angle)
+//    {
+//        Graphics2D g2d = bufferedImage.createGraphics();
+//        AffineTransform origXform1 = g2d.getTransform();
+//        AffineTransform newXform1 = (AffineTransform) (origXform1.clone());
+//        int xRot1 = p.getP().getXInt() + (p.getWidth() / 2);
+//        int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
+//        newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
+//        g2d.setTransform(newXform1);
+//        g2d.drawImage(p.getSchiff(), p.getP().getXInt(), p.getP().getYInt(), null);
+//        g2d.setTransform(origXform1);
+//    }
 
 //    public void drawPlayer2(Player p, int angle)
 //    {

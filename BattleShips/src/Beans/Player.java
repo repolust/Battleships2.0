@@ -209,6 +209,7 @@ public class Player implements Serializable{
 
     public void setStartPos(Position startPos) {
         this.startPos = startPos;
+        this.p = startPos;
     }
 
     @Override
