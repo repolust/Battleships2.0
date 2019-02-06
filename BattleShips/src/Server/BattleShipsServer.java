@@ -300,8 +300,8 @@ public class BattleShipsServer
                     //setPosition
                     Position p1 = new Position(300, (maxY / 2) - 35);
                     Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
-                    player1.setP(p1);
-                    player2.setP(p2);
+                    player1.setStartPos(p1);
+                    player2.setStartPos(p2);
                     //setRotation
                     player1.setRotation(40);
                     player2.setRotation(270);
@@ -311,6 +311,9 @@ public class BattleShipsServer
                     //setWinkel
                     player1.setCurrentAngle(90);
                     player2.setCurrentAngle(270);
+                    //SET index
+                    player1.setIndex(1);
+                    player2.setIndex(2);
 
                     //updatePlayerliste           
                     int c = 0;
@@ -342,9 +345,9 @@ public class BattleShipsServer
                     Position p1 = new Position(300, 200);
                     Position p2 = new Position(maxX - 300, 200);
                     Position p3 = new Position(300, maxY - 200);
-                    player1.setP(p1);
-                    player2.setP(p2);
-                    player3.setP(p3);
+                    player1.setStartPos(p1);
+                    player2.setStartPos(p2);
+                    player3.setStartPos(p3);
                     //setRotation
                     player1.setRotation(40);
                     player2.setRotation(270);
@@ -357,6 +360,10 @@ public class BattleShipsServer
                     player1.setCurrentAngle(90);
                     player2.setCurrentAngle(270);
                     player3.setCurrentAngle(90);
+                    //SET index
+                    player1.setIndex(1);
+                    player2.setIndex(2);
+                    player3.setIndex(3);
 
                     //updatePlayerliste           
                     int c = 0;
@@ -392,10 +399,10 @@ public class BattleShipsServer
                     Position p2 = new Position(maxX - 300, 200);
                     Position p3 = new Position(300, maxY - 200);
                     Position p4 = new Position(maxX - 300, maxY - 200);
-                    player1.setP(p1);
-                    player2.setP(p2);
-                    player3.setP(p3);
-                    player4.setP(p3);
+                    player1.setStartPos(p1);
+                    player2.setStartPos(p2);
+                    player3.setStartPos(p3);
+                    player4.setStartPos(p3);
                     //setRotation
                     player1.setRotation(40);
                     player2.setRotation(270);
@@ -411,6 +418,11 @@ public class BattleShipsServer
                     player2.setCurrentAngle(270);
                     player3.setCurrentAngle(90);
                     player4.setCurrentAngle(270);
+                    //SET index
+                    player1.setIndex(1);
+                    player2.setIndex(2);
+                    player3.setIndex(3);
+                    player4.setIndex(4);
                     //updatePlayerliste           
                     int c = 0;
                     for (ObjectInputStream stream : clients.keySet())
@@ -462,7 +474,7 @@ public class BattleShipsServer
             while (!isInterrupted())
             {
                 boolean startGame = false;
-                if (getPlayerList().size() > 1)
+                if (getPlayerList().size() > 0)
                 {
 
                     for (Player p : getPlayerList())

@@ -45,10 +45,10 @@ public class BattleShipsClient
     {
         try
         {
-//            ADDR = InetAddress.getLocalHost();
+            ADDR = InetAddress.getLocalHost();
 //            ADDR = InetAddress.getByName("192.168.126.1"); //getByAddress(, null);
-            socket = new Socket("192.168.8.100", 1337);
-
+//            socket = new Socket("192.168.8.100", 1337);
+            socket = new Socket(ADDR,1337);
             
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());

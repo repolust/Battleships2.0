@@ -259,12 +259,15 @@ public class GameGUI extends javax.swing.JFrame {
                         //----------------------------Daten werden zum Server geschickt------------------------------------
                         connection.sendObject(p);
                         
-                        
+                        Thread.sleep(1500);
                     } catch (IOException ex) {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
 //                    
 //                    Thread.sleep(10);
                } 

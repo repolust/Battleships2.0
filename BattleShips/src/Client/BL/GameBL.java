@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -37,8 +38,8 @@ public class GameBL
 
     private BufferedImage bufferedImage;
 
-    private List<Player> schiffListe;
-    private List<Kugel> kugelListe;
+    private List<Player> schiffListe = new LinkedList();
+    private List<Kugel> kugelListe = new LinkedList();
 
 //    private Position startPos1 = new Position(300, (maxY / 2 - 35));
 //    
@@ -74,10 +75,14 @@ public class GameBL
 
     public void draw()//Zeichnet alles
     {
-
+        if(!schiffListe.isEmpty())
+        {
         this.drawShips();
+        }
+        if(!kugelListe.isEmpty())
+        {
         this.drawKugeln();
-        
+        }
         g.drawImage(bufferedImage, 0, 0, null);
     }
 
@@ -94,22 +99,23 @@ public class GameBL
             for (Player p : schiffListe)
             {
 
-    //            //-----------Position Point-------
-    //            g.setColor(Color.red);
-    //            g.fillOval(p.getP().getXInt(), p.getP().getYInt(), 8, 8);
-    //            g.setColor(Color.black);
-    //            //-----------/Position Point-------
-    // 
-    //            
-    //            //-----------Hitbox-------
-    //            Rectangle hitbox = p.getHitbox();
-    //            g.drawRect((int) Math.round(hitbox.x), (int) Math.round(hitbox.y), hitbox.width, hitbox.height); 
-    //            //-----------/Hitbox-------
+                //-----------Position Point-------
+                g.setColor(Color.red);
+                g.fillOval(p.getP().getXInt(), p.getP().getYInt(), 8, 8);
+                g.setColor(Color.black);
+                //-----------/Position Point-------
+     
+                
+                //-----------Hitbox-------
+                Rectangle hitbox = p.getHitbox();
+                g.drawRect((int) Math.round(hitbox.x), (int) Math.round(hitbox.y), hitbox.width, hitbox.height); 
+                //-----------/Hitbox-------
 
 
                 //-----------Rotate----------------
                 AffineTransform origXform1 = g2d.getTransform();
                 AffineTransform newXform1 = (AffineTransform) (origXform1.clone());
+                System.out.println(" "+p.getP().getXInt());
                 int xRot1 = p.getP().getXInt() + (p.getWidth() / 2);
                 int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
                 newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
@@ -205,10 +211,13 @@ public class GameBL
 
                     }
                         
-                 
+                 Thread.sleep(1000);
                 } catch (IOException ex) {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex)
+                {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
