@@ -292,6 +292,37 @@ public class BattleShipsServer
 
             switch (anzahl)
             {
+                case 1:
+                {
+                     //getPlayer
+                    Player player1 = players.get(0);
+                    //setPosition
+                    Position p1 = new Position(300, (maxY / 2) - 35);
+                    player1.setStartPos(p1);
+                    //setRotation
+                    player1.setRotation(40);
+                    //setEinheitsvektor
+                    player1.setDirection(new EinheitsVektor(1, 0));
+                    //setWinkel
+                    player1.setCurrentAngle(90);
+                    //SET index
+                    player1.setIndex(1);
+
+                    //updatePlayerliste           
+                    int c = 0;
+                    for (ObjectInputStream stream : clients.keySet())
+                    {
+                        switch (c)
+                        {
+                            case 0:
+                                clients.replace(stream, player1);
+                                break;
+                            default:
+                                break;
+                        }
+                        c++;
+                    }
+                }break;
                 case 2:
                 {
                     //getPlayer

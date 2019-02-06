@@ -81,15 +81,15 @@ public class GameGUI extends javax.swing.JFrame {
     {
         super.paint(grphcs); //To change body of generated methods, choose Tools | Templates.
 
-        if (bl != null)
+        if (bl != null && p!=null)
         {
-            bl.draw();
+            bl.startdrawPlayer(p);
 
         }
     }
     
     public GameGUI(Player p) {
-        
+        this.p = p;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
@@ -97,7 +97,7 @@ public class GameGUI extends javax.swing.JFrame {
         maxX = (int) this.jpGame.getSize().getWidth();
         maxY = (int) this.jpGame.getSize().getHeight();
         
-        this.p = p;
+        
         
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
