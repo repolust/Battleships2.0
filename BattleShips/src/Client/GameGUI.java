@@ -92,17 +92,20 @@ public class GameGUI extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
-//        this.jpGame.setSize(1920, 918);
+        this.jpGame.setSize(1920, 918);
         maxX = (int) this.jpGame.getSize().getWidth();
         maxY = (int) this.jpGame.getSize().getHeight();
         
-        
-        
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
-        playSound(airhornPath);
+//        playSound(airhornPath);
         
-        
+            this.lbName.setBackground(p.getC());
+            this.jLabel1.setBackground(p.getC());
+            this.lbLeben.setBackground(p.getC());
+            this.jLabel3.setBackground(p.getC());
+            this.lbMunition.setBackground(p.getC());
+            this.jLabel4.setBackground(p.getC());
 
         controllThread = new ControllThread(this,this.lbName,this.lbLeben,this.lbMunition);
         controllThread.start();
@@ -132,8 +135,13 @@ public class GameGUI extends javax.swing.JFrame {
             this.gui = gui;
 
             this.lbName = lbName;
+            this.lbName.setBackground(p.getC());
             this.lbHealth = lbHealth;
+            this.lbHealth.setBackground(p.getC());
             this.lbMunition = lbMunition;
+            this.lbMunition.setBackground(p.getC());
+            
+            
             connection = BattleShipsClient.getTheInstance();
 
         }
@@ -464,6 +472,7 @@ public class GameGUI extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jpGame.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(51, 51, 51)));
+        jpGame.setPreferredSize(new java.awt.Dimension(1920, 918));
 
         javax.swing.GroupLayout jpGameLayout = new javax.swing.GroupLayout(jpGame);
         jpGame.setLayout(jpGameLayout);
