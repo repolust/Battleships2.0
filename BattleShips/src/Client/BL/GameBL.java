@@ -217,7 +217,7 @@ public class GameBL
                             synchronized(schiffListe)
                             {
                                 schiffListe = (List<Player>) obj;
-                                System.out.println("Schiffsliste bekommen!");
+//                                System.out.println("Schiffsliste bekommen!");
                             }
                         }
                         else if(list.get(0) instanceof Kugel)
