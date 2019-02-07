@@ -19,7 +19,7 @@ public class Player implements Serializable{
     
     private String name;
     private Color c;
-    private transient Image schiff;
+//    private Image schiff;
     private int leben;
     private int munition;
     private int index;
@@ -43,7 +43,7 @@ public class Player implements Serializable{
     {
         this.name = name;
         this.c = c;
-        this.schiff = schiff;
+//        this.schiff = schiff;
         this.leben = leben;
         this.munition = munition;
         this.index = index;
@@ -163,13 +163,13 @@ public class Player implements Serializable{
         this.c = c;
     }
 
-    public Image getSchiff() {
-        return schiff;
-    }
-
-    public void setSchiff(Image schiff) {
-        this.schiff = schiff;
-    }
+//    public Image getSchiff() {
+//        return schiff;
+//    }
+//
+//    public void setSchiff(Image schiff) {
+//        this.schiff = schiff;
+//    }
 
     public int getLeben() {
         return leben;
@@ -215,7 +215,7 @@ public class Player implements Serializable{
     @Override
     public String toString() {
         int n = 1;
-        return "Player{" + "name=" + name + ", c=" + c + ", schiff=" + schiff + ", leben=" + leben + ", munition=" + munition + ", index=" + index + ", p=" + p + ", schiffArt=" + schiffArt + ", currentAngle=" + currentAngle + ", direction=" + direction + ", speed=" + speed + ", width=" + width + ", height=" + height + ", rotation=" + rotation + ", startPos=" + startPos + ", bereit=" + bereit + '}';
+        return "Player{" + "name=" + name + ", c=" + c + ", leben=" + leben + ", munition=" + munition + ", index=" + index + ", p=" + p + ", schiffArt=" + schiffArt + ", currentAngle=" + currentAngle + ", direction=" + direction + ", speed=" + speed + ", width=" + width + ", height=" + height + ", rotation=" + rotation + ", startPos=" + startPos + ", bereit=" + bereit + '}';
     }
 
 

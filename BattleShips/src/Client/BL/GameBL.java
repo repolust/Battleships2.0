@@ -17,12 +17,14 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
@@ -41,17 +43,34 @@ public class GameBL
     private List<Player> schiffListe = new LinkedList();
     private List<Kugel> kugelListe = new LinkedList();
 
+    private BattleShipsClient bss;
+    
+    private String path = System.getProperty("user.dir")
+            + File.separator + "src"
+            + File.separator + "bilder"
+            + File.separator + "playShip1.png";
+    private Image ship;
 //    private Position startPos1 = new Position(300, (maxY / 2 - 35));
 //    
 //    private boolean startToDraw = false;
     
-    public GameBL(JPanel jpGame, int maxX,int maxY)
+    public GameBL(JPanel jpGame, int maxX,int maxY) 
     {
         g = jpGame.getGraphics();
+        g.clearRect(0, 0, maxX, maxY);
         bufferedImage = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_ARGB);
         this.jpGame = jpGame;
         this.maxX = maxX;
         this.maxY = maxY;
+        try
+        {
+            ship = ImageIO.read(new File(path));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        bss = BattleShipsClient.getTheInstance();
         
         ServerCommunicationThread connection = new ServerCommunicationThread();
         DrawThread drawThread = new DrawThread();
@@ -75,14 +94,9 @@ public class GameBL
 
     public void draw()//Zeichnet alles
     {
-        if(!schiffListe.isEmpty())
-        {
         this.drawShips();
-        }
-        if(!kugelListe.isEmpty())
-        {
         this.drawKugeln();
-        }
+
         g.drawImage(bufferedImage, 0, 0, null);
     }
 
@@ -119,7 +133,7 @@ public class GameBL
                 int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
                 newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
                 g2d.setTransform(newXform1);
-                g2d.drawImage(p.getSchiff(), p.getP().getXInt(), p.getP().getYInt(), null);
+                g2d.drawImage(ship, p.getP().getXInt(), p.getP().getYInt(), null);
                 g2d.setTransform(origXform1);
                 //-----------/Rotate---------------
             }
@@ -182,11 +196,10 @@ public class GameBL
      public class ServerCommunicationThread extends Thread
     {
 
-         private BattleShipsClient bss;
+         
          
         public ServerCommunicationThread() {
             
-            bss = BattleShipsClient.getTheInstance();
         }
 
         @Override
@@ -201,24 +214,29 @@ public class GameBL
                        List list = (List) obj;
                         if(list.get(0) instanceof Player)
                         {
-                            schiffListe = (List<Player>) obj;
+                            synchronized(schiffListe)
+                            {
+                                schiffListe = (List<Player>) obj;
+                                System.out.println("Schiffsliste bekommen!");
+                            }
                         }
                         else if(list.get(0) instanceof Kugel)
                         {
-                            kugelListe = (List<Kugel>) obj;
+                            synchronized(kugelListe)
+                            {
+                                kugelListe = (List<Kugel>) obj;
+                                System.out.println("KugelListe bekommen!");
+                            }
                         }
 
                     }
                         
-                 Thread.sleep(1000);
+
                 } catch (IOException ex) {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex)
-                {
-                    Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                } 
             }
         }
      

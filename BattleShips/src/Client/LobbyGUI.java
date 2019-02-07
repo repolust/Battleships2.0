@@ -55,7 +55,7 @@ public class LobbyGUI extends javax.swing.JFrame
             connection = BattleShipsClient.getTheInstance();
             connection.connect();
 
-            searchForUpdates = new UpdateThread();
+            searchForUpdates = new UpdateThread(this);
             searchForUpdates.start();
 
             connection.sendObject(p);
@@ -184,7 +184,7 @@ public class LobbyGUI extends javax.swing.JFrame
         {
             //Anmelden, vom Server restlichen Daten bekommen
             connection.sendObject("imReady");
-
+            this.btBereit.setEnabled(false);
             // Spieler muss vom Server noch Folgende Eigenschaften bekommen: position, pos, startPos, angle, Einheitsvektor
         } catch (IOException | ClassNotFoundException ex)
         {
@@ -194,10 +194,11 @@ public class LobbyGUI extends javax.swing.JFrame
 
     public class UpdateThread extends Thread
     {
-
-        public UpdateThread()
+        private LobbyGUI lobby;
+        
+        public UpdateThread(LobbyGUI l)
         {
-
+            this.lobby = l;
         }
 
         @Override
@@ -233,10 +234,11 @@ public class LobbyGUI extends javax.swing.JFrame
                             {
                                 JOptionPane.showMessageDialog(null, "Start inforormation bekommen!");
                                 Player p = (Player) objStart;
+                                this.interrupt();
                                 GameGUI gui = new GameGUI(p);
                                 gui.setVisible(true);
-                                this.interrupt();
-                                
+                                lobby.setVisible(false);
+                                break;
                             }
                         }
                     }

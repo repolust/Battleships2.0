@@ -84,7 +84,6 @@ public class GameGUI extends javax.swing.JFrame {
         if (bl != null)
         {
             bl.drawShips();
-
         }
     }
     
@@ -93,7 +92,7 @@ public class GameGUI extends javax.swing.JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         
         initComponents();
-        this.jpGame.setSize(1920, 918);
+//        this.jpGame.setSize(1920, 918);
         maxX = (int) this.jpGame.getSize().getWidth();
         maxY = (int) this.jpGame.getSize().getHeight();
         
@@ -192,8 +191,8 @@ public class GameGUI extends javax.swing.JFrame {
                     if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss
                     {
 
-                        EinheitsVektor einVLinks = new EinheitsVektor(schiffListe.get(0).getDirection().getX(), schiffListe.get(0).getDirection().getY()); 
-                        EinheitsVektor einVRechts = new EinheitsVektor(schiffListe.get(0).getDirection().getX(), schiffListe.get(0).getDirection().getY());
+                        EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY()); 
+                        EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
 
                         einVLinks.rotateEinheitsVektor(-90); 
                         einVRechts.rotateEinheitsVektor(90);
@@ -258,16 +257,13 @@ public class GameGUI extends javax.swing.JFrame {
                     try {
                         //----------------------------Daten werden zum Server geschickt------------------------------------
                         connection.sendObject(p);
-                        
-                        Thread.sleep(1500);
+                        System.out.println("Player sent to server");
+
                     } catch (IOException ex) {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex)
-                {
-                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    } 
 //                    
 //                    Thread.sleep(10);
                } 
@@ -420,7 +416,8 @@ public class GameGUI extends javax.swing.JFrame {
      
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
