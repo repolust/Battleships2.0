@@ -100,12 +100,8 @@ public class GameGUI extends javax.swing.JFrame {
         jpGame.setFocusable(true);
 //        playSound(airhornPath);
         
-            this.lbName.setBackground(p.getC());
-            this.jLabel1.setBackground(p.getC());
-            this.lbLeben.setBackground(p.getC());
-            this.jLabel3.setBackground(p.getC());
-            this.lbMunition.setBackground(p.getC());
-            this.jLabel4.setBackground(p.getC());
+            this.jPanel1.setBackground(p.getC());
+
 
         controllThread = new ControllThread(this,this.lbName,this.lbLeben,this.lbMunition);
         controllThread.start();
