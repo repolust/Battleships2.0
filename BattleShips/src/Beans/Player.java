@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Beans;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -12,11 +13,11 @@ import java.io.Serializable;
 
 /**
  *
- * @author Team
- * Erstellt am 11.4.2018
+ * @author Team Erstellt am 11.4.2018
  */
-public class Player implements Serializable{
-    
+public class Player implements Serializable
+{
+
     private String name;
     private Color c;
 //    private Image schiff;
@@ -37,9 +38,8 @@ public class Player implements Serializable{
     public Player()
     {
     }
- 
 
-    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation, Position startPos, boolean bereit) 
+    public Player(String name, Color c, Image schiff, int leben, int munition, int index, Position p, String schiffArt, double currentAngle, EinheitsVektor direction, double speed, int rotation, Position startPos, boolean bereit)
     {
         this.name = name;
         this.c = c;
@@ -59,107 +59,133 @@ public class Player implements Serializable{
         this.bereit = bereit;
     }
 
-       public int getWidth() {
+    public int getWidth()
+    {
         return width;
     }
-       
-       public void setToStartPos()
-       {
-           this.p = startPos;
-       }
-       public Rectangle getHitbox()
-       {
-           Rectangle hitbox = null;
-           
-           if((currentAngle > 45 && currentAngle < 135 || currentAngle > 225 && currentAngle < 315) || (currentAngle < -45 && currentAngle > -135 || currentAngle < -225 && currentAngle > -315))
-            {
-               hitbox = new Rectangle(p.getXInt() -(width/4), p.getYInt()+(width/4), height, width); 
-            }
-            else
-            {
-                hitbox = new Rectangle(p.getXInt(), p.getYInt(), width, height);
-            }
-          
-           return hitbox;
-       }
 
-       public void setToStartPosition()
-       {
-           this.p = this.startPos;
-       }
-    public int getRotation() {
+    public void setToStartPos()
+    {
+        this.p = startPos;
+    }
+
+    public Rectangle getHitbox()
+    {
+        Rectangle hitbox = null;
+
+        if ((currentAngle > 45 && currentAngle < 135 || currentAngle > 225 && currentAngle < 315) || (currentAngle < -45 && currentAngle > -135 || currentAngle < -225 && currentAngle > -315))
+        {
+            hitbox = new Rectangle(p.getXInt() - (width / 4), p.getYInt() + (width / 4), height, width);
+        } else
+        {
+            hitbox = new Rectangle(p.getXInt(), p.getYInt(), width, height);
+        }
+
+        return hitbox;
+    }
+
+    public void setToStartPosition()
+    {
+        this.p = this.startPos;
+    }
+
+    public int getRotation()
+    {
         return rotation;
     }
 
-    public void setRotation(int rotation) {
+    public void setRotation(int rotation)
+    {
         this.rotation = rotation;
     }
-       
-    public void setWidth(int width) {
+
+    public void setWidth(int width)
+    {
         this.width = width;
     }
 
-    public int getHeight() {
+    public int getHeight()
+    {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(int height)
+    {
         this.height = height;
     }
-    public double getSpeed() {
+
+    public double getSpeed()
+    {
         return speed;
     }
 
-    public boolean isBereit() {
+    public boolean isBereit()
+    {
         return bereit;
     }
 
-    public void setBereit(boolean bereit) {
+    public void setBereit(boolean bereit)
+    {
         this.bereit = bereit;
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeed(double speed)
+    {
         this.speed = speed;
     }
-    
-    public EinheitsVektor getDirection() {
+
+    public EinheitsVektor getDirection()
+    {
         return direction;
     }
 
-    public void setDirection(EinheitsVektor direction) {
+    public void setDirection(EinheitsVektor direction)
+    {
         this.direction = direction;
     }
 
-    public String getSchiffArt() {
+    public String getSchiffArt()
+    {
         return schiffArt;
     }
 
-    public void setSchiffArt(String schiffArt) {
+    public void setSchiffArt(String schiffArt)
+    {
         this.schiffArt = schiffArt;
     }
 
-    public double getCurrentAngle() {
+    public double getCurrentAngle()
+    {
         return currentAngle;
     }
 
-    public void setCurrentAngle(double currentAngle) {
+    public void setCurrentAngle(double currentAngle)
+    {
+        if (currentAngle >= 360 || currentAngle <= -360) // Winkel zurücksetzen
+        {
+            currentAngle = 0;
+        }
         this.currentAngle = currentAngle;
+        
     }
-    
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Color getC() {
+    public Color getC()
+    {
         return c;
     }
 
-    public void setC(Color c) {
+    public void setC(Color c)
+    {
         this.c = c;
     }
 
@@ -170,56 +196,62 @@ public class Player implements Serializable{
 //    public void setSchiff(Image schiff) {
 //        this.schiff = schiff;
 //    }
-
-    public int getLeben() {
+    public int getLeben()
+    {
         return leben;
     }
 
-    public void setLeben(int leben) {
+    public void setLeben(int leben)
+    {
         this.leben = leben;
     }
 
-    public int getMunition() {
+    public int getMunition()
+    {
         return munition;
     }
 
-    public void setMunition(int munition) {
+    public void setMunition(int munition)
+    {
         this.munition = munition;
     }
 
-    public int getIndex() {
+    public int getIndex()
+    {
         return index;
     }
 
-    public void setIndex(int index) {
+    public void setIndex(int index)
+    {
         this.index = index;
     }
 
-    public Position getP() {
+    public Position getP()
+    {
         return p;
     }
 
-    public void setP(Position p) {
+    public void setP(Position p)
+    {
         this.p = p;
     }
 
-    public Position getStartPos() {
+    public Position getStartPos()
+    {
         return startPos;
     }
 
-    public void setStartPos(Position startPos) {
+    public void setStartPos(Position startPos)
+    {
         this.startPos = startPos;
         this.p = startPos;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         int n = 1;
         return "Player{" + "name=" + name + ", c=" + c + ", leben=" + leben + ", munition=" + munition + ", index=" + index + ", p=" + p + ", schiffArt=" + schiffArt + ", currentAngle=" + currentAngle + ", direction=" + direction + ", speed=" + speed + ", width=" + width + ", height=" + height + ", rotation=" + rotation + ", startPos=" + startPos + ", bereit=" + bereit + '}';
     }
 
-
-
-    
-    
 }

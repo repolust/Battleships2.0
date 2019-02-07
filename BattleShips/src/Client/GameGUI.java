@@ -34,48 +34,49 @@ import sound.MusikThread;
  *
  * @author michi
  */
-public class GameGUI extends javax.swing.JFrame {
+public class GameGUI extends javax.swing.JFrame
+{
 
     /**
      * Creates new form GameGUI
      */
     private GameBL bl;
     private Controlls controlls = new Controlls();
-    
-     private final String cannonPath = System.getProperty("user.dir")
+
+    private final String cannonPath = System.getProperty("user.dir")
             + File.separator + "src"
             + File.separator + "sound"
             + File.separator + "cannon.mp3";
-    
+
     private final String hitPath = System.getProperty("user.dir")
             + File.separator + "src"
             + File.separator + "sound"
             + File.separator + "hitmarker.mp3";
-    
+
     private final String crashPath = System.getProperty("user.dir")
             + File.separator + "src"
             + File.separator + "sound"
             + File.separator + "crash.mp3";
-    
+
     private final String winSoundPath = System.getProperty("user.dir")
             + File.separator + "src"
             + File.separator + "sound"
             + File.separator + "winSound.mp3";
-    
+
     private final String airhornPath = System.getProperty("user.dir")
             + File.separator + "src"
             + File.separator + "sound"
             + File.separator + "airhorn.mp3";
-    
+
     private KeyListener jpGameListener = new KeyAdapterImpl();
-    
+
     private int maxX;
     private int maxY;
-    
+
     private Player p;
-    
+
     private ControllThread controllThread;
-    
+
     @Override
     public void paint(Graphics grphcs)
     {
@@ -86,47 +87,47 @@ public class GameGUI extends javax.swing.JFrame {
             bl.drawShips();
         }
     }
-    
-    public GameGUI(Player p) {
+
+    public GameGUI(Player p)
+    {
         this.p = p;
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         initComponents();
         this.jpGame.setSize(1920, 918);
         maxX = (int) this.jpGame.getSize().getWidth();
         maxY = (int) this.jpGame.getSize().getHeight();
-        
+
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
 //        playSound(airhornPath);
-        
-            this.jPanel1.setBackground(p.getC());
 
+        this.jPanel1.setBackground(p.getC());
 
-        controllThread = new ControllThread(this,this.lbName,this.lbLeben,this.lbMunition);
+        controllThread = new ControllThread(this, this.lbName, this.lbLeben, this.lbMunition);
         controllThread.start();
-        
-        bl = new GameBL(this.jpGame,maxX,maxY);
+
+        bl = new GameBL(this.jpGame, maxX, maxY);
     }
 
-     public void playSound(String path)
-        {
-            MusikThread sound = new MusikThread(path);
-            sound.start();
-        }
-    
+    public void playSound(String path)
+    {
+        MusikThread sound = new MusikThread(path);
+        sound.start();
+    }
+
     public class ControllThread extends Thread
     {
 
         private JFrame gui;
-        
+
         private List<Player> schiffListe = new LinkedList<Player>();
         private List<Kugel> kugelListe = new LinkedList<Kugel>();
-        private JLabel lbName,lbHealth,lbMunition;
-        
-        private BattleShipsClient connection;
-        
-        public ControllThread(JFrame gui,JLabel lbName, JLabel lbHealth,JLabel lbMunition)
+        private JLabel lbName, lbHealth, lbMunition;
+
+        private BattleShipsClient client;
+
+        public ControllThread(JFrame gui, JLabel lbName, JLabel lbHealth, JLabel lbMunition)
         {
             this.gui = gui;
 
@@ -136,9 +137,8 @@ public class GameGUI extends javax.swing.JFrame {
             this.lbHealth.setBackground(p.getC());
             this.lbMunition = lbMunition;
             this.lbMunition.setBackground(p.getC());
-            
-            
-            connection = BattleShipsClient.getTheInstance();
+
+            client = BattleShipsClient.getTheInstance();
 
         }
 
@@ -150,175 +150,234 @@ public class GameGUI extends javax.swing.JFrame {
 //                try
 //                {
 
-                    lbName.setText(p.getName());
-                    lbHealth.setText(""+p.getLeben());
-                    lbMunition.setText(""+p.getMunition());
+                lbName.setText(p.getName());
+                lbHealth.setText("" + p.getLeben());
+                lbMunition.setText("" + p.getMunition());
 
 // Der Thread überprüft ob die jeweiligen Tasten in der Liste der Klasse Controlls enthalten sind und führt demensprechen die Aktionen aus     
-
 //-----------------------------------Controlls---------------------------------
-
-
-                    if (p.getCurrentAngle() >= 360 || p.getCurrentAngle() <= -360) // Winkel zurücksetzen
+//                    if (p.getCurrentAngle() >= 360 || p.getCurrentAngle() <= -360) // Winkel zurücksetzen
+//                    {
+//                        p.setCurrentAngle(0);
+//                    }
+                if (controlls.containsKey(KeyEvent.VK_W) && !controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W Gerade aus
+                {
+                    //checkAndIncrease();
+                    try
                     {
-                        p.setCurrentAngle(0);
-                    }
-
-                    if (controlls.containsKey(KeyEvent.VK_W) && !controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W Gerade aus
+                        client.sendObject("moveForward");
+                    } catch (IOException ex)
                     {
-                        checkAndIncrease();
-
-                    }
-                    if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && controlls.containsKey(KeyEvent.VK_D))// W A D Gerade aus
-                    {
-                        checkAndIncrease();
-
-                    }
-                    if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W A Links Kurve
-                    {
-                        checkAndIncrease();
-                        EinheitsVektor k = p.getDirection();
-                        k.rotateEinheitsVektor(-p.getRotation());
-                        p.setDirection(k);
-                        p.setCurrentAngle(p.getCurrentAngle() - p.getRotation());
-
-                    }
-                    if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
-                    {
-                        checkAndIncrease();
-                        EinheitsVektor k = p.getDirection();
-                        k.rotateEinheitsVektor(p.getRotation());
-                        p.setDirection(k);
-                        p.setCurrentAngle(p.getCurrentAngle() + p.getRotation());
-
-                    }
-                    if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss
-                    {
-
-                        EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY()); 
-                        EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
-
-                        einVLinks.rotateEinheitsVektor(-90); 
-                        einVRechts.rotateEinheitsVektor(90);
-
-                        Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);           
-
-                        for (int i = 0; i <= 14; i += 7)
-                        {
-                            Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
-                            Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
-
-                            if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
-                            {
-                                posSL.increaseX(i);
-                                posSR.increaseX(i);
-                            } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
-                            {
-                                posSL.increaseY(i);
-                                posSR.increaseY(i);
-                            } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
-                            {
-                                posSL.increaseX(i * (-1));
-                                posSR.increaseX(i * (-1));
-                                posSL.increaseY(i);
-                                posSR.increaseY(i);
-                            } else
-                            {
-                                posSL.increaseX(i);
-                                posSR.increaseX(i);
-                                posSL.increaseY(i);
-                                posSR.increaseY(i);
-                            }
-                            if (!(p.getMunition() <= 0))
-                            {
-
-                                try {
-                                    connection.sendObject(new Kugel(einVLinks, posSL, 5, 1));
-                                    connection.sendObject(new Kugel(einVRechts, posSR, 5, 1));
-                                } catch (IOException ex) {
-                                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (ClassNotFoundException ex) {
-                                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                
-                                p.setMunition(p.getMunition() - 2);
-
-                            }
-                        }
-                        
-                        controlls.removeKey(KeyEvent.VK_SPACE);
-                        
-                        if(p.getMunition() != 0)
-                        {
-                             playSound(cannonPath);
-                             
-                        }
-                        
-                        
-                    }
-
-
-                    try {
-                        //----------------------------Daten werden zum Server geschickt------------------------------------
-                        connection.sendObject(p);
-                        System.out.println("Player sent to server");
-
-                    } catch (IOException ex) {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
+                    } catch (ClassNotFoundException ex)
+                    {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
-//                    
-//                    Thread.sleep(10);
-               } 
-//                    catch (InterruptedException ex)
+                    }
+
+                }
+                if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && controlls.containsKey(KeyEvent.VK_D))// W A D Gerade aus
+                {
+//                        checkAndIncrease();
+                    try
+                    {
+                        client.sendObject("moveForward");
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+                if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W A Links Kurve
+                {
+//                    checkAndIncrease();
+//                    EinheitsVektor k = p.getDirection();
+//                    k.rotateEinheitsVektor(-p.getRotation());
+//                    p.setDirection(k);
+//                    p.setCurrentAngle(p.getCurrentAngle() - p.getRotation());
+
+                    try
+                    {
+                        client.sendObject("turnLeft");
+                        Thread.sleep(100);
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+                if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
+                {
+//                    checkAndIncrease();
+//                    EinheitsVektor k = p.getDirection();
+//                    k.rotateEinheitsVektor(p.getRotation());
+//                    p.setDirection(k);
+//                    p.setCurrentAngle(p.getCurrentAngle() + p.getRotation());
+
+                    try
+                    {
+                        client.sendObject("turnRight");
+                        Thread.sleep(100);
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+                if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss
+                {
+
+                    try
+                    {
+                        //                    EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
+//                    EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
+//
+//                    einVLinks.rotateEinheitsVektor(-90);
+//                    einVRechts.rotateEinheitsVektor(90);
+//
+//                    Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);
+//
+//                    for (int i = 0; i <= 14; i += 7)
+//                    {
+//                        Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
+//                        Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
+//
+//                        if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
+//                        {
+//                            posSL.increaseX(i);
+//                            posSR.increaseX(i);
+//                        } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
+//                        {
+//                            posSL.increaseY(i);
+//                            posSR.increaseY(i);
+//                        } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
+//                        {
+//                            posSL.increaseX(i * (-1));
+//                            posSR.increaseX(i * (-1));
+//                            posSL.increaseY(i);
+//                            posSR.increaseY(i);
+//                        } else
+//                        {
+//                            posSL.increaseX(i);
+//                            posSR.increaseX(i);
+//                            posSL.increaseY(i);
+//                            posSR.increaseY(i);
+//                        }
+//                        if (!(p.getMunition() <= 0))
+//                        {
+//
+//                            try
+//                            {
+//                                client.sendObject(new Kugel(einVLinks, posSL, 5, 1));
+//                                client.sendObject(new Kugel(einVRechts, posSR, 5, 1));
+//                            } catch (IOException ex)
+//                            {
+//                                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                            } catch (ClassNotFoundException ex)
+//                            {
+//                                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                            }
+//
+//                            p.setMunition(p.getMunition() - 2);
+//
+//                        }
+//                    }
+                        
+                        client.sendObject("schuss");
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    controlls.removeKey(KeyEvent.VK_SPACE);
+
+                    if (p.getMunition() != 0)
+                    {
+                        playSound(cannonPath);
+
+                    }
+
+                }
+
+                try
+                {
+                    //                try
+//                {
+                    //----------------------------Daten werden zum Server geschickt------------------------------------
+//                    client.sendObject(p);
+//                    System.out.println("Player sent to server");
+
+//                } catch (IOException ex)
+//                {
+//                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+//                } catch (ClassNotFoundException ex)
 //                {
 //                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-//            }
-
-        }
-
-        public void checkAndIncrease()//Bewegt Spieler1 und sorgt dafür das man über den Rand fahren kann
-        {
-
-            if (p.getP().getX() <= 0)
-            {
-                p.getP().setX(maxX - 1);
-            } else if (p.getP().getX() >= maxX)
-            {
-                p.getP().setX(1);
-            } else if (p.getP().getY() <= 0)
-            {
-                p.getP().setY(maxY - 1);
-            } else if (p.getP().getY() >= maxY)
-            {
-                p.getP().setY(1);
-            } else
-            {
-                p.getP().increaseY(p.getDirection().getY() * p.getSpeed());
-                p.getP().increaseX(p.getDirection().getX() * p.getSpeed());
+//                    
+                    Thread.sleep(10);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
             }
+
         }
 
-        
+//        public void checkAndIncrease()//Bewegt Spieler1 und sorgt dafür das man über den Rand fahren kann
+//        {
+//
+//            if (p.getP().getX() <= 0)
+//            {
+//                p.getP().setX(maxX - 1);
+//            } else if (p.getP().getX() >= maxX)
+//            {
+//                p.getP().setX(1);
+//            } else if (p.getP().getY() <= 0)
+//            {
+//                p.getP().setY(maxY - 1);
+//            } else if (p.getP().getY() >= maxY)
+//            {
+//                p.getP().setY(1);
+//            } else
+//            {
+//                p.getP().increaseY(p.getDirection().getY() * p.getSpeed());
+//                p.getP().increaseX(p.getDirection().getX() * p.getSpeed());
+//            }
+//        }
         public void playSound(String path)
         {
             MusikThread sound = new MusikThread(path);
             sound.start();
         }
     }
-     
-     
-     private class KeyAdapterImpl extends KeyAdapter //KeyListener
+
+    private class KeyAdapterImpl extends KeyAdapter //KeyListener
     {
 
         //Wenn eine Taste gedrückt wird, dann wird sie in der Klasse Controlls gespeichtert
         //Wenn man die Taste wieder loslässt wird diese wieder aus Controlls entfernt
-        
         public KeyAdapterImpl()
         {
-            
+
         }
 
         @Override
@@ -391,7 +450,7 @@ public class GameGUI extends javax.swing.JFrame {
                     System.out.println("Released: d");
                     controlls.removeKey(KeyEvent.VK_D);
                     break;
-                
+
                 case KeyEvent.VK_LEFT:
                     System.out.println("Released: left");
                     controlls.removeKey(KeyEvent.VK_LEFT);
@@ -415,9 +474,8 @@ public class GameGUI extends javax.swing.JFrame {
             }
 
         }
-     }
-     
-     
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
@@ -489,33 +547,43 @@ public class GameGUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(GameGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new GameGUI(null).setVisible(true);
             }
         });

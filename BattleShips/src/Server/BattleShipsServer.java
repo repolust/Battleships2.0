@@ -43,6 +43,7 @@ public class BattleShipsServer
     private Map<ObjectInputStream, Player> clients = new HashMap();
     private List<ObjectOutputStream> connections = new LinkedList();
     private StartGameThread startGame = new StartGameThread();
+    private LogicThread logicThread = new LogicThread();
     private int maxX = 1920;
     private int maxY = 910;
 
@@ -205,12 +206,13 @@ public class BattleShipsServer
                             }
                         }
 
-                    } else if (gameObj instanceof Kugel)
-                    {
-                        Kugel k = (Kugel) gameObj;
-                        kugelList.add(k);
-
-                    } else if (gameObj instanceof String)
+                    } //                    else if (gameObj instanceof Kugel)
+                    //                    {
+                    //                        Kugel k = (Kugel) gameObj;
+                    //                        kugelList.add(k);
+                    //
+                    //                    } //-------------------------------Lobby---------------------------------------
+                    else if (gameObj instanceof String)
                     {
                         String command = (String) gameObj;
 
@@ -250,8 +252,7 @@ public class BattleShipsServer
 
                                 }
                             }
-                        } 
-                        else if (command.equals("requestStartInformation"))
+                        } else if (command.equals("requestStartInformation"))
                         {
                             synchronized (clients)
                             {
@@ -259,6 +260,73 @@ public class BattleShipsServer
                                 out.writeObject(clients.get(in));
                                 out.reset();
                             }
+
+                        } //-------------------------------------Bewegung------------------------------------
+                        else if (command.equals("moveForward"))
+                        {
+                            synchronized (clients)
+                            {
+                                Player p = moveShip(clients.get(in));
+                                clients.replace(in, p);
+
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(getPlayerList());
+                                    con.reset();
+                                }
+                            }
+                        } else if (command.equals("turnLeft"))
+                        {
+                            synchronized (clients)
+                            {
+                                Player p = moveShip(clients.get(in));
+
+                                EinheitsVektor k = p.getDirection();
+                                k.rotateEinheitsVektor(-p.getRotation());
+                                p.setDirection(k);
+                                p.setCurrentAngle(p.getCurrentAngle() - p.getRotation());
+
+                                clients.replace(in, p);
+
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(getPlayerList());
+                                    con.reset();
+                                }
+                            }
+                        } else if (command.equals("turnRight"))
+                        {
+                            synchronized (clients)
+                            {
+                                Player p = moveShip(clients.get(in));
+
+                                EinheitsVektor k = p.getDirection();
+                                k.rotateEinheitsVektor(p.getRotation());
+                                p.setDirection(k);
+                                p.setCurrentAngle(p.getCurrentAngle() + p.getRotation());
+                                clients.replace(in, p);
+
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(getPlayerList());
+                                    con.reset();
+                                }
+                            }
+                        } else if (command.equals("schuss"))
+                        {
+
+                            synchronized (kugelList)
+                            {
+                                Player p = clients.get(in);
+                                gui.log(p.getName() + " schießt!");
+                                schuss(p);
+                                for (ObjectOutputStream con : connections)
+                                {
+                                    con.writeObject(kugelList);
+                                    con.reset();
+                                }
+                            }
+
                         }
                     }
 
@@ -271,7 +339,75 @@ public class BattleShipsServer
             {
                 Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
 
+        public Player moveShip(Player p)
+        {
+            if (p.getP().getX() <= 0)
+            {
+                p.getP().setX(maxX - 1);
+            } else if (p.getP().getX() >= maxX)
+            {
+                p.getP().setX(1);
+            } else if (p.getP().getY() <= 0)
+            {
+                p.getP().setY(maxY - 1);
+            } else if (p.getP().getY() >= maxY)
+            {
+                p.getP().setY(1);
+            } else
+            {
+                p.getP().increaseY(p.getDirection().getY() * p.getSpeed());
+                p.getP().increaseX(p.getDirection().getX() * p.getSpeed());
+            }
+
+            return p;
+        }
+
+        public void schuss(Player p)
+        {
+            EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
+            EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
+
+            einVLinks.rotateEinheitsVektor(-90);
+            einVRechts.rotateEinheitsVektor(90);
+
+            Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);
+
+            for (int i = 0; i <= 14; i += 7)
+            {
+                Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
+                Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
+
+                if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
+                {
+                    posSL.increaseX(i);
+                    posSR.increaseX(i);
+                } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
+                {
+                    posSL.increaseY(i);
+                    posSR.increaseY(i);
+                } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
+                {
+                    posSL.increaseX(i * (-1));
+                    posSR.increaseX(i * (-1));
+                    posSL.increaseY(i);
+                    posSR.increaseY(i);
+                } else
+                {
+                    posSL.increaseX(i);
+                    posSR.increaseX(i);
+                    posSL.increaseY(i);
+                    posSR.increaseY(i);
+                }
+                if (!(p.getMunition() <= 0))
+                {
+                    kugelList.add(new Kugel(einVLinks, posSL, 5, 1));
+                    kugelList.add(new Kugel(einVRechts, posSR, 5, 1));
+                    p.setMunition(p.getMunition() - 2);
+                }
+
+            }
         }
     }
 
@@ -294,7 +430,7 @@ public class BattleShipsServer
             {
                 case 1:
                 {
-                     //getPlayer
+                    //getPlayer
                     Player player1 = players.get(0);
                     //setPosition
                     Position p1 = new Position(300, (maxY / 2) - 35);
@@ -322,7 +458,8 @@ public class BattleShipsServer
                         }
                         c++;
                     }
-                }break;
+                }
+                break;
                 case 2:
                 {
                     //getPlayer
@@ -536,6 +673,7 @@ public class BattleShipsServer
                                 Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
+                        logicThread.start();
                         this.interrupt();
                     }
                 }
@@ -555,13 +693,16 @@ public class BattleShipsServer
         @Override
         public void run()
         {
-
-            if (!kugelList.isEmpty())
+            gui.log("LogicThread started!");
+            while (!isInterrupted())
             {
-                moveKugeln();
-                checkIfHit();
+                if (!kugelList.isEmpty())
+                {
+                    moveKugeln();
+                    checkIfHit();
+                }
+                checkCollision();
             }
-            checkCollision();
         }
 
         public void moveKugeln()
@@ -592,15 +733,19 @@ public class BattleShipsServer
                 kugelList.remove(removeIndex);
             }
 
-            for (ObjectOutputStream con : connections)
+            if (!kugelList.isEmpty())
             {
-                try
+                for (ObjectOutputStream con : connections)
                 {
-                    con.writeObject(kugelList);
-                    con.reset();
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                    try
+                    {
+                        con.writeObject(kugelList);
+                        con.reset();
+               
+                    } catch (IOException ex)
+                    {
+                        Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
                 }
             }
         }

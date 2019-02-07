@@ -113,17 +113,17 @@ public class GameBL
             for (Player p : schiffListe)
             {
 
-                //-----------Position Point-------
-                g.setColor(Color.red);
-                g.fillOval(p.getP().getXInt(), p.getP().getYInt(), 8, 8);
-                g.setColor(Color.black);
-                //-----------/Position Point-------
-     
-                
-                //-----------Hitbox-------
-                Rectangle hitbox = p.getHitbox();
-                g.drawRect((int) Math.round(hitbox.x), (int) Math.round(hitbox.y), hitbox.width, hitbox.height); 
-                //-----------/Hitbox-------
+//                //-----------Position Point-------
+//                g.setColor(Color.red);
+//                g.fillOval(p.getP().getXInt(), p.getP().getYInt(), 8, 8);
+//                g.setColor(Color.black);
+//                //-----------/Position Point-------
+//     
+//                
+//                //-----------Hitbox-------
+//                Rectangle hitbox = p.getHitbox();
+//                g.drawRect((int) Math.round(hitbox.x), (int) Math.round(hitbox.y), hitbox.width, hitbox.height); 
+//                //-----------/Hitbox-------
 
 
                 //-----------Rotate----------------
@@ -144,13 +144,14 @@ public class GameBL
         if(kugelListe != null && !kugelListe.isEmpty())
         {
             Graphics2D g2d = bufferedImage.createGraphics();
+            
             g2d.setColor(Color.BLACK);
             for(Kugel k:kugelListe){
                 g2d.fillOval(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse()); 
             }
         }
     }
-//
+
 //    public void startdrawPlayer(Player startp)//Zeichnet die Schiffe das erste mal. Wird von der Paint-Methode aus der GUI am start aufgerufen
 //    {
 //        Graphics gPanel = this.jpGame.getGraphics();
@@ -174,7 +175,7 @@ public class GameBL
 //        int yRot1 = p.getP().getYInt() + (p.getHeight() / 2);
 //        newXform1.rotate(Math.toRadians(p.getCurrentAngle()), xRot1, yRot1);
 //        g2d.setTransform(newXform1);
-//        g2d.drawImage(p.getSchiff(), p.getP().getXInt(), p.getP().getYInt(), null);
+//        g2d.drawImage(ship, p.getP().getXInt(), p.getP().getYInt(), null);
 //        g2d.setTransform(origXform1);
 //    }
 
@@ -212,6 +213,7 @@ public class GameBL
                     if(obj instanceof List)
                     {
                        List list = (List) obj;
+                       
                         if(list.get(0) instanceof Player)
                         {
                             synchronized(schiffListe)
