@@ -100,7 +100,7 @@ public class GameGUI extends javax.swing.JFrame
 
         jpGame.addKeyListener(jpGameListener);
         jpGame.setFocusable(true);
-//        playSound(airhornPath);
+        playSound(airhornPath);
 
         this.jPanel1.setBackground(p.getC());
 
@@ -201,17 +201,14 @@ public class GameGUI extends javax.swing.JFrame
                     try
                     {
                         client.sendObject("turnLeft");
-                        Thread.sleep(100);
+               
                     } catch (IOException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex)
-                    {
-                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } 
 
                 }
                 if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
@@ -225,17 +222,14 @@ public class GameGUI extends javax.swing.JFrame
                     try
                     {
                         client.sendObject("turnRight");
-                        Thread.sleep(100);
+                      
                     } catch (IOException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex)
-                    {
-                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } 
 
                 }
                 if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss

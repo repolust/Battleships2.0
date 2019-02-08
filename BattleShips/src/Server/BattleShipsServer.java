@@ -435,8 +435,6 @@ public class BattleShipsServer
                     //setPosition
                     Position p1 = new Position(300, (maxY / 2) - 35);
                     player1.setStartPos(p1);
-                    //setRotation
-                    player1.setRotation(40);
                     //setEinheitsvektor
                     player1.setDirection(new EinheitsVektor(1, 0));
                     //setWinkel
@@ -470,9 +468,6 @@ public class BattleShipsServer
                     Position p2 = new Position(maxX - 300, (maxY / 2) - 35);
                     player1.setStartPos(p1);
                     player2.setStartPos(p2);
-                    //setRotation
-                    player1.setRotation(40);
-                    player2.setRotation(270);
                     //setEinheitsvektor
                     player1.setDirection(new EinheitsVektor(1, 0));
                     player2.setDirection(new EinheitsVektor(-1, 0));
@@ -516,10 +511,6 @@ public class BattleShipsServer
                     player1.setStartPos(p1);
                     player2.setStartPos(p2);
                     player3.setStartPos(p3);
-                    //setRotation
-                    player1.setRotation(40);
-                    player2.setRotation(270);
-                    player3.setRotation(40);
                     //setEinheitsvektor
                     player1.setDirection(new EinheitsVektor(1, 0));
                     player2.setDirection(new EinheitsVektor(-1, 0));
@@ -571,11 +562,6 @@ public class BattleShipsServer
                     player2.setStartPos(p2);
                     player3.setStartPos(p3);
                     player4.setStartPos(p3);
-                    //setRotation
-                    player1.setRotation(40);
-                    player2.setRotation(270);
-                    player3.setRotation(40);
-                    player4.setRotation(270);
                     //setEinheitsvektor
                     player1.setDirection(new EinheitsVektor(1, 0));
                     player2.setDirection(new EinheitsVektor(-1, 0));
