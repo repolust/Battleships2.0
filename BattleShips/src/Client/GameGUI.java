@@ -74,7 +74,7 @@ public class GameGUI extends javax.swing.JFrame
     private int maxY;
 
     private Player p;
-
+    private List<Player> startPlayers;
     private ControllThread controllThread;
 
     @Override
@@ -84,13 +84,14 @@ public class GameGUI extends javax.swing.JFrame
 
         if (bl != null)
         {
-            bl.drawShips();
+            bl.startdrawPlayers(startPlayers);
         }
     }
 
-    public GameGUI(Player p)
+    public GameGUI(Player p,List<Player> players)
     {
         this.p = p;
+        this.startPlayers = players;
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         initComponents();
@@ -156,13 +157,8 @@ public class GameGUI extends javax.swing.JFrame
 
 // Der Thread überprüft ob die jeweiligen Tasten in der Liste der Klasse Controlls enthalten sind und führt demensprechen die Aktionen aus     
 //-----------------------------------Controlls---------------------------------
-//                    if (p.getCurrentAngle() >= 360 || p.getCurrentAngle() <= -360) // Winkel zurücksetzen
-//                    {
-//                        p.setCurrentAngle(0);
-//                    }
                 if (controlls.containsKey(KeyEvent.VK_W) && !controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W Gerade aus
                 {
-                    //checkAndIncrease();
                     try
                     {
                         client.sendObject("moveForward");
@@ -177,7 +173,6 @@ public class GameGUI extends javax.swing.JFrame
                 }
                 if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && controlls.containsKey(KeyEvent.VK_D))// W A D Gerade aus
                 {
-//                        checkAndIncrease();
                     try
                     {
                         client.sendObject("moveForward");
@@ -192,11 +187,6 @@ public class GameGUI extends javax.swing.JFrame
                 }
                 if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_A) && !controlls.containsKey(KeyEvent.VK_D))// W A Links Kurve
                 {
-//                    checkAndIncrease();
-//                    EinheitsVektor k = p.getDirection();
-//                    k.rotateEinheitsVektor(-p.getRotation());
-//                    p.setDirection(k);
-//                    p.setCurrentAngle(p.getCurrentAngle() - p.getRotation());
 
                     try
                     {
@@ -213,12 +203,6 @@ public class GameGUI extends javax.swing.JFrame
                 }
                 if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
                 {
-//                    checkAndIncrease();
-//                    EinheitsVektor k = p.getDirection();
-//                    k.rotateEinheitsVektor(p.getRotation());
-//                    p.setDirection(k);
-//                    p.setCurrentAngle(p.getCurrentAngle() + p.getRotation());
-
                     try
                     {
                         client.sendObject("turnRight");
@@ -578,7 +562,7 @@ public class GameGUI extends javax.swing.JFrame
         {
             public void run()
             {
-                new GameGUI(null).setVisible(true);
+                new GameGUI(null,null).setVisible(true);
             }
         });
     }

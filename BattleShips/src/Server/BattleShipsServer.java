@@ -258,6 +258,7 @@ public class BattleShipsServer
                             {
                                 gui.log("Start information sent to: " + clients.get(in).getName());
                                 out.writeObject(clients.get(in));
+                                out.writeObject(getPlayerList());
                                 out.reset();
                             }
 

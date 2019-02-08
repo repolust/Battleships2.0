@@ -229,17 +229,17 @@ public class LobbyGUI extends javax.swing.JFrame
                             //Startinformationen von Player anfordern
                             connection.sendObject("requestStartInformation");
                             Object objStart = connection.getObject();
-                            
-                            if(objStart instanceof Player)
-                            {
+                            Object objPlayers = connection.getObject();
+
 //                                JOptionPane.showMessageDialog(null, "Start inforormation bekommen!");
                                 Player p = (Player) objStart;
+                                List<Player> players = (List<Player>) objPlayers;
                                 this.interrupt();
-                                GameGUI gui = new GameGUI(p);
+                                GameGUI gui = new GameGUI(p,players);
                                 gui.setVisible(true);
                                 lobby.setVisible(false);
                                 break;
-                            }
+                            
                         }
                     }
 
