@@ -11,6 +11,7 @@ import Beans.Kugel;
 import Beans.Player;
 import Beans.Position;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -31,8 +32,7 @@ import javax.swing.JPanel;
  *
  * @author Team Erstellt am 11.4.2018
  */
-public class GameBL
-{
+public class GameBL {
 
     private int maxX, maxY;
     private Graphics g;
@@ -54,19 +54,16 @@ public class GameBL
 //    
 //    private boolean startToDraw = false;
 
-    public GameBL(JPanel jpGame, int maxX, int maxY)
-    {
+    public GameBL(JPanel jpGame, int maxX, int maxY) {
         g = jpGame.getGraphics();
         g.clearRect(0, 0, maxX, maxY);
         bufferedImage = new BufferedImage(maxX, maxY, BufferedImage.TYPE_INT_ARGB);
         this.jpGame = jpGame;
         this.maxX = maxX;
         this.maxY = maxY;
-        try
-        {
+        try {
             ship = ImageIO.read(new File(path));
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -94,21 +91,31 @@ public class GameBL
     {
         this.drawShips();
         this.drawKugeln();
-
+        this.drawText();
         g.drawImage(bufferedImage, 0, 0, null);
+    }
+
+    public void drawText() {//zeichnet Infos wie Name mit Farbe
+        Graphics2D g2d = bufferedImage.createGraphics();
+        for(Player p:schiffListe){
+            Font test = new Font("Arial",Font.BOLD,14);
+            g.setFont(test);
+            g.setColor(p.getC());
+            Position position = p.getP();
+            g.drawString(p.getName(), position.getXInt(), position.getYInt());
+        }
+        
     }
 
     public void drawShips()//Zeichnet die SChiffe
     {
-        if (schiffListe != null && !schiffListe.isEmpty())
-        {
+        if (schiffListe != null && !schiffListe.isEmpty()) {
             Graphics2D g2d = bufferedImage.createGraphics();
             g2d.clearRect(0, 0, maxX, maxY);
             g2d.setColor(new Color(62, 208, 245));
             g2d.fillRect(0, 0, maxX, maxY);
 
-            for (Player p : schiffListe)
-            {
+            for (Player p : schiffListe) {
 
 //                //-----------Position Point-------
 //                g.setColor(Color.red);
@@ -137,13 +144,11 @@ public class GameBL
 
     public void drawKugeln()//Zeichnet die Kugeln
     {
-        if (kugelListe != null && !kugelListe.isEmpty())
-        {
+        if (kugelListe != null && !kugelListe.isEmpty()) {
             Graphics2D g2d = bufferedImage.createGraphics();
 
             g2d.setColor(Color.BLACK);
-            for (Kugel k : kugelListe)
-            {
+            for (Kugel k : kugelListe) {
                 g2d.fillOval(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse());
             }
         }
@@ -156,8 +161,7 @@ public class GameBL
         g2d.setColor(new Color(62, 208, 245));
         g2d.fillRect(0, 0, maxX, maxY);
 
-        for (Player p : players)
-        {
+        for (Player p : players) {
 
             AffineTransform origXform1 = g2d.getTransform();
             AffineTransform newXform1 = (AffineTransform) (origXform1.clone());
@@ -170,39 +174,29 @@ public class GameBL
             //-----------/Rotate---------------
         }
     }
-    
-    public class ServerCommunicationThread extends Thread
-    {
 
-        public ServerCommunicationThread()
-        {
+    public class ServerCommunicationThread extends Thread {
+
+        public ServerCommunicationThread() {
 
         }
 
         @Override
-        public void run()
-        {
-            while (!isInterrupted())
-            {
-                try
-                {
+        public void run() {
+            while (!isInterrupted()) {
+                try {
                     Object obj = bss.getObject();
 
-                    if (obj instanceof List)
-                    {
+                    if (obj instanceof List) {
                         List list = (List) obj;
 
-                        if (list.get(0) instanceof Player)
-                        {
-                            synchronized (schiffListe)
-                            {
+                        if (list.get(0) instanceof Player) {
+                            synchronized (schiffListe) {
                                 schiffListe = (List<Player>) obj;
                                 System.out.println("Schiffsliste bekommen!");
                             }
-                        } else if (list.get(0) instanceof Kugel)
-                        {
-                            synchronized (kugelListe)
-                            {
+                        } else if (list.get(0) instanceof Kugel) {
+                            synchronized (kugelListe) {
                                 kugelListe = (List<Kugel>) obj;
                                 System.out.println("KugelListe bekommen!");
                             }
@@ -210,11 +204,9 @@ public class GameBL
 
                     }
 
-                } catch (IOException ex)
-                {
+                } catch (IOException ex) {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex)
-                {
+                } catch (ClassNotFoundException ex) {
                     Logger.getLogger(GameBL.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -222,19 +214,15 @@ public class GameBL
 
     }
 
-    public class DrawThread extends Thread
-    {
+    public class DrawThread extends Thread {
 
-        public DrawThread()
-        {
+        public DrawThread() {
 
         }
 
         @Override
-        public void run()
-        {
-            while (!isInterrupted())
-            {
+        public void run() {
+            while (!isInterrupted()) {
                 draw();
             }
         }

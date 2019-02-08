@@ -8,7 +8,7 @@ package Client;
 import Beans.Option;
 import dialog.HelpDlg;
 import dialog.NewPlayerDlg;
-import java.awt.Dimension;
+import java.awt.Dimension; 
 import java.io.File;
 import java.nio.file.Paths;
 import sound.MusikThread;
