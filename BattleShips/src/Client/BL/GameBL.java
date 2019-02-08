@@ -99,10 +99,10 @@ public class GameBL {
         Graphics2D g2d = bufferedImage.createGraphics();
         for(Player p:schiffListe){
             Font test = new Font("Arial",Font.BOLD,14);
-            g.setFont(test);
-            g.setColor(p.getC());
+            g2d.setFont(test);
+            g2d.setColor(p.getC());
             Position position = p.getP();
-            g.drawString(p.getName(), position.getXInt(), position.getYInt());
+            g2d.drawString(p.getName(), position.getXInt(), position.getYInt());
         }
         
     }
