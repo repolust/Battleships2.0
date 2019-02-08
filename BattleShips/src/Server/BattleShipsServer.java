@@ -316,7 +316,7 @@ public class BattleShipsServer
                         } else if (command.equals("schuss"))
                         {
 
-                            synchronized (kugelList)
+                            synchronized (clients)
                             {
                                 Player p = clients.get(in);
                                 gui.log(p.getName() + " schießt!");
@@ -689,50 +689,61 @@ public class BattleShipsServer
                     checkIfHit();
                 }
                 checkCollision();
+                try
+                {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
         public void moveKugeln()
         {
-            int removeIndex = -1;
-
-            for (Kugel k : kugelList)
+            synchronized (clients)
             {
+                int removeIndex = -1;
 
-                k.getPos().increaseX(k.getEinheintsVektor().getX() * 20);
-                k.getPos().increaseY(k.getEinheintsVektor().getY() * 20);
-
-                if (k.getPos().getX() > maxX || k.getPos().getX() < 0)
+                for (Kugel k : kugelList)
                 {
-                    removeIndex = kugelList.indexOf(k);
+
+                    k.getPos().increaseX(k.getEinheintsVektor().getX() * 20);
+                    k.getPos().increaseY(k.getEinheintsVektor().getY() * 20);
+
+                    if (k.getPos().getX() > maxX || k.getPos().getX() < 0)
+                    {
+                        removeIndex = kugelList.indexOf(k);
+
+                    }
+                    if (k.getPos().getY() > maxY || k.getPos().getY() < 0)
+                    {
+                        removeIndex = kugelList.indexOf(k);
+
+                    }
 
                 }
-                if (k.getPos().getY() > maxY || k.getPos().getY() < 0)
-                {
-                    removeIndex = kugelList.indexOf(k);
 
+                if (removeIndex != -1)
+                {
+                    kugelList.remove(removeIndex);
                 }
 
-            }
-
-            if (removeIndex != -1)
-            {
-                kugelList.remove(removeIndex);
-            }
-
-            if (!kugelList.isEmpty())
-            {
-                for (ObjectOutputStream con : connections)
+                if (!kugelList.isEmpty())
                 {
-                    try
+                    for (ObjectOutputStream con : connections)
                     {
-                        con.writeObject(kugelList);
-                        con.reset();
-               
-                    } catch (IOException ex)
-                    {
-                        Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                        try
+                        {
+
+                            con.writeObject(kugelList);
+                            con.reset();
+
+                        } catch (IOException ex)
+                        {
+                            Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                 }
             }
         }
