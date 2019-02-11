@@ -367,47 +367,51 @@ public class BattleShipsServer
 
         public void schuss(Player p)
         {
-            EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
-            EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
-
-            einVLinks.rotateEinheitsVektor(-90);
-            einVRechts.rotateEinheitsVektor(90);
-
-            Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);
-
-            for (int i = 0; i <= 14; i += 7)
+            synchronized (kugelList)
             {
-                Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
-                Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
+                EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
+                EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
 
-                if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
-                {
-                    posSL.increaseX(i);
-                    posSR.increaseX(i);
-                } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
-                {
-                    posSL.increaseY(i);
-                    posSR.increaseY(i);
-                } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
-                {
-                    posSL.increaseX(i * (-1));
-                    posSR.increaseX(i * (-1));
-                    posSL.increaseY(i);
-                    posSR.increaseY(i);
-                } else
-                {
-                    posSL.increaseX(i);
-                    posSR.increaseX(i);
-                    posSL.increaseY(i);
-                    posSR.increaseY(i);
-                }
-                if (!(p.getMunition() <= 0))
-                {
-                    kugelList.add(new Kugel(einVLinks, posSL, 5, 1));
-                    kugelList.add(new Kugel(einVRechts, posSR, 5, 1));
-                    p.setMunition(p.getMunition() - 2);
-                }
+                einVLinks.rotateEinheitsVektor(-90);
+                einVRechts.rotateEinheitsVektor(90);
 
+                Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);
+
+                for (int i = 0; i <= 14; i += 7)
+                {
+                    Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
+                    Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
+
+                    if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
+                    {
+                        posSL.increaseX(i);
+                        posSR.increaseX(i);
+                    } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
+                    {
+                        posSL.increaseY(i);
+                        posSR.increaseY(i);
+                    } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
+                    {
+                        posSL.increaseX(i * (-1));
+                        posSR.increaseX(i * (-1));
+                        posSL.increaseY(i);
+                        posSR.increaseY(i);
+                    } else
+                    {
+                        posSL.increaseX(i);
+                        posSR.increaseX(i);
+                        posSL.increaseY(i);
+                        posSR.increaseY(i);
+                    }
+                    if (!(p.getMunition() <= 0))
+                    {
+                        kugelList.add(new Kugel(einVLinks, posSL, 5, p.getIndex()));
+
+                        kugelList.add(new Kugel(einVRechts, posSR, 5, p.getIndex()));
+                        p.setMunition(p.getMunition() - 2);
+                    }
+
+                }
             }
         }
     }
@@ -629,7 +633,7 @@ public class BattleShipsServer
             while (!isInterrupted())
             {
                 boolean startGame = false;
-                if (getPlayerList().size() > 0)
+                if (getPlayerList().size() > 1)
                 {
 
                     for (Player p : getPlayerList())
@@ -701,7 +705,7 @@ public class BattleShipsServer
 
         public void moveKugeln()
         {
-            synchronized (clients)
+            synchronized (kugelList)
             {
                 int removeIndex = -1;
 
@@ -727,6 +731,7 @@ public class BattleShipsServer
                 if (removeIndex != -1)
                 {
                     kugelList.remove(removeIndex);
+                    gui.log("Kugel entfernt!");
                 }
 
                 if (!kugelList.isEmpty())
@@ -737,7 +742,7 @@ public class BattleShipsServer
                         {
 
                             con.writeObject(kugelList);
-                            con.reset();
+                           con.reset();
 
                         } catch (IOException ex)
                         {
@@ -779,28 +784,40 @@ public class BattleShipsServer
 
         public void checkIfHit()
         {
-
-            //Treffer mit KanonenKugel
-            for (Kugel k : kugelList)
+            synchronized (kugelList)
             {
-
-                Rectangle rectK = new Rectangle(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse());
-
-                for (Player p : getPlayerList())
+                try
                 {
-                    Rectangle hitbox = p.getHitbox();
-
-                    if (rectK.intersects(hitbox))
+                    
+                    //Treffer mit KanonenKugel
+                    for (Kugel k : kugelList)
                     {
-                        Treffer t = new Treffer(p.getIndex(), kugelList.indexOf(k));
-                        //leben abziehen
-                        //kugel entfernen
-                        //dem client leben mitteilen
-                        gui.log(p.getName() + " wurde getroffen!");
+                        
+                        Rectangle rectK = new Rectangle(k.getPos().getXInt(), k.getPos().getYInt(), k.getGroesse(), k.getGroesse());
+                        
+                        for (Player p : getPlayerList())
+                        {
+                            Rectangle hitbox = p.getHitbox();
+                            
+                            if (rectK.intersects(hitbox) && k.getPlayernumber() != p.getIndex())
+                            {
+                                kugelList.wait();
+                                Treffer t = new Treffer(p.getIndex(), kugelList.indexOf(k));
+                                kugelList.remove(k);
+                                //leben abziehen
+                                
+                                //dem client leben mitteilen
+                                gui.log(p.getName() + " wurde getroffen!");
+                                kugelList.notifyAll();
+                            }
+                        }
                     }
+                    
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(BattleShipsServer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
         }
 
     }

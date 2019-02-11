@@ -88,7 +88,7 @@ public class GameGUI extends javax.swing.JFrame
         }
     }
 
-    public GameGUI(Player p,List<Player> players)
+    public GameGUI(Player p, List<Player> players)
     {
         this.p = p;
         this.startPlayers = players;
@@ -191,14 +191,14 @@ public class GameGUI extends javax.swing.JFrame
                     try
                     {
                         client.sendObject("turnLeft");
-               
+
                     } catch (IOException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                    }
 
                 }
                 if (controlls.containsKey(KeyEvent.VK_W) && controlls.containsKey(KeyEvent.VK_D) && !controlls.containsKey(KeyEvent.VK_A))// W D Rechts Kurve
@@ -206,75 +206,21 @@ public class GameGUI extends javax.swing.JFrame
                     try
                     {
                         client.sendObject("turnRight");
-                      
+
                     } catch (IOException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClassNotFoundException ex)
                     {
                         Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
+                    }
 
                 }
                 if (controlls.containsKey(KeyEvent.VK_SPACE)) // Schuss
                 {
-
                     try
                     {
-                        //                    EinheitsVektor einVLinks = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
-//                    EinheitsVektor einVRechts = new EinheitsVektor(p.getDirection().getX(), p.getDirection().getY());
-//
-//                    einVLinks.rotateEinheitsVektor(-90);
-//                    einVRechts.rotateEinheitsVektor(90);
-//
-//                    Rectangle hitbox = new Rectangle(p.getHitbox().x, p.getHitbox().y, p.getHitbox().width, p.getHitbox().height);
-//
-//                    for (int i = 0; i <= 14; i += 7)
-//                    {
-//                        Position posSL = new Position(hitbox.getCenterX() - 3, hitbox.getCenterY() - 3);
-//                        Position posSR = new Position(hitbox.getCenterX() + 3, hitbox.getCenterY() + 3);
-//
-//                        if ((p.getCurrentAngle() > 70 && p.getCurrentAngle() < 110 || p.getCurrentAngle() > 250 && p.getCurrentAngle() < 290) || (p.getCurrentAngle() < -70 && p.getCurrentAngle() > -110 || p.getCurrentAngle() < -250 && p.getCurrentAngle() > -290))
-//                        {
-//                            posSL.increaseX(i);
-//                            posSR.increaseX(i);
-//                        } else if ((p.getCurrentAngle() > 340 && p.getCurrentAngle() <= 360 || p.getCurrentAngle() > 160 && p.getCurrentAngle() <= 200 || p.getCurrentAngle() >= 0 && p.getCurrentAngle() < 20) || (p.getCurrentAngle() < -340 && p.getCurrentAngle() >= -360 || p.getCurrentAngle() < -160 && p.getCurrentAngle() >= -200 || p.getCurrentAngle() <= -0 && p.getCurrentAngle() > -20))
-//                        {
-//                            posSL.increaseY(i);
-//                            posSR.increaseY(i);
-//                        } else if ((p.getCurrentAngle() > 20 && p.getCurrentAngle() < 70 || p.getCurrentAngle() > 200 && p.getCurrentAngle() < 250) || (p.getCurrentAngle() < -290 && p.getCurrentAngle() > -340 || p.getCurrentAngle() < -110 && p.getCurrentAngle() > -160))
-//                        {
-//                            posSL.increaseX(i * (-1));
-//                            posSR.increaseX(i * (-1));
-//                            posSL.increaseY(i);
-//                            posSR.increaseY(i);
-//                        } else
-//                        {
-//                            posSL.increaseX(i);
-//                            posSR.increaseX(i);
-//                            posSL.increaseY(i);
-//                            posSR.increaseY(i);
-//                        }
-//                        if (!(p.getMunition() <= 0))
-//                        {
-//
-//                            try
-//                            {
-//                                client.sendObject(new Kugel(einVLinks, posSL, 5, 1));
-//                                client.sendObject(new Kugel(einVRechts, posSR, 5, 1));
-//                            } catch (IOException ex)
-//                            {
-//                                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                            } catch (ClassNotFoundException ex)
-//                            {
-//                                Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//
-//                            p.setMunition(p.getMunition() - 2);
-//
-//                        }
-//                    }
-                        
+
                         client.sendObject("schuss");
                     } catch (IOException ex)
                     {
@@ -296,51 +242,16 @@ public class GameGUI extends javax.swing.JFrame
 
                 try
                 {
-                    //                try
-//                {
-                    //----------------------------Daten werden zum Server geschickt------------------------------------
-//                    client.sendObject(p);
-//                    System.out.println("Player sent to server");
-
-//                } catch (IOException ex)
-//                {
-//                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                } catch (ClassNotFoundException ex)
-//                {
-//                    Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                    
                     Thread.sleep(10);
                 } catch (InterruptedException ex)
                 {
                     Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            
+
             }
 
         }
 
-//        public void checkAndIncrease()//Bewegt Spieler1 und sorgt dafür das man über den Rand fahren kann
-//        {
-//
-//            if (p.getP().getX() <= 0)
-//            {
-//                p.getP().setX(maxX - 1);
-//            } else if (p.getP().getX() >= maxX)
-//            {
-//                p.getP().setX(1);
-//            } else if (p.getP().getY() <= 0)
-//            {
-//                p.getP().setY(maxY - 1);
-//            } else if (p.getP().getY() >= maxY)
-//            {
-//                p.getP().setY(1);
-//            } else
-//            {
-//                p.getP().increaseY(p.getDirection().getY() * p.getSpeed());
-//                p.getP().increaseX(p.getDirection().getX() * p.getSpeed());
-//            }
-//        }
         public void playSound(String path)
         {
             MusikThread sound = new MusikThread(path);
@@ -446,6 +357,15 @@ public class GameGUI extends javax.swing.JFrame
                     controlls.removeKey(KeyEvent.VK_RIGHT);
                     break;
                 case KeyEvent.VK_ESCAPE:
+                    try
+                    {
+                        BattleShipsClient connection = BattleShipsClient.getTheInstance();
+                        connection.sendObject("imOut");
+                        connection.disconnect();
+                    } catch (IOException | ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     System.exit(0);
                     controlls.addKey(KeyEvent.VK_ESCAPE);
                     break;
@@ -469,6 +389,13 @@ public class GameGUI extends javax.swing.JFrame
         jpGame = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
+                onClosing(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(102, 255, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(32767, 100));
@@ -523,6 +450,22 @@ public class GameGUI extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void onClosing(java.awt.event.WindowEvent evt)//GEN-FIRST:event_onClosing
+    {//GEN-HEADEREND:event_onClosing
+        try
+        {
+            BattleShipsClient connection = BattleShipsClient.getTheInstance();
+            connection.sendObject("imOut");
+            connection.disconnect();
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(GameGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_onClosing
+
     /**
      * @param args the command line arguments
      */
@@ -563,7 +506,7 @@ public class GameGUI extends javax.swing.JFrame
         {
             public void run()
             {
-                new GameGUI(null,null).setVisible(true);
+                new GameGUI(null, null).setVisible(true);
             }
         });
     }

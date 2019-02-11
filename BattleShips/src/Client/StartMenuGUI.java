@@ -38,7 +38,7 @@ public class StartMenuGUI extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        musik.start();
+//        musik.start();
     }
 
     /**
