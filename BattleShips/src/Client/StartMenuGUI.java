@@ -27,7 +27,8 @@ public class StartMenuGUI extends javax.swing.JFrame {
     private int breiteSchirm = (int) screensize.getWidth();
 
     private final String musicPath = Paths.get(System.getProperty("user.dir"), "src", "sound", "FluchDerKaribik.mp3").toString();
-    private Option o = new Option(100, 150, 8, 3);
+    private Option o = new Option(100, 150, 5, 2);
+
  
 
     private MusikThread musik = new MusikThread(musicPath);

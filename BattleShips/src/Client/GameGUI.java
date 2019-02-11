@@ -481,6 +481,7 @@ public class GameGUI extends javax.swing.JFrame
         jLabel1.setText("Name:");
         jPanel1.add(jLabel1);
 
+        lbName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(lbName);
 

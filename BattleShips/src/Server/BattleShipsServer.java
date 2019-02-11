@@ -629,7 +629,7 @@ public class BattleShipsServer
             while (!isInterrupted())
             {
                 boolean startGame = false;
-                if (getPlayerList().size() > 1)
+                if (getPlayerList().size() > 0)
                 {
 
                     for (Player p : getPlayerList())
